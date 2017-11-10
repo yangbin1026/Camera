@@ -1,0 +1,22 @@
+<resources>
+
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">8dp</dimen>
+    <dimen name="padding_large">16dp</dimen>
+	<dimen name="video_title_size">42dp</dimen><!-- 实时流标题 -->
+    <dimen name="title_size">39dp</dimen><!-- 标题 -->
+    <!-- 登陆 -->
+    <dimen name="login_text_width">63dp</dimen> <!--描述字体与输入框的间隔 -->
+    <dimen name="login_text_padding">1dp</dimen> <!--描述字体与分割图片的间隔 -->
+    <!--<dimen name="login_font_margin_input">5dp</dimen>输入框与描述的间隔-->
+    <!--<dimen name="login_margin_image">50dp</dimen> UI图片的位置 -->
+    <!--<dimen name="login_input_margin">20dp</dimen> 相邻输入框的间隔 -->
+    <!--<dimen name="login_button_margin">10dp</dimen> 相邻按钮的间隔 -->
+    
+    <!-- 设备列表 -->
+    <!--<dimen name="device_text_margin">10dp</dimen> 列表与字体的间隔 -->
+    <!--<dimen name="group_margin">10dp</dimen> 组列表控件之间的间隔 -->
+    <!--<dimen name="group_fontsize">15dp</dimen> 组列表字体大小 -->
+    <!--<dimen name="child_image_margin">65dp</dimen> 子列表图片与列表的间隔 -->
+    <!--<dimen name="device_button_margin">10dp</dimen> 按钮与列表的间隔 -->
+</resources>

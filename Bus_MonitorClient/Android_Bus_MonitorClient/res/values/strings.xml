@@ -1,0 +1,262 @@
+<resources>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="app_name">Mobile Video Monitor Client</string>
+    <string name="country">other</string>
+
+    <!-- 登陆 -->
+    <string name="init_user">Please enter a username</string>
+    <string name="init_psw">Please enter the password</string>
+    <string name="init_port">Please enter a port number</string>
+    <string name="init_ip">Enter the IP address</string>
+    <string name="login_title">Login</string>
+    <string name="userName">User:</string>
+    <string name="password">PSW:</string>
+    <string name="login">Login</string>
+    <string name="cancel">Cancel</string>
+    <string name="loginFailed">Login failed!</string>
+    <string name="ipFailed">Enter the IP address is not valid!</string>
+    <string name="auto_Login">Auto Login</string>
+    <string name="login_port">Port:</string>
+    <string name="login_address">Address:</string>
+    <string name="lose_efficacy">Test Version, Lose Efficacy!!</string>
+    <string name="prompt">Notice</string>
+    <string name="confirm">Exit</string>
+    <string name="analysis_error">Parse error!!</string>
+    <string name="infomation_error">User name or user password mistake!!</string>
+    <string name="relogin_error">Relogin error!! </string>
+    <string name="blacklist_error">Black Listed!!</string>
+    <string name="version_error">Version is too old!!</string>
+    <string name="over_max_user_num">More than the maximum number of users!!</string>
+    <string name="other_error">unknown exception!!</string>
+    <string name="network_error">Network Error!!</string>
+
+    <!-- 主页面 -->
+    <string name="main_title">Home</string>
+    <string name="exitTitle">Notice</string>
+    <string name="exitMsg">Sure to exit?</string>
+    <string name="exitConfirm">Yes</string>
+    <string name="exitComplete">Exit</string>
+    <string name="setting">Setting</string>
+    <string name="googleMapSupport">Download Google Map Support Module</string>
+
+    <!-- 设置页面 -->
+    <string name="google_store">Google Store Url:</string>
+    <string name="google_service">Google Service Url:</string>
+    <string name="default_map">Default Map:</string>
+    <string name="change">Change</string>
+    <string name="save">Save</string>
+    <string name="save_succeed">Save Succeed</string>
+
+    <!-- 实时视频 -->
+    <string name="video_stream">Live View</string>
+    <string name="video_talk">Talk</string>
+    <string name="video_connect_success">Connected Successfully!</string>
+    <string name="video_connect_lose">Failure to connect, pls check the internet and setting.</string>
+    <string name="not_playdata">No Playback Data!</string>
+    <string name="video_playcontrol">No Video Played!</string>
+    <string name="open">ON</string>
+    <string name="close">OFF</string>
+    <string name="monitor">Audio</string>
+    <string name="mirror">Mirror</string>
+    <string name="title_left_name">Video</string>
+    <string name="login_loading_title">Logining</string>
+    <string name="loading_data_title">Loading Data</string>
+    <string name="waiting">Pls Wait....</string>
+    <!-- 视频回放 -->
+    <string name="record_stream">Play Back</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Stop</string>
+    <string name="choice_time">Set</string>
+    <string name="start_time">Start time:</string>
+    <string name="end_time">End time:</string>
+    <string name="query">Search</string>
+    <string name="query_date">Query date:</string>
+    <string name="start_text">00:00</string>
+    <string name="end_text">23:59</string>
+    <string name="not_findfile">Video file doesn\'t exist!</string>
+    <string name="query_input">Invalid input, pls input as \'HHmm\'!</string>
+    <string name="video_stop">Playback Stopped!</string>
+    <string name="not_recordfile">No Video File!</string>
+    <string name="not_dev_recordfile">Not this time of video files!</string>
+    <string name="time_validate">Start time cannot be greater than the end time!</string>
+    <string name="local_record">Native</string>
+    <string name="remote_record">Terminal equipment</string>
+    <string name="devChnNumber">Channel</string>
+    <string name="recordType">Record type</string>
+
+    <string-array name="recordTypeData">
+        <item>Ordinary record</item>
+        <item>Alarm record</item>
+    </string-array>
+
+    <string name="downLoad">Download</string>
+    <string name="loadMessage">Sure you want to download the file to the local?</string>
+
+    <!-- 设备列表 -->
+    <string name="dev_list">Device List</string>
+    <string name="addDev">Add</string>
+    <string name="queryMap">Query Map</string>
+    <string name="delDev">Delete</string>
+    <string name="delMsg">Sure to Delete?</string>
+    <string name="addDevMessage">Pls add device first!</string>
+    <string name="devList"> Device </string>
+
+    <!-- 电子地图 -->
+    <string name="electronMap">Electronic Map</string>
+    <string name="baiduMap">Baidu Map</string>
+    <string name="googleMap">Google Map</string>
+    <string name="googleGpsCorrection">Google GPS Correction</string>
+    <string name="googleGpsCorrectionFileLoad">File Loading...</string>
+    <!-- 报警信息列表 -->
+    <string name="alarm_list">Alarm List</string>
+    <string name="refresh">Refresh</string>
+    <string name="filter">Filter</string>
+    <!-- 相册 -->
+    <string name="pic_list">Snapped Pictures</string>
+    <string name="file_back">../(Back)</string>
+    <string name="not_imagefile">No Image File!</string>
+    <string name="alert">Note</string>
+    <string name="wrong">Failure！</string>
+    <string name="already_del">Deleted!</string>
+    <!-- 设备操作 -->
+    <string name="devName">Device name:</string>
+    <string name="devIp">Ip Address:</string>
+    <string name="devPort">Device Port:</string>
+    <string name="devUsername">User Name:</string>
+    <string name="devPassword">Password:</string>
+    <string name="devChnCount">Channel Number:</string>
+    <string name="devProtocol">Protocol Type:</string>
+    <string name="devStreamType">Stream Type:</string>
+    <string name="btnSure">Save</string>
+    <string name="btnBack">Back</string>
+    <string name="addSuccess">Add device success!</string>
+    <string name="updateSuccess">Set Successfully!</string>
+    <string name="devOperate">Device Setting</string>
+    <string name="repeat_device">Device Alreay Exists!</string>
+
+    <string-array name="jpf_streamTypes">
+        <item>First Stream</item>
+        <item>Second Stream</item>
+        <item>Third Stream</item>
+    </string-array>
+    <string-array name="jxj_streamTypes">
+        <item>First Stream</item>
+        <item>Second Stream</item>
+    </string-array>
+    <!-- 云台 -->
+    <string name="ptzUp">Up</string>
+    <string name="ptzDown">Down</string>
+    <string name="ptzLeft">Left</string>
+    <string name="ptzRight">Right</string>
+    <string name="ptzOk">OK</string>
+
+    <!-- 抓拍 -->
+    <string name="capture">Capture</string>
+    <string name="capture_success">Capture Successfully!</string>
+    <!-- 录像 -->
+    <string name="record">Record</string>
+    <string name="record_fail">Failure to Record!</string>
+    <string name="stop_recordfail">Failure to Stop Record!</string>
+    <!-- test -->
+    <string name="localFile">Local Video File</string>
+    <!-- 关于 -->
+    <string name="about">About</string>
+    <string name="version">Version: V3.0.2.12</string>
+    <string name="product_name">Mobile Video Monitor</string>
+
+    <!-- notification -->
+    <string name="back_stage">Running at Back Stage.</string>
+    <string name="alert_massage">Alarm message already exist, pls check.</string>
+    <string name="online">Online</string>
+    <string name="alarm">Alarm</string>
+    <!-- 版本 -->
+    <string name="product_version">Version: </string>
+    <!-- 报警动作配置 -->
+    <string name="alarm_action_config">Alarm Action Configuration</string>
+    <!-- 温馨提示 -->
+    <string name="warm_tip">Warm Tip</string>
+    <!-- 报警信息 -->
+    <string name="exists">&#160;exists&#160;</string>
+    <string name="overspeed"> overspeed</string>
+    <string name="overspeed_cancel_alarm"> overspeed cancel-alarm</string>
+    <string name="input_trigger"> input-trigger</string>
+    <string name="motion_detection"> motion-detection</string>
+    <string name="video_lose"> video-lose</string>
+    <string name="low_speed_alarm"> low-speed alarm</string>
+    <string name="low_speed_cancel_alarm"> low-speed cancel alarm</string>
+    <string name="violation_parking_alarm"> violation of parking alarm</string>
+    <string name="violation_parking_cancel_alarm"> violation parking cancel alarm</string>
+    <string name="insufficient_GPS_disk_space"> insufficient GPS-disk-space</string>
+    <string name="gps_save_ceased"> cease of gps-save</string>
+    <string name="overspeed_freeway"> overspeed on the freeway</string>
+    <string name="overspeed_freeway_cancel_alarm"> overspeed on the freeway,alarm canceled</string>
+    <string name="lowspeed_freeway_alarm"> lowspeed on the freeway,alarm</string>
+    <string name="lowspeed_freeway_cancel_alarm"> lowspeed on the freeway,alarm canceled</string>
+    <string name="overspeed_national_road"> overspeed on national road</string>
+    <string name="lowspeed_national_road"> lowspeed on national road</string>
+    <string name="overspeed_nation_road_alarm_canceled"> overspeed on national road,alarm canceled</string>
+	<string name="lowspeed_nation_road_alarm_canceled"> lowspeed on national road,alarm canceled</string>
+	<string name="gps_module_abnormal"> abnormal gps module</string>
+	<string name="gsensor_alarm"> gsensor alarm</string>
+	<string name="storage_medium_one_abnormity"> first storage medium abnormity</string>
+	<string name="storage_medium_two_abnormity"> second storage medium abnormity</string>
+	<string name="system_abnormity"> system abnormity</string>
+	<string name="device_online"> online device</string>
+	<string name="device_offline"> device off-line</string>
+	<string name="enter_into_wifi_region"> enter into wifi region</string>
+	<string name="leave_wifi_region"> leave wifi region</string>
+	<string name="ignition"> ignition</string>
+	<string name="flameout"> flameout</string>
+	<string name="front_door_opens"> front door opens</string>
+	<string name="front_door_closed"> front door closed</string>
+	<string name="middle_door_opens"> middle door opens</string>
+	<string name="middle_door_closed"> middle door closed</string>
+	<string name="postern_opens"> postern opens</string>
+	<string name="postern_closed"> postern closed</string>
+	<string name="arrive_at_station_nostop"> arrive at station but not park</string>
+	<string name="arrive_at_station_noopen"> arrive at station but not open the dorr</string>
+	<string name="high_temperature_on_carriage"> high temperature on the carriage</string>
+	<string name="low_temperature_on_carriage"> low temperature on the carriage</string>
+	<string name="drive_with_door_open"> drive with door open</string>
+	<string name="alarm_when_delay_at_station"> alarm when delay at station</string>
+	<string name="exigency_accelerate"> exigency accelerate</string>
+	<string name="exigency_brake"> exigency brake</string>
+	<string name="exigency_alarm"> exigency alarm</string>
+	<string name="deviate_route"> deviate route</string>
+	<string name="ballot_box_door_alarm"> ballot-box door alarm</string>
+	<string name="electronic_unlock"> electronic lock opens</string>
+	<string name="electronic_lock_closed"> electronic lock closed</string>
+	<string name="electronic_lock_abnormity"> electronic lock abnormity</string>
+	<string name="input_one_trigger"> input one trigger</string>
+	<string name="input_two_trigger"> input two trigger</string>
+	<string name="input_three_trigger"> input three trigger</string>
+	<string name="input_four_trigger"> input four trigger</string>
+	<string name="input_five_trigger"> input five trigger</string>
+	<string name="input_six_trigger"> input six trigger</string>
+	<string name="input_seven_trigger"> input seven trigger</string>
+	<string name="input_eight_trigger"> input eight trigger</string>
+	<string name="illegality_close"> close the door unlawfully</string>
+	<string name="overload"> overload</string>
+	<string name="beyond_the_mark"> beyond the mark</string>
+	<string name="remove_slop_over"> remove slop over</string>
+	<string name="overtime_parking"> parking overtime</string>
+	<string name="remove_overtime_parking"> remove overtime-parking</string>
+	<string name="fatigue_driving"> fatigue driving</string>
+	<string name="remove_fatigue_driving"> remove fatigue driving</string>
+	<!-- 颜色 -->
+	<drawable name="white">#ffffff</drawable>
+	<!-- 记住密码 -->
+	<string name="remember_psw">Remember Psw</string>
+	<!-- 检查版本 -->
+	<string name="version_check">Check Latest Version</string>
+	<string name="check">Check</string>
+	<string name="this_latest_version">The current version is the latest</string>
+	<string name="exit_process">Exit The Program</string>
+	<string name="exit">Exit</string>
+	<string name="software_expired">software expired</string>
+	<string name="software">software</string>
+	<string name="software_expired_tip">Expired,please upgrade to the latest version!</string>
+</resources>

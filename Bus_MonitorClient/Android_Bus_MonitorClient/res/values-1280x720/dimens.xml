@@ -1,0 +1,9 @@
+<resources>
+
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_large">16dp</dimen>
+
+    <dimen name="video_title_size">42dp</dimen><!-- 实时流标题 -->
+    <dimen name="title_size">39dp</dimen><!-- 标题 -->
+</resources>

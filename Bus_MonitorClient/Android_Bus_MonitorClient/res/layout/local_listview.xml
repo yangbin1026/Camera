@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/main_bg"
+    android:orientation="vertical" >
+
+        <include
+        android:id="@+id/include1"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_size"
+        layout="@layout/title_themes" />
+    
+    <ListView
+        android:id="@+id/localListView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="#00000000"
+        android:divider="@xml/listline_repeat"
+        android:dividerHeight="1dp"
+        android:drawSelectorOnTop="false"
+        android:scrollbars="vertical" >
+    </ListView>
+
+</LinearLayout>

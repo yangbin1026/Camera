@@ -1,0 +1,252 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/videoLayoutId"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <include
+        android:id="@+id/titlelayout"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_size"
+        android:layout_alignParentTop="true"
+        layout="@layout/title_themes" />
+
+    <com.monitor.bus.view.MyVideoView
+        android:id="@+id/myVideoView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/relativeLayout"
+        android:layout_below="@+id/titlelayout"
+        android:background="@color/black" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="190dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/ptz_bg" >
+
+        <RelativeLayout
+            android:id="@+id/ptzLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/operateLayout"
+            android:layout_marginTop="5dp" >
+            
+            
+            
+            <ImageButton
+                android:id="@+id/capture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/capture"
+                android:contentDescription="@string/app_name"
+                android:onClick="videoCapture" />
+
+            <ImageButton
+                android:id="@+id/ptzRight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/capture"
+                android:background="@drawable/right_2"
+                android:contentDescription="@string/app_name" />
+
+            <ImageButton
+                android:id="@+id/ptzLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/capture"
+                android:background="@drawable/left_2"
+                android:contentDescription="@string/app_name" />
+
+            <ImageButton
+                android:id="@+id/ptzDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/capture"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/down_2"
+                android:contentDescription="@string/app_name" />
+
+            <ImageButton
+                android:id="@+id/ptzUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/capture"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/up_2"
+                android:contentDescription="@string/app_name" />
+
+            <ImageButton
+                android:id="@+id/ibtn_suo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="57dp"
+                android:layout_toLeftOf="@+id/ptzLeft"
+                android:background="@drawable/suo"
+                android:contentDescription="@string/app_name"
+                android:onClick="videoSuo" />
+
+            <ImageButton
+                android:id="@+id/ibtn_fang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="65dp"
+                android:layout_toRightOf="@+id/ptzRight"
+                android:background="@drawable/fang"
+                android:contentDescription="@string/app_name"
+                android:onClick="videoFang" />
+
+        </RelativeLayout>
+
+        <TableLayout
+            android:id="@+id/operateLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true" >
+
+            <TableRow
+                android:id="@+id/devLinear"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="center" >
+
+                <!-- 设备列表 -->
+
+                <TextView
+                    android:id="@+id/textDev"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:gravity="right"
+                    android:text="@string/devList"
+                    android:textColor="@color/font_color"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/dev_list_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center"
+                    android:background="@drawable/dev_list_button"
+                    android:onClick="goDeviceListActivity"
+                    android:text="@string/devList"
+                    android:textColor="@color/font_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/devList"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/open"
+                    android:visibility="invisible" />
+
+                <!-- 方向 -->
+
+                <TextView
+                    android:id="@+id/textDerection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="5dp"
+                    android:gravity="right"
+                    android:text="@string/mirror"
+                    android:textColor="@color/font_color"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/mirror_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center"
+                    android:background="@drawable/open"
+                    android:textColor="@color/font_color" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/recordLinear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center" >
+
+                <!-- 录像 -->
+
+                <TextView
+                    android:id="@+id/textRecord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:gravity="right"
+                    android:text="@string/record"
+                    android:textColor="@color/font_color"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/record_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/close"
+                    android:textColor="@color/font_color" />
+
+                <!-- 监听 -->
+
+                <TextView
+                    android:id="@+id/textMonitor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="5dp"
+                    android:gravity="right"
+                    android:text="@string/monitor"
+                    android:textColor="@color/font_color"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/monitor_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/close"
+                    android:textColor="@color/font_color" />
+
+                <!-- 对讲 -->
+
+                <TextView
+                    android:id="@+id/textTalk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="5dp"
+                    android:gravity="right"
+                    android:text="@string/video_talk"
+                    android:textColor="@color/font_color"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/talk_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/close"
+                    android:textColor="@color/font_color" />
+            </TableRow>
+        </TableLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

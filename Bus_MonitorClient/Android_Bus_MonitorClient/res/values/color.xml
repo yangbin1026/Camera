@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="input_color">#a8a8a8</color> <!-- 输入框字体颜色 -->
+	<color name="font_color">#FFFFFFFF</color><!-- 按钮、textview 字体颜色 -->
+	<color name="title_color">#f0f0f0</color><!-- 标题字体颜色 -->
+	<!--<color name="close_color">#6d6d6d</color> 录像、监听、对讲、方向的关闭 的字体颜色 -->
+	<color name="black">#000000</color><!-- 黑色 -->
+	<color name="white">#FFFFFFFF</color><!-- 白色 -->
+	<color name="blue">#ff0000ff</color>
+</resources> 

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.monitor.bus.activity"
+    android:versionCode="18"
+    android:versionName="3.0.2.12" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="19" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="com.monitor.bus.activity.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <permission
+        android:name="com.monitor.bus.activity.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyAXN1I6xLqUQ6JeYZ3ZtKhtsmu57PU8aNk" />
+        <!-- AIzaSyAL2Hq1dw17xeVxtlMJTfGFLXSV2Eewkss
+        AIzaSyBCCmHf_RFopdnPMynW5fZ4ALQqRFUHU-s -->
+        <!-- AIzaSyC56Vx9UdWItTphk3hBlf_ItkY3i8TU2us -->
+        <!-- wzq.key的google map key AIzaSyDq3pAWE5n-OYeDDoItq0nYaVPDaycz6aM -->
+        <!-- android:value="AIzaSyDrae3AGHBv3LWFAM9ICvYy34mOtzr3jPM" /> -->
+        <!-- debug的google map key -->
+        <!-- AIzaSyCIXFqFNkyzregsQpzNqjWkxU4opd_dsjc -->
+        <activity
+            android:name=".Logo"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="LoginActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BusDeviceList"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainListActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="SettingActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LocalRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".VideoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FilelistActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordQueryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BaseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AlarmListActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DevRecordListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".UserMapActivity"
+            android:alwaysRetainTaskState="true"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".UserGoogleMapActivity"
+            android:alwaysRetainTaskState="true"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".FilterOptionActivity"
+            android:alwaysRetainTaskState="true"
+            android:screenOrientation="sensorPortrait" >
+        </activity>
+        <activity
+            android:name=".CheckBoxPreferActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <service android:name="com.monitor.bus.service.MonitorAppStatus" />
+    </application>
+
+</manifest>

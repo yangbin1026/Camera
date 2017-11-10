@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:descendantFocusability="blocksDescendants">
+
+    <include
+        android:id="@+id/include_filter"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_size"
+        layout="@layout/title_themes" />
+
+    <GridView
+        android:id="@+id/gridview_filter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:numColumns="2"
+        android:focusable="true" >
+    </GridView>
+
+</LinearLayout>

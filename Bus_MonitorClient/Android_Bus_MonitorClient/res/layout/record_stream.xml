@@ -1,0 +1,72 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/videoLayoutId"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/main_bg"
+    >
+
+    <include
+        android:id="@+id/video_title"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_size"
+        layout="@layout/title_themes" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/record_linear"
+        android:layout_below="@+id/video_title"
+        android:background="@color/font_color"
+        android:padding="0.5dp" >
+
+        <com.monitor.bus.view.MyVideoView
+            android:id="@+id/myVideoView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/record_linear"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/pause"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_click"
+            android:onClick="pauseVideo"
+            android:text="@string/pause"
+            android:textColor="@color/font_color" />
+        <!--
+    <Button
+        android:id="@+id/play"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="22dp"
+        android:layout_toLeftOf="@+id/pause"
+        android:text="@string/play" 
+        android:onClick="playVideo"/>
+        -->
+
+        <Button
+            android:id="@+id/stop"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="22dp"
+            android:background="@drawable/button_click"
+            android:onClick="stopVideo"
+            android:text="@string/stop"
+            android:textColor="@color/font_color" />
+    </LinearLayout>
+
+</RelativeLayout>
