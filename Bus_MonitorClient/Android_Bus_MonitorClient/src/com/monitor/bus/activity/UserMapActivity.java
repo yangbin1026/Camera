@@ -87,11 +87,13 @@ import com.monitor.bus.adapter.SpinnerBusAdapter;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.utils.LogUtils;
 
 /**
  * 地图
  */
 public class UserMapActivity extends Activity {
+	public static final String TAG ="TAGUserMapAct";
 	BMapManager bManager;
 	private MyLocationMapView mapView;
 	private MapController mapController;
@@ -127,10 +129,13 @@ public class UserMapActivity extends Activity {
 		// NWbcmXVqc4pTsPpQZ9l81VeB
 		// XyMmRTO8VVhFVd0laDfkCxWH
 		// YO2IhEA6cBGz8pnIx0hgBHAo		nUKAWtCiINQEmL6gzpQiA6UG	[chen zheng yi]
-		bManager.init("nUKAWtCiINQEmL6gzpQiA6UG", new MyGeneralListener());
+		//yangbin ：9aFWU4B5xsHpnUDeGGnMbFcNVZaxu70Q
+
+		//bManager.init("nUKAWtCiINQEmL6gzpQiA6UG", new MyGeneralListener());
+		bManager.init("9aFWU4B5xsHpnUDeGGnMbFcNVZaxu70Q", new MyGeneralListener());
 		bManager.start();
 		setContentView(R.layout.user_mapview);
-		findViews();
+		initView();
 		Intent intent = getIntent();
 		curBusDeviceInfo = (BusDeviceInfo) intent
 				.getSerializableExtra("DevObj");
@@ -452,10 +457,11 @@ public class UserMapActivity extends Activity {
 				public void run() {
 					// TODO Auto-generated method stub
 					try {
-						if(IsExit)
+						if(IsExit){
 							return;
-						
+						}
 						String guid_Tmp = guid;
+						LogUtils.d(TAG,"initDevLocationGPS" + latitude + longitude);
 						Map<String, String> maps = GpsToBaiduUtil
 								.ConvertGpsToBaidu(guid_Tmp,latitude, longitude);
 						BASE64Decoder decoder = new BASE64Decoder();
@@ -471,6 +477,7 @@ public class UserMapActivity extends Activity {
 						
 						String x = maps.get("x");
 						String y = maps.get("y");
+						//invalid double:""
 						byte[] byte_x = decoder.decodeBuffer(x);
 						byte[] byte_y = decoder.decodeBuffer(y);
 						longitude = Double.parseDouble(new String(byte_x));
@@ -666,7 +673,7 @@ public class UserMapActivity extends Activity {
 	}
 
 	// 初始化UI控件
-	private void findViews() {
+	private void initView() {
 		mapView = (MyLocationMapView) findViewById(R.id.bmapView);
 		// 获取地图控制器
 		mapController = mapView.getController();
