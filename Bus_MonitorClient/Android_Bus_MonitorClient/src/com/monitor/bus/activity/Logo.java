@@ -21,10 +21,10 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.baidu.location.f.d;
 import com.jniUtil.MyUtil;
 import com.monitor.bus.consts.Constants;
 
+//SplashActivity
 public class Logo extends Activity {
 
 	private static final int END = 0;

@@ -164,7 +164,6 @@ int id aboutLayoutId 0x7f070005
 int id alarmListView 0x7f07000b
 int id alarmText 0x7f070009
 int id back_title 0x7f07001e
-int id bmapView 0x7f07005f
 int id busDevListView 0x7f07000d
 int id busItem 0x7f07000c
 int id capture 0x7f070063
@@ -208,6 +207,7 @@ int id include1 0x7f07000a
 int id include_filter 0x7f070025
 int id linearLayout1 0x7f070032
 int id ll_editall 0x7f070029
+int id ll_main 0x7f07005f
 int id localListView 0x7f070028
 int id localTest 0x7f070027
 int id login 0x7f070033

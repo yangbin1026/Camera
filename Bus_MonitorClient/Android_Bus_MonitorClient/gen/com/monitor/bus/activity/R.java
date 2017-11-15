@@ -317,7 +317,6 @@ containing a value of this type.
         public static final int alarmListView=0x7f07000b;
         public static final int alarmText=0x7f070009;
         public static final int back_title=0x7f07001e;
-        public static final int bmapView=0x7f07005f;
         public static final int busDevListView=0x7f07000d;
         public static final int busItem=0x7f07000c;
         public static final int capture=0x7f070063;
@@ -361,6 +360,7 @@ containing a value of this type.
         public static final int include_filter=0x7f070025;
         public static final int linearLayout1=0x7f070032;
         public static final int ll_editall=0x7f070029;
+        public static final int ll_main=0x7f07005f;
         public static final int localListView=0x7f070028;
         public static final int localTest=0x7f070027;
         public static final int login=0x7f070033;

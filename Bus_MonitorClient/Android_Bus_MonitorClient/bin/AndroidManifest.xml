@@ -40,6 +40,7 @@
         android:required="true" />
 
     <application
+        android:name="com.monitor.bus.Application"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -47,6 +48,9 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAXN1I6xLqUQ6JeYZ3ZtKhtsmu57PU8aNk" />
+         <meta-data
+           android:name="com.baidu.lbsapi.API_KEY"
+           android:value="SGX8RCR9slElekih1wwESSt3q1DPi6UR" />
         <!-- AIzaSyAL2Hq1dw17xeVxtlMJTfGFLXSV2Eewkss
         AIzaSyBCCmHf_RFopdnPMynW5fZ4ALQqRFUHU-s -->
         <!-- AIzaSyC56Vx9UdWItTphk3hBlf_ItkY3i8TU2us -->
