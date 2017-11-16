@@ -25,7 +25,7 @@ import com.jniUtil.MyUtil;
 import com.monitor.bus.consts.Constants;
 
 //SplashActivity
-public class Logo extends Activity {
+public class SplashActivity extends Activity {
 
 	private static final int END = 0;
 	private static final int DOING = 1;
@@ -172,7 +172,7 @@ public class Logo extends Activity {
 	 */
 	public void StartIntent() {
 		Intent intent = new Intent();
-		intent.setClass(Logo.this, LoginActivity.class);
+		intent.setClass(SplashActivity.this, LoginActivity.class);
 		startActivity(intent);
 		this.overridePendingTransition(android.R.anim.fade_in,
 				android.R.anim.fade_out);
