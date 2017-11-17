@@ -521,18 +521,6 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 		isCapturePicture = true;
 	}
 
-	@Override
-	protected void onRestart() {
-		super.onRestart();
-	}
-	
-	/*
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-	}*/
-
 	/**
 	 * 判断是否正常播放
 	 * 

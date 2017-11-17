@@ -70,29 +70,33 @@ import com.monitor.bus.view.MyEditText;
  * 
  */
 public class LoginActivity extends Activity implements android.view.View.OnClickListener {
+	private static String TAG = "LoginActivity";
+
 	private MyEditText userName;// 用户名
 	private MyEditText password;// 密码
 	private MyEditText login_port;// 端口
 	private MyEditText login_address;// 地址
-	private LoginEventControl loginControl;// 登陆回调类
-	private static String TAG = "LoginActivity";
-	private String newVerName, newAppName;// 新版本名称,新应用程序名称
-	private int newVerCode;// 新版本号
-	private int currentCode = 0;//旧版本号
 	private ProgressDialog pbar;// 进度条对话框
-	private Handler handler = new Handler();
-	private ImageButton mDropDown;
-	private DBHelper dbHelper;
-	private CheckBox mCheckBox;
-	private PopupWindow popView;
-	private MyAdapter dropDownAdapter;
 	private EditText mUserName;
 	private EditText mPassword;
 	private EditText mIP;
 	private EditText mPort;
+	private ImageButton mDropDown;
 	private Button btn_login;
+	private CheckBox mCheckBox;
+	private PopupWindow popView;
+	private MyAdapter dropDownAdapter;
+	
+	private String newVerName, newAppName;// 新版本名称,新应用程序名称
+	private int newVerCode;// 新版本号
+	private int currentCode = 0;//旧版本号
 	private InetAddress iAdd;
-	private String analysis_Ip;
+	
+	
+	
+	private Handler handler = new Handler();
+	private DBHelper dbHelper;
+	private LoginEventControl loginControl;// 登陆回调类
 	static {
 		try {
 			System.loadLibrary("ffmpeg");

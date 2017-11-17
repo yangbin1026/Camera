@@ -124,7 +124,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
 
 		Intent intent = getIntent();
-		curCtlDevInfo = (BusDeviceInfo) intent.getSerializableExtra("DevObj");// 获取当前设备坐标
+		curCtlDevInfo = (BusDeviceInfo) intent.getSerializableExtra(UserMapActivity.KEY_DEVICE_INFO);// 获取当前设备坐标
 
 		mLocationSource = new MyLocationSource();
 
@@ -394,7 +394,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 			guid = "";
 			Intent intent2 = new Intent();
 			if(busListEntrance){
-				intent2.putExtra("DevObj", curCtlDevInfo);
+				intent2.putExtra(UserMapActivity.KEY_DEVICE_INFO, curCtlDevInfo);
 			}
 			intent2.setClass(this, UserMapActivity.class);
 			startActivity(intent2);

@@ -265,16 +265,16 @@ public static String getCurrentDateTime(String fomat){
 	 * 开启地图
 	 * @return 开启成功返回true,否则相反
 	 */
-	public static boolean startMapActivity(Activity from, Intent intent) {
+	public static boolean startMapActivity(Activity context, Intent intent) {
 		
 //		if(MyUtil.isChina(MainListActivity.this)){
-		if(MyUtil.getDefMapIsBaiduMap(from)){
-			intent.setClass(from, UserMapActivity.class);
-			from.startActivity(intent);
+		if(MyUtil.getDefMapIsBaiduMap(context)){
+			intent.setClass(context, UserMapActivity.class);
+			context.startActivity(intent);
 		}else{
-			if( MyUtil.checkGoogleMapModule(from) ){
-				intent.setClass(from, UserGoogleMapActivity.class);
-				from.startActivity(intent);
+			if( MyUtil.checkGoogleMapModule(context) ){
+				intent.setClass(context, UserGoogleMapActivity.class);
+				context.startActivity(intent);
 			}else{
 				return false;
 			}

@@ -3,6 +3,8 @@ package com.monitor.bus.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.nfc.Tag;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import com.monitor.bus.activity.R;
 import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.utils.LogUtils;
 
 /**
  * 显示spinner下拉列表的适配器
@@ -57,6 +60,7 @@ public class SpinnerBusAdapter extends ArrayAdapter<Object> {
 		}
 		busItem = 	(TextView) convertView.findViewById(R.id.busItem);
 		busItem.setText(items.get(position).getDeviceName());
+		LogUtils.d("yangbin", "mapActDevice: "+items.get(position).getDeviceName()+" l :"+items.get(position).getLatitude()+" w :"+items.get(position).getLongitude());
 		return convertView;
 	}
 

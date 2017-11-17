@@ -189,7 +189,7 @@ public class BusDeviceList extends BaseActivity {
 		switch (item.getOrder()) {
 		case 0:// 进入电子地图
 			Intent intent = new Intent();
-			intent.putExtra("DevObj", curCtlDevInfo);
+			intent.putExtra(UserMapActivity.KEY_DEVICE_INFO, curCtlDevInfo);
 			MyUtil.startMapActivity(this, intent);
 			
 ////			if(MyUtil.isChina(this.getBaseContext())){
