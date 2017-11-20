@@ -550,7 +550,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 		case MotionEvent.ACTION_MOVE:
 			mx = (int) (event.getRawX() - x);
 			my = (int) (event.getRawY() - y);
-			v.layout(mx, my, mx + v.getWidth(), my + v.getHeight());
+			//v.layout(mx, my, mx + v.getWidth(), my + v.getHeight());
 			break;
 		}
 		return mGestureDetector.onTouchEvent(event);

@@ -43,11 +43,13 @@ public class MainListActivity extends BaseActivity{
 	private View view;
 	private MyNotification myNotification;//引用通知
 	private GridView mainList;
+	private Context mContext;
 	//private Intent serviceIntent;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.i("MainListActivity", "===========>onCreate");
+		mContext=this;
 		initMainListData();
 		getWindow().setFlags(0x08000000, 0x08000000);
 		//serviceIntent = new Intent(this,MonitorAppStatus.class);
@@ -93,19 +95,19 @@ public class MainListActivity extends BaseActivity{
 				switch (position) {
 				case 0:
 					Intent intent_1=new Intent();
-					intent_1.setClass(MainListActivity.this, RecordQueryActivity.class);
+					intent_1.setClass(mContext, RecordQueryActivity.class);
 					startActivity(intent_1);
 					break;
 					
 				case 1:
 					Intent intent_2=new Intent();
-					intent_2.setClass(MainListActivity.this, BusDeviceList.class);
+					intent_2.setClass(mContext, BusDeviceList.class);
 					startActivity(intent_2);
 					break;
 					
 				case 2:
 					Intent intent_3=new Intent();
-					MyUtil.startMapActivity(MainListActivity.this, intent_3);
+					MyUtil.startMapActivity((Activity)mContext, intent_3);
 					/*
 					if(MyUtil.isChina(MainListActivity.this)){
 					if(MyUtil.getDefMapIsBaiduMap(MainListActivity.this)){
@@ -121,13 +123,13 @@ public class MainListActivity extends BaseActivity{
 					
 				case 3:
 					Intent intent_4=new Intent();
-					intent_4.setClass(MainListActivity.this, FilelistActivity.class);
+					intent_4.setClass(mContext, FilelistActivity.class);
 					startActivity(intent_4);
 					break;
 					
 				case 4:
 					Intent intent_5=new Intent();
-					intent_5.setClass(MainListActivity.this, AlarmListActivity.class);
+					intent_5.setClass(mContext, AlarmListActivity.class);
 					startActivity(intent_5);
 					break;
 					

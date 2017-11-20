@@ -31,6 +31,7 @@ import com.jniUtil.JNVPlayerUtil;
 import com.jniUtil.MyUtil;
 import com.jniUtil.PullParseXML;
 import com.monitor.bus.activity.BusDeviceList;
+import com.monitor.bus.activity.HomeActivity;
 import com.monitor.bus.activity.MainListActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.adapter.MyNotification;
@@ -157,11 +158,10 @@ public class LoginEventControl extends Object {
 			case CALLBACKFLAG.LOGIN_SUCCESS:// 登陆成功
 				Log.e(TAG, "登陆成功！！");
 				JNVPlayerUtil.JNV_N_GetDevList(Constants.DEVICELIST_PASTH);// 获取设备列表
-
 				if (!loginsuccess_flag) {
 					myProgress.dismiss();
 					Intent intent = new Intent();
-					intent.setClass(currentContext, MainListActivity.class);
+					intent.setClass(currentContext, HomeActivity.class);
 					currentContext.startActivity(intent);
 					currentContext.finish();
 				}

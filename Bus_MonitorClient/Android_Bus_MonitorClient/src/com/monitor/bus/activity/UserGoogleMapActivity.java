@@ -58,6 +58,7 @@ import com.monitor.bus.adapter.SpinnerBusAdapter;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.utils.MyUtils;
 
 
 public class UserGoogleMapActivity extends FragmentActivity{ 
@@ -350,19 +351,6 @@ public class UserGoogleMapActivity extends FragmentActivity{
 
 
 	/**
-	 * 获取旋转后的位图
-	 */
-	protected Bitmap getRotatedBmp(Bitmap bmp, int angle) {
-		Matrix myMatrix = new Matrix();
-		myMatrix.reset();
-		myMatrix.postRotate(angle);
-		Bitmap dstBitmap = Bitmap.createBitmap(bmp, 0, 0, 
-				bmp.getWidth(),bmp.getHeight(), myMatrix, true);
-		return dstBitmap;
-	} 
-
-
-	/**
 	 * 验证是否具有有效的GPS数据
 	 * @param curCtlDevInfo
 	 * @return
@@ -572,11 +560,6 @@ public class UserGoogleMapActivity extends FragmentActivity{
 				int eventType = intent.getIntExtra("eventType", 0);// 
 				if(isBroadcastRegister && eventType == CALLBACKFLAG.DEVICE_EVENT_GPS_INFO){//GPS基本
 
-//					if(!validateGps()){
-//						//禁用自动定位
-//												app.mBMapMan.getLocationManager().removeUpdates(mLocationListener);
-//												mLocationOverlay.disableMyLocation();
-//					}
 					String gpsDevID = intent.getStringExtra("gpsDevID");
 //					Log.i(TAG, "当前设备："+curCtlDevInfo);
 					if(curCtlDevInfo!=null && curCtlDevInfo.getGuId().equals(gpsDevID)){
@@ -590,7 +573,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 						if(!curPoint.equals(prePoint)){
 							Bitmap bmp = BitmapFactory.decodeResource(getResources(),
 									R.drawable.bus_image_map);
-							Bitmap dstBitmap = getRotatedBmp(bmp, baseDirect);
+							Bitmap dstBitmap = MyUtils.getRotatedBmp(bmp, baseDirect);
 							mMarker.setIcon(BitmapDescriptorFactory.fromBitmap(dstBitmap));
 
 							mLatLngs.add(curPoint);

@@ -41,10 +41,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 /**
  * 地图
@@ -77,6 +79,7 @@ public class UserMapActivity extends Activity {
 	private MapView mapView;
 	private BaiduMap mBaiduMap;
 	private Marker mMarkerA;
+	private TextView tv_googleMap;
 	MapStatus.Builder builder;
 	LatLng center = new LatLng(39.915071, 116.403907); // 地图定位中心点, 默认 天安门
 
@@ -122,6 +125,28 @@ public class UserMapActivity extends Activity {
 
 	private void initView() {
 		mapView = (MapView) findViewById(R.id.bmapView);
+		tv_googleMap =(TextView) findViewById(R.id.tv_googlemap);
+		tv_googleMap.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				if (MyUtil.checkGoogleMapModule((Activity)mContext)) {
+					isToOtherMap = true;
+					IsExit = true;
+					guid = "";
+					// 刷新地图
+					// mapView.getOverlays().clear();
+					Intent intent2 = new Intent();
+					if (busListEntrance) {
+						intent2.putExtra(UserMapActivity.KEY_DEVICE_INFO, curBusDeviceInfo);
+					}
+					intent2.setClass(mContext, UserGoogleMapActivity.class);
+					startActivity(intent2);
+					finish();
+				}
+			}
+		});
 	}
 
 	private void initDeviceInfo() {
@@ -154,6 +179,7 @@ public class UserMapActivity extends Activity {
 							guid = "";
 						}
 						curBusDeviceInfo = listBus.get(location);
+						initOverlay();
 					}
 
 					@Override
@@ -273,49 +299,6 @@ public class UserMapActivity extends Activity {
 				listBus.add(busInfo);
 			}
 		}
-	}
-
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, 0, 0, R.string.video_stream);
-		menu.add(0, 1, 1, R.string.cancel);
-		menu.add(0, 2, 2, R.string.googleMap);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case 0:
-			Intent intent = new Intent();
-			curBusDeviceInfo.setCurrentChn(1);
-			intent.putExtra("videoData", curBusDeviceInfo);
-			intent.setClass(this, VideoActivity.class);
-			startActivity(intent);
-			break;
-		case 1:
-
-			break;
-		case 2:
-			// 谷歌地图
-			if (MyUtil.checkGoogleMapModule(this)) {
-				isToOtherMap = true;
-				IsExit = true;
-				guid = "";
-				// 刷新地图
-				// mapView.getOverlays().clear();
-				Intent intent2 = new Intent();
-				if (busListEntrance) {
-					intent2.putExtra(UserMapActivity.KEY_DEVICE_INFO, curBusDeviceInfo);
-				}
-				intent2.setClass(this, UserGoogleMapActivity.class);
-				startActivity(intent2);
-				finish();
-			}
-			break;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	/**
