@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.monitor.bus.activity.R;
 import com.monitor.bus.model.AlarmInfo;
+import com.monitor.bus.utils.MyUtils;
 
 /**
  * 显示报警信息的列表适配器
@@ -25,6 +26,7 @@ public class AlarmListAdapter extends BaseAdapter{
 	
 	/* 构造器 */
 	public AlarmListAdapter(Context context, List<AlarmInfo> it) {
+		MyUtils.showToast(context, "listLength:"+it.size());
 		mInflater = LayoutInflater.from(context);
 		items = it;
 	}

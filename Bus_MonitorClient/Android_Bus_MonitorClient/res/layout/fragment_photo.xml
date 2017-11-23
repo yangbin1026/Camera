@@ -1,14 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/aboutLayoutId"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/white"
-    android:gravity="center"
-    android:orientation="vertical" >
-    <TextView android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="这是图片页"/>
-    
+    android:background="@drawable/main_bg" >
 
-</LinearLayout>
+    <include
+        android:id="@+id/titlelayout"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_size"
+        android:layout_alignParentTop="true"
+        layout="@layout/title_themes" />
+
+    <TextView
+        android:id="@+id/path_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titlelayout"
+        android:drawablePadding="1dip"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="3"
+        android:padding="2dip"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="20sp" >
+
+        <requestFocus />
+    </TextView>
+
+    <TextView
+        android:id="@+id/back_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/path_view"
+        android:drawableLeft="@drawable/back_folder"
+        android:gravity="center|left"
+        android:paddingLeft="3dp"
+        android:text="@string/file_back"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:visibility="invisible" />
+
+    <ListView
+        android:id="@+id/fileList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/back_title"
+        android:cacheColorHint="#00000000"
+        android:divider="@xml/listline_repeat"
+        android:dividerHeight="1dp"
+        android:longClickable="true"
+        android:paddingLeft="3dp" >
+    </ListView>
+
+</RelativeLayout>

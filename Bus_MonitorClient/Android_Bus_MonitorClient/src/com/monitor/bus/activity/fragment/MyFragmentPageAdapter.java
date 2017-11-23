@@ -7,13 +7,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 public class MyFragmentPageAdapter extends FragmentPagerAdapter {
-	private List<Fragment> mFragments;
+	private List<BaseFragment> mFragments;
 
 	public MyFragmentPageAdapter(FragmentManager fm) {
 		super(fm);
 	}
 
-	public MyFragmentPageAdapter(FragmentManager fm, List<Fragment> list) {
+	public MyFragmentPageAdapter(FragmentManager fm, List<BaseFragment> list) {
 		this(fm);
 		mFragments = list;
 	}

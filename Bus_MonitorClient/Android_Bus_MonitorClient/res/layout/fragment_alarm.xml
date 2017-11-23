@@ -1,14 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/aboutLayoutId"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/white"
-    android:gravity="center"
+    android:background="@drawable/main_bg"
     android:orientation="vertical" >
-    <TextView android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="这是警报页"/>
+
+        <include
+        android:id="@+id/include1"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_size"
+        layout="@layout/title_themes" />
     
+    <ListView
+        android:id="@+id/alarmListView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="#00000000"
+        android:divider="@xml/listline_repeat"
+        android:dividerHeight="1dp"
+        android:drawSelectorOnTop="false"
+        android:scrollbars="vertical" >
+    </ListView>
 
 </LinearLayout>

@@ -324,7 +324,6 @@ public class SettingActivity extends BaseActivity{
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
-										// TODO Auto-generated method stub
 										installNewApk();
 										
 										finish();
@@ -336,7 +335,6 @@ public class SettingActivity extends BaseActivity{
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
-										// TODO Auto-generated method stub
 										/* finish(); */
 									}
 								}).create().show();
@@ -348,7 +346,6 @@ public class SettingActivity extends BaseActivity{
 	 * 安装新的应用程序
 	 */
 	private void installNewApk() {
-		// TODO Auto-generated method stub
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setDataAndType(
 				Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/", newAppName)),
@@ -360,7 +357,6 @@ public class SettingActivity extends BaseActivity{
 	 * 将从服务器version.json获得的字符串解析出我们需要的版本信息
 	 */
 	private boolean getServerVersion() {
-		// TODO Auto-generated method stub
 		try {
 			Log.i("--------------", "ip:" + Constants.SERVER_IP);
 			String newVerJSON = GetUpdateJsonInfo

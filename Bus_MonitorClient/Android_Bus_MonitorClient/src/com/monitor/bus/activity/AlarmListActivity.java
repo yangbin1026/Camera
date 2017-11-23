@@ -18,9 +18,9 @@ import android.widget.ListView;
 import com.jniUtil.MyUtil;
 import com.monitor.bus.adapter.AlarmListAdapter;
 import com.monitor.bus.consts.Constants;
-import com.monitor.bus.control.VibrateEventActivity;
 import com.monitor.bus.model.AlarmInfo;
 import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.utils.MyUtils;
 
 /**
  * 报警信息list
@@ -74,7 +74,7 @@ public class AlarmListActivity extends BaseActivity {
 		
 		for (int i = 0; i < alarms.size(); i++) {
 			if (alarms.get(i).getExpresion().contains(getString(R.string.motion_detection))) {
-				new VibrateEventActivity()
+				MyUtils
 						.Vibrate(AlarmListActivity.this, 1000);// 震动提示用户
 			}
 		}

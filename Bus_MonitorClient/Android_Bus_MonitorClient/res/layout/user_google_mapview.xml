@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <LinearLayout
+   <RelativeLayout
         android:id="@+id/devSelect"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
             android:layout_marginRight="20dp"
             android:background="@drawable/dev_list_button"
             android:gravity="center" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <fragment
         android:id="@+id/map"

@@ -2,6 +2,7 @@ package com.monitor.bus.activity.fragment;
 
 import com.monitor.bus.activity.R;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,6 +14,12 @@ public class BaseFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_setting, container, false);
 		return view;
+	}
+	public boolean onBackPress(){
+		return false;
+	}
+	protected Context getContext() {
+		return (Context)getActivity();
 	}
 
 }

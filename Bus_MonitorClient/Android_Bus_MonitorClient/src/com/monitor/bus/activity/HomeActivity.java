@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.monitor.bus.activity.fragment.AboutFragment;
 import com.monitor.bus.activity.fragment.AlarmFragment;
+import com.monitor.bus.activity.fragment.BaseFragment;
 import com.monitor.bus.activity.fragment.MyFragmentPageAdapter;
 import com.monitor.bus.activity.fragment.PhotoFragment;
 import com.monitor.bus.activity.fragment.RePlayFragment;
@@ -24,8 +25,8 @@ public class HomeActivity extends FragmentActivity {
 
 	private ViewPager mViewPager;
 	private FragmentPagerAdapter mAdapter;
-	private List<Fragment> mFragments = new ArrayList<Fragment>();
-	private int currentIndex;
+	private List<BaseFragment> mFragments = new ArrayList<BaseFragment>();
+	private BaseFragment currentFragment;
 
 	/**
 	 * 底部四个按钮
@@ -79,30 +80,12 @@ public class HomeActivity extends FragmentActivity {
 	}
 
 	protected void resetTabBtn(int position) {
-		((ImageButton) mTabBtn1.findViewById(R.id.ib_1)).setImageResource(R.drawable.icon);
-		((ImageButton) mTabBtn2.findViewById(R.id.ib_2)).setImageResource(R.drawable.icon);
-		((ImageButton) mTabBtn3.findViewById(R.id.ib_3)).setImageResource(R.drawable.icon);
-		((ImageButton) mTabBtn4.findViewById(R.id.ib_4)).setImageResource(R.drawable.icon);
-		((ImageButton) mTabBtn5.findViewById(R.id.ib_5)).setImageResource(R.drawable.icon);
-		switch (position) {
-		case 0:
-			((ImageButton) mTabBtn1.findViewById(R.id.ib_1)).setImageResource(R.drawable.icon);
-			break;
-		case 1:
-			((ImageButton) mTabBtn2.findViewById(R.id.ib_2)).setImageResource(R.drawable.icon);
-			break;
-		case 2:
-			((ImageButton) mTabBtn3.findViewById(R.id.ib_3)).setImageResource(R.drawable.icon);
-			break;
-		case 3:
-			((ImageButton) mTabBtn4.findViewById(R.id.ib_4)).setImageResource(R.drawable.icon);
-			break;
-		case 4:
-			((ImageButton) mTabBtn5.findViewById(R.id.ib_5)).setImageResource(R.drawable.icon);
-			break;
-		}
-
-		currentIndex = position;
+		((ImageButton) mTabBtn1.findViewById(R.id.ib_1)).setBackgroundColor(position==0? getResources().getColor(R.color.black):getResources().getColor(R.color.blue));
+		((ImageButton) mTabBtn2.findViewById(R.id.ib_2)).setImageResource(position==1? getResources().getColor(R.color.black):getResources().getColor(R.color.blue));
+		((ImageButton) mTabBtn3.findViewById(R.id.ib_3)).setImageResource(position==2? getResources().getColor(R.color.black):getResources().getColor(R.color.blue));
+		((ImageButton) mTabBtn4.findViewById(R.id.ib_4)).setImageResource(position==3? getResources().getColor(R.color.black):getResources().getColor(R.color.blue));
+		((ImageButton) mTabBtn5.findViewById(R.id.ib_5)).setImageResource(position==4? getResources().getColor(R.color.black):getResources().getColor(R.color.blue));
+		currentFragment = mFragments.get(position);
 	}
 
 	private void initView() {
@@ -111,6 +94,13 @@ public class HomeActivity extends FragmentActivity {
 		mTabBtn3 = (LinearLayout) findViewById(R.id.ll_3);
 		mTabBtn4 = (LinearLayout) findViewById(R.id.ll_4);
 		mTabBtn5 = (LinearLayout) findViewById(R.id.ll_5);
+	}
 
+	@Override
+	public void onBackPressed() {
+		if (currentFragment.onBackPress()) {
+			return;
+		}
+		super.onBackPressed();
 	}
 }

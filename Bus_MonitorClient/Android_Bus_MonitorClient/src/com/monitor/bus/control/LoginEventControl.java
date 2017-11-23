@@ -58,8 +58,6 @@ public class LoginEventControl extends Object {
 	public static Timer alarmTimer;// 计时器
 	private SoundPool soundPool;
 	private int nGetServerIndex = 0; // 获取服务器列表次数
-	private Object threadLock = new Object();
-	private List<AlarmInfo> alarms;
 	private BusDeviceInfo currentDeviceInfo;
 	public LoginEventControl(Activity currentActivity) {
 		this.currentContext = currentActivity;
@@ -102,7 +100,7 @@ public class LoginEventControl extends Object {
 			throws JSONException {
 
 		strEvent = strEvent.replace("NaN", "1");
-		// Log.i(TAG, "callbackEvent:"+iUserParam+","+strEvent);
+		Log.i(TAG, "callbackEvent:"+iUserParam+","+strEvent);
 		JSONObject jo = new JSONObject(strEvent);
 		int eventType = jo.getInt("eventType");
 		msg = myHandler.obtainMessage();
@@ -161,7 +159,7 @@ public class LoginEventControl extends Object {
 				if (!loginsuccess_flag) {
 					myProgress.dismiss();
 					Intent intent = new Intent();
-					intent.setClass(currentContext, HomeActivity.class);
+					intent.setClass(currentContext, MainListActivity.class);
 					currentContext.startActivity(intent);
 					currentContext.finish();
 				}
