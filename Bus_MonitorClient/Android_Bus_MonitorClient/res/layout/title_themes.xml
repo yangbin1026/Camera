@@ -2,16 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/loginLayoutId"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent" 
+    android:background="#ffffff">
 
     <TextView
         android:id="@+id/tilte_name"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
-        android:background="@drawable/main_title"
+        android:background="#ffffff"
         android:gravity="center"
         android:paddingLeft="10dp"
-        android:textColor="@color/title_color" />
+        android:textColor="@color/black" />
+    <View android:layout_height="1dp"
+        android:layout_width="match_parent"
+        android:background="@color/bg_my_gray"/>
 
 </RelativeLayout>

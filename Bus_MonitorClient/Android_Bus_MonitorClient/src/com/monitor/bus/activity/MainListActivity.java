@@ -71,7 +71,7 @@ public class MainListActivity extends BaseActivity{
 		}
 		//stopService(serviceIntent);//停止服务
 		
-		JNVPlayerUtil.JNV_N_GetAlarmStop("");//获取报警信息
+		JNVPlayerUtil.JNV_N_GetAlarmStop("");//获取报警信息 报错
 		LoginEventControl.alarmTimer.cancel();
 		Log.e("MainListActivity", "=======onDestroy");
 		JNVPlayerUtil.JNV_N_Logout();//登出

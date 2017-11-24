@@ -3,7 +3,7 @@ package com.monitor.bus.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.monitor.bus.activity.fragment.AboutFragment;
+import com.monitor.bus.activity.fragment.SettingFragment;
 import com.monitor.bus.activity.fragment.AlarmFragment;
 import com.monitor.bus.activity.fragment.BaseFragment;
 import com.monitor.bus.activity.fragment.MyFragmentPageAdapter;
@@ -18,24 +18,26 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-public class HomeActivity extends FragmentActivity {
+public class HomeActivity extends FragmentActivity implements OnClickListener{
 
 	private ViewPager mViewPager;
-	private FragmentPagerAdapter mAdapter;
+	private FragmentPagerAdapter mPageAdapter;
 	private List<BaseFragment> mFragments = new ArrayList<BaseFragment>();
 	private BaseFragment currentFragment;
 
 	/**
 	 * 底部四个按钮
 	 */
-	private LinearLayout mTabBtn1;
-	private LinearLayout mTabBtn2;
-	private LinearLayout mTabBtn3;
-	private LinearLayout mTabBtn4;
-	private LinearLayout mTabBtn5;
+	private ImageButton ib_0;
+	private ImageButton ib_1;
+	private ImageButton ib_2;
+	private ImageButton ib_3;
+	private ImageButton ib_4;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,7 @@ public class HomeActivity extends FragmentActivity {
 	}
 
 	private void initData() {
-		AboutFragment fragment4 = new AboutFragment();
+		SettingFragment fragment4 = new SettingFragment();
 		AlarmFragment fragment3 = new AlarmFragment();
 		PhotoFragment fragment2 = new PhotoFragment();
 		RePlayFragment fragment1 = new RePlayFragment();
@@ -58,8 +60,8 @@ public class HomeActivity extends FragmentActivity {
 		mFragments.add(fragment2);
 		mFragments.add(fragment3);
 		mFragments.add(fragment4);
-		mAdapter = new MyFragmentPageAdapter(getSupportFragmentManager(), mFragments);
-		mViewPager.setAdapter(mAdapter);
+		mPageAdapter = new MyFragmentPageAdapter(getSupportFragmentManager(), mFragments);
+		mViewPager.setAdapter(mPageAdapter);
 		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override
@@ -79,21 +81,26 @@ public class HomeActivity extends FragmentActivity {
 
 	}
 
-	protected void resetTabBtn(int position) {
-		((ImageButton) mTabBtn1.findViewById(R.id.ib_1)).setBackgroundColor(position==0? getResources().getColor(R.color.black):getResources().getColor(R.color.blue));
-		((ImageButton) mTabBtn2.findViewById(R.id.ib_2)).setImageResource(position==1? getResources().getColor(R.color.black):getResources().getColor(R.color.blue));
-		((ImageButton) mTabBtn3.findViewById(R.id.ib_3)).setImageResource(position==2? getResources().getColor(R.color.black):getResources().getColor(R.color.blue));
-		((ImageButton) mTabBtn4.findViewById(R.id.ib_4)).setImageResource(position==3? getResources().getColor(R.color.black):getResources().getColor(R.color.blue));
-		((ImageButton) mTabBtn5.findViewById(R.id.ib_5)).setImageResource(position==4? getResources().getColor(R.color.black):getResources().getColor(R.color.blue));
+	protected void resetTabBtn(int position) { 
+		((ImageButton) ib_0).setBackgroundColor(position==0? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_1).setBackgroundColor(position==1? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_2).setBackgroundColor(position==2? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_3).setBackgroundColor(position==3? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_4).setBackgroundColor(position==4? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
 		currentFragment = mFragments.get(position);
 	}
 
 	private void initView() {
-		mTabBtn1 = (LinearLayout) findViewById(R.id.ll_1);
-		mTabBtn2 = (LinearLayout) findViewById(R.id.ll_2);
-		mTabBtn3 = (LinearLayout) findViewById(R.id.ll_3);
-		mTabBtn4 = (LinearLayout) findViewById(R.id.ll_4);
-		mTabBtn5 = (LinearLayout) findViewById(R.id.ll_5);
+		ib_0 = (ImageButton) findViewById(R.id.ib_1);
+		ib_1 = (ImageButton) findViewById(R.id.ib_2);
+		ib_2 = (ImageButton) findViewById(R.id.ib_3);
+		ib_3 = (ImageButton) findViewById(R.id.ib_4);
+		ib_4 = (ImageButton) findViewById(R.id.ib_5);
+		ib_0.setOnClickListener(this);
+		ib_1.setOnClickListener(this);
+		ib_2.setOnClickListener(this);
+		ib_3.setOnClickListener(this);
+		ib_4.setOnClickListener(this);
 	}
 
 	@Override
@@ -102,5 +109,35 @@ public class HomeActivity extends FragmentActivity {
 			return;
 		}
 		super.onBackPressed();
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		switch (arg0.getId()) {
+		case R.id.ib_1:
+			mViewPager.setCurrentItem(0);
+			resetTabBtn(0);
+			break;
+		case R.id.ib_2:
+			mViewPager.setCurrentItem(1);
+			resetTabBtn(1);
+			break;
+		case R.id.ib_3:
+			mViewPager.setCurrentItem(2);
+			resetTabBtn(2);
+			break;
+		case R.id.ib_4:
+			mViewPager.setCurrentItem(3);
+			resetTabBtn(3);
+			break;
+		case R.id.ib_5:
+			mViewPager.setCurrentItem(4);
+			resetTabBtn(4);
+			break;
+
+		default:
+			break;
+		}
+		
 	}
 }

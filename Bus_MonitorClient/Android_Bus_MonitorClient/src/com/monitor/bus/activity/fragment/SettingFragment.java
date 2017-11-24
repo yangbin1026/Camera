@@ -20,7 +20,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-public class AboutFragment extends BaseFragment implements View.OnClickListener {
+public class SettingFragment extends BaseFragment implements View.OnClickListener {
 
 	private boolean isCurDefBaiduMap;
 	private String newVerName, newAppName;// 新版本名称,新应用程序名称

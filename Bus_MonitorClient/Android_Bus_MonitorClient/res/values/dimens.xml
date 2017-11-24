@@ -19,4 +19,15 @@
     <!--<dimen name="group_fontsize">15dp</dimen> 组列表字体大小 -->
     <!--<dimen name="child_image_margin">65dp</dimen> 子列表图片与列表的间隔 -->
     <!--<dimen name="device_button_margin">10dp</dimen> 按钮与列表的间隔 -->
+    
+    
+    	<dimen name="ksw_md_thumb_ripple_size">42dp</dimen>
+	<dimen name="ksw_md_thumb_solid_inset">11dp</dimen>
+	<dimen name="ksw_md_thumb_shadow_inset">11dp</dimen>
+	<dimen name="ksw_md_thumb_shadow_inset_top">11dp</dimen>
+	<dimen name="ksw_md_thumb_shadow_inset_bottom">10dp</dimen>
+
+	<dimen name="ksw_md_thumb_solid_size">20dp</dimen>
+	<dimen name="ksw_md_thumb_shadow_size">21dp</dimen>
+	<dimen name="ksw_md_thumb_shadow_offset">2dp</dimen>
 </resources>

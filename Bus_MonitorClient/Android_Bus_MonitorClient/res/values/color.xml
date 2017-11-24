@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="input_color">#a8a8a8</color> <!-- 输入框字体颜色 -->
-	<color name="font_color">#FFFFFFFF</color><!-- 按钮、textview 字体颜色 -->
-	<color name="title_color">#f0f0f0</color><!-- 标题字体颜色 -->
-	<!--<color name="close_color">#6d6d6d</color> 录像、监听、对讲、方向的关闭 的字体颜色 -->
 	<color name="black">#000000</color><!-- 黑色 -->
 	<color name="white">#FFFFFFFF</color><!-- 白色 -->
-	<color name="blue">#ff0000ff</color>
+	<color name="transparent">#00000000</color><!-- 透明 -->
+	<color name="blue">#ff0000ff</color><!-- 蓝色 -->
+	
+	<!--        mycolor     -->
+	<color name="title_color">#000000</color><!-- 标题字体颜色 -->
+	<!--<color name="close_color">#6d6d6d</color> 录像、监听、对讲、方向的关闭 的字体颜色 -->
+	<color name="input_color">#a8a8a8</color> <!-- 输入框字体颜色 -->
+	<color name="font_color">#FFFFFFFF</color><!-- 按钮、textview 字体颜色 -->
+	<color name="bg_line_gray">#c0bfc3</color>
+	<color name="bg_my_gray">#f0eff5</color>
+	
+	
+	<color name="ksw_md_ripple_normal">#1E000000</color>
+	<color name="ksw_md_ripple_checked">#33019285</color>
+
+	<color name="ksw_md_solid_shadow">#33000000</color>
+
+	<color name="ksw_md_solid_normal">#ECECEC</color>
+	<color name="ksw_md_solid_checked">#019285</color>
+	<color name="ksw_md_solid_disable">#FFFFFF</color>
+	<color name="ksw_md_solid_checked_disable">#aaaaaa</color>
+	
 </resources> 

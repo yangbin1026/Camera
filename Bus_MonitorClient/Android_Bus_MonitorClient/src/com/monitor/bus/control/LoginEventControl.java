@@ -41,6 +41,7 @@ import com.monitor.bus.consts.Constants.LGOINFLAG;
 import com.monitor.bus.model.AlarmInfo;
 import com.monitor.bus.model.BusDeviceInfo;
 import com.monitor.bus.model.ServerInfo;
+import com.monitor.bus.utils.LogUtils;
 
 /**
  * 登陆回调管理类
@@ -159,7 +160,11 @@ public class LoginEventControl extends Object {
 				if (!loginsuccess_flag) {
 					myProgress.dismiss();
 					Intent intent = new Intent();
-					intent.setClass(currentContext, MainListActivity.class);
+					if(LogUtils.Debug){
+						intent.setClass(currentContext, HomeActivity.class);
+					}else {
+						intent.setClass(currentContext, MainListActivity.class);
+					}
 					currentContext.startActivity(intent);
 					currentContext.finish();
 				}

@@ -146,10 +146,12 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		mPassword.setText("");
 		mIP = (EditText) login_address.findViewById(R.id.edit_text_input);
 		mPort = (EditText) login_port.findViewById(R.id.edit_text_input);
-		mUserName.setText("123");
-		mPassword.setText("123");
-		mIP.setText("183.61.171.28");
-		mPort.setText("6008");
+		
+		
+//		mUserName.setText("123");
+//		mPassword.setText("123");
+//		mIP.setText("183.61.171.28");
+//		mPort.setText("6008");
 		
 		btn_login = (Button) findViewById(R.id.login);
 		mDropDown.setOnClickListener(this);

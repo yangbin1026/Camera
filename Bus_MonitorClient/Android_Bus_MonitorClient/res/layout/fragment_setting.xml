@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@drawable/main_bg" >
+    android:background="#ffffff"
+    android:orientation="vertical" >
 
     <include
         android:id="@+id/include1"
@@ -15,125 +16,274 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="70dp"
+        android:background="@color/bg_my_gray"
         android:orientation="vertical" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:text="@string/google_store"
-            android:textColor="@color/font_color" />
-
-        <EditText
-            android:id="@+id/storeUrl"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:text="用户" />
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textUri"
-            android:textColor="@color/blue" />
+            android:gravity="center_vertical"
+            android:background="#ffffff" >
 
-        <Button
-            android:id="@+id/storeButton"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 android:layout_alignParentRight="true" 
+                android:text="账号" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="123" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="@drawable/button_click"
-            android:text="@string/save"
-            android:textColor="@color/font_color" />
+            android:background="#ffffff" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自动登录" />
+
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginTop="10dp"
-            android:text="@string/google_service"
-            android:textColor="@color/font_color" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:text="设置" />
 
-        <EditText
-            android:id="@+id/serviceUrl"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textUri"
-            android:textColor="@color/blue" />
+            android:background="#ffffff" >
 
-        <Button
-            android:id="@+id/serviceButton"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="显示模式" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="显示模式" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="@drawable/button_click"
-            android:onClick="saveUrl"
-            android:text="@string/save"
-            android:textColor="@color/font_color" />
+            android:background="#ffffff" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自动登录" />
+
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自动登录" />
+
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自动登录" />
+
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginTop="10dp"
-            android:text="@string/default_map"
-            android:textColor="@color/font_color" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:text="版本" />
 
-        <TextView
-            android:id="@+id/defMapText"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/baiduMap"
-            android:textColor="@color/font_color" />
+            android:background="#ffffff" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自动登录" />
+
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
 
         <Button
-            android:id="@+id/changeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="@drawable/button_click"
-            android:text="@string/change"
-            android:textColor="@color/font_color" />
-
-        <CheckBox
-            android:id="@+id/checkBox_googlegpsCorrection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/googleGpsCorrection" />
-
-        <TextView
-            android:id="@+id/checkVersionText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/version_check"
-            android:textColor="@color/font_color" />
+            android:layout_height="30dp"
+            android:text="退出登录" />
 
-        <Button
-            android:id="@+id/checkVersionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="@drawable/button_click"
-            android:onClick="checkVersion"
-            android:text="@string/check"
-            android:textColor="@color/font_color" />
+        <!-- #################################### -->
 
-        <TextView
-            android:id="@+id/exitText"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/exit_process"
-            android:textColor="@color/font_color"
-            android:visibility="invisible" />
+            android:layout_height="match_parent"
+            android:background="@color/bg_my_gray"
+            android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/exitButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="@drawable/button_click"
-            android:text="@string/exit"
-            android:textColor="@color/font_color"
-            android:visibility="invisible" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="@string/google_store"
+                android:textColor="@color/font_color" />
+
+            <EditText
+                android:id="@+id/storeUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textUri"
+                android:textColor="@color/blue" />
+
+            <Button
+                android:id="@+id/storeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@drawable/button_click"
+                android:text="@string/save"
+                android:textColor="@color/font_color" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="10dp"
+                android:text="@string/google_service"
+                android:textColor="@color/font_color" />
+
+            <EditText
+                android:id="@+id/serviceUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textUri"
+                android:textColor="@color/blue" />
+
+            <Button
+                android:id="@+id/serviceButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@drawable/button_click"
+                android:onClick="saveUrl"
+                android:text="@string/save"
+                android:textColor="@color/font_color" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="10dp"
+                android:text="@string/default_map"
+                android:textColor="@color/font_color" />
+
+            <TextView
+                android:id="@+id/defMapText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/baiduMap"
+                android:textColor="@color/font_color" />
+
+            <Button
+                android:id="@+id/changeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@drawable/button_click"
+                android:text="@string/change"
+                android:textColor="@color/font_color" />
+
+            <CheckBox
+                android:id="@+id/checkBox_googlegpsCorrection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/googleGpsCorrection" />
+
+            <TextView
+                android:id="@+id/checkVersionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/version_check"
+                android:textColor="@color/font_color" />
+
+            <Button
+                android:id="@+id/checkVersionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@drawable/button_click"
+                android:onClick="checkVersion"
+                android:text="@string/check"
+                android:textColor="@color/font_color" />
+
+            <TextView
+                android:id="@+id/exitText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/exit_process"
+                android:textColor="@color/font_color"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/exitButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@drawable/button_click"
+                android:text="@string/exit"
+                android:textColor="@color/font_color"
+                android:visibility="invisible" />
+        </LinearLayout>
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

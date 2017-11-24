@@ -24,9 +24,14 @@ public class MyUtils {
 	}
 	
 	public static void showToast(Context context,String msg){
+		if(LogUtils.Debug){
+			return;
+		}
 		Toast.makeText(context, ""+msg, Toast.LENGTH_LONG).show();
 	}
-	
+	public static void toast(Context context,String msg){
+		Toast.makeText(context, ""+msg, Toast.LENGTH_LONG).show();
+	}
 	// double类型保留6位小数
 		public static double convertDoubleType6(double d) {
 			BigDecimal b = new BigDecimal(d);

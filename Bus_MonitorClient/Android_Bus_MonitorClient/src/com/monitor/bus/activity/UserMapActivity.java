@@ -264,7 +264,7 @@ public class UserMapActivity extends Activity {
 	 */
 	private void initOverlay() {
 		if(null==curBusDeviceInfo){
-			MyUtils.showToast(mContext, "未监测到设备");
+			MyUtils.toast(mContext, "未监测到设备");
 		}
 		center = new LatLng(curBusDeviceInfo.getLatitude(), curBusDeviceInfo.getLongitude());
 		// 定义地图状态
@@ -276,8 +276,7 @@ public class UserMapActivity extends Activity {
 		
 		
 		// 坐标
-		Toast.makeText(mContext, "Lai:" + curBusDeviceInfo.getLatitude() + "：" + curBusDeviceInfo.getLongitude(),
-				Toast.LENGTH_LONG).show();
+		MyUtils.showToast(mContext, "Lai:" + curBusDeviceInfo.getLatitude() + "：" + curBusDeviceInfo.getLongitude());
 		LatLng llA = new LatLng(curBusDeviceInfo.getLatitude(), curBusDeviceInfo.getLongitude());
 		MarkerOptions ooA = new MarkerOptions().position(llA).icon(bdA).zIndex(9).draggable(true);
 		// 掉下动画
