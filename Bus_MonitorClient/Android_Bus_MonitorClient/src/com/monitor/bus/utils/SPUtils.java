@@ -1,5 +1,7 @@
 package com.monitor.bus.utils;
 
+import com.monitor.bus.model.LoginInfo;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -7,11 +9,24 @@ import android.content.SharedPreferences.Editor;
 public class SPUtils {
 
 	private static SharedPreferences sp;
+	private static SharedPreferences sp_login;
+	private static String TAG= SPUtils.class.getSimpleName();
 	private static final String MY_SP_KEY = "appkey";
-	private static final String KEY_SHOW_MIRROR = "key_show_mirror";
+	public static final String KEY_AUTO_LOGIN="key_auto_login";
+	public static final String KEY_GSP="key_gps";
+	public static final String KEY_LOCAL="key_local";
 	
 	
-	public static void setString(Context context, String key,String value) {
+	private static final String LOGIN_INFO="login_info";
+	private static final String KEY_INFO_NAME="login_name";
+	private static final String KEY_INFO_PW="login_pw";
+	private static final String KEY_INFO_IP="login_ip";
+	private static final String KEY_INFO_PORT="login_port";
+	
+	
+	
+	public static void saveString(Context context, String key,String value) {
+		LogUtils.d(TAG, "saveString:"+key+"："+value);
 		if (null == sp) {
 			sp = context.getSharedPreferences(MY_SP_KEY, Context.MODE_APPEND);
 		}
@@ -21,13 +36,15 @@ public class SPUtils {
 	}
 	
 	public static String getString(Context context,String key,String defaultvalue){
+		LogUtils.d(TAG, "getString:"+key+"："+defaultvalue);
 		if (null == sp) {
 			sp = context.getSharedPreferences(MY_SP_KEY, Context.MODE_APPEND);
 		}
 		return sp.getString(key, defaultvalue);
 	}
 	
-	public static void setBoolean(Context context, String key,boolean value) {
+	public static void saveBoolean(Context context, String key,boolean value) {
+		LogUtils.d(TAG, "saveBoolean:"+key+"："+value);
 		if (null == sp) {
 			sp = context.getSharedPreferences(MY_SP_KEY, Context.MODE_APPEND);
 		}
@@ -36,6 +53,7 @@ public class SPUtils {
 		e.commit();
 	}
 	public static boolean getBoolean(Context context,String key,boolean defaultvalue){
+		LogUtils.d(TAG, "getBoolean:"+key+"："+defaultvalue);
 		if (null == sp) {
 			sp = context.getSharedPreferences(MY_SP_KEY, Context.MODE_APPEND);
 		}
@@ -52,41 +70,28 @@ public class SPUtils {
 		}
 		return data;
 	}
-
-	public static void setMirrorShow(Context context, boolean show) {
-		if (null == sp) {
-			sp = context.getSharedPreferences(MY_SP_KEY, Context.MODE_APPEND);
+	public static void saveLoginInfo(Context context,LoginInfo info) {
+		if (null == sp_login) {
+			sp_login = context.getSharedPreferences(LOGIN_INFO, Context.MODE_APPEND);
 		}
 		Editor e = sp.edit();
-		e.putBoolean(KEY_SHOW_MIRROR, show);
+		e.putString(KEY_INFO_NAME, info.getUserName());
+		e.putString(KEY_INFO_PW, info.getPassWord());
+		e.putString(KEY_INFO_IP, info.getIp());
+		e.putString(KEY_INFO_PORT, info.getPort());
 		e.commit();
 	}
-
-	public static boolean getMirrorShow(Context context) {
-		if (null == sp) {
-			sp = context.getSharedPreferences(MY_SP_KEY, Context.MODE_APPEND);
+	public static LoginInfo getLoginInfo(Context context){
+		if (null == sp_login) {
+			sp_login = context.getSharedPreferences(LOGIN_INFO, Context.MODE_APPEND);
 		}
-		return sp.getBoolean(KEY_SHOW_MIRROR, false);
+		LoginInfo info=new LoginInfo();
+		info.setUserName(sp_login.getString(KEY_INFO_NAME, ""));
+		info.setPassWord(sp_login.getString(KEY_INFO_PW, ""));
+		info.setIp(sp_login.getString(KEY_INFO_IP, ""));
+		info.setPort(sp_login.getString(KEY_INFO_PORT, ""));
+		return info;
 	}
 
-	/**
-	 * 保存字符串共享参数
-	 */
-	public static void saveStringPreferences(Context context, String key, String value) {
-		if (null == sp) {
-			sp = context.getSharedPreferences(MY_SP_KEY, Context.MODE_APPEND);
-		}
-		sp.edit().putString(key, value).commit();
-	}
-
-	/**
-	 * 保存布尔型共享参数
-	 */
-	public static void saveBooleanPreferences(Context context, String key, boolean value) {
-		if (null == sp) {
-			sp = context.getSharedPreferences(MY_SP_KEY, Context.MODE_APPEND);
-		}
-		sp.edit().putBoolean(key, value).commit();
-	}
 
 }

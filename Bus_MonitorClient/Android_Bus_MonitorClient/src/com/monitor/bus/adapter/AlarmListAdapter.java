@@ -26,7 +26,7 @@ public class AlarmListAdapter extends BaseAdapter{
 	
 	/* 构造器 */
 	public AlarmListAdapter(Context context, List<AlarmInfo> it) {
-		MyUtils.showToast(context, "listLength:"+it.size());
+		MyUtils.debugToast(context, "listLength:"+it.size());
 		mInflater = LayoutInflater.from(context);
 		items = it;
 	}

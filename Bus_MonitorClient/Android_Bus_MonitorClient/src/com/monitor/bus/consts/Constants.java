@@ -149,7 +149,7 @@ public class Constants {
 	public static final int SERVER_TYPES 	= 3;	//服务器类型数
 	
 	public static boolean IS_TEST_VERSION = false;//是否是测试版
-	public static final String EFFECTIVE_DATE = "2017-12-31";
+	public static final String EFFECTIVE_DATE = "2018-10-26";
 	public static final String DATE_FORMAT = "yyyy-MM-dd";
 
 	public static final boolean HAS_LOGO = true;

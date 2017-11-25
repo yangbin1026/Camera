@@ -26,45 +26,47 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-public class PhotoFragment extends BaseFragment implements OnItemLongClickListener{
+public class PhotoFragment extends BaseFragment{
 	View view;
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.fragment_photo, container, false);
-		initView();
-		getFileDir(path_view.getText().toString());
-		return view;
-	}
-	
 	private List<String> items = null; // items：存放显示的名称
 	private List<String> paths = null; // paths：存放文件路径
 	private List<String> sizes = null; // sizes：文件大小
 	private String rootPath = Constants.IMAGE_PATH; // rootPath：起始文件夹
-	private TextView path_view;
+	private String currentPath = Constants.IMAGE_PATH;
 	private TextView back_title;
 	private ListView fileList;
 	private int isOpen = 0; 
 	
 	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		view = inflater.inflate(R.layout.fragment_photo, container, false);
+		setTitle();
+		initView();
+		getFilePathList(rootPath);
+		return view;
+	}
 
+	private void setTitle() {
+		TextView title= (TextView) view.findViewById(R.id.tilte_name);
+		title.setText(getContext().getString(R.string.pic_list));
+	}
 	@Override
 	public boolean onBackPress() {
-		File file = new File(path_view.getText().toString());
+		File file = new File(currentPath);
 		if (rootPath.equals(file.getParent())) {
 			back_title.setVisibility(View.INVISIBLE);
 		}
-		if (rootPath.equals(path_view.getText().toString())) {
+		if (rootPath.equals(currentPath)) {
 		} else {
-			getFileDir(file.getParent());
+			getFilePathList(file.getParent());
 			return true;
 		}
 		return false;
 	}
 
 	public void initView() {
-		path_view = (TextView) view.findViewById(R.id.path_view);
 		fileList = (ListView) view.findViewById(R.id.fileList);
-		fileList.setOnItemLongClickListener(this);
 		fileList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -76,8 +78,15 @@ public class PhotoFragment extends BaseFragment implements OnItemLongClickListen
 				
 			}
 		});
-		getFileDir(rootPath);
+		fileList.setOnItemLongClickListener(new OnItemLongClickListener() {
 
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				File file = new File(paths.get(arg2));
+				fileOrDirHandle(file, "long");
+				return true;
+			}
+		});
 		back_title = (TextView) view.findViewById(R.id.back_title);
 		back_title.setOnClickListener(new TextViewListener());
 	}
@@ -92,16 +101,6 @@ public class PhotoFragment extends BaseFragment implements OnItemLongClickListen
 	}
 	 */
 
-	/**
-	 * 设置ListItem被长按时要做的动作
-	 */
-	@Override
-	public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2,
-			long arg3) {
-		File file = new File(paths.get(arg2));
-		fileOrDirHandle(file, "long");
-		return true;
-	}
 
 	/**
 	 * 处理文件或者目录的方法
@@ -135,7 +134,7 @@ public class PhotoFragment extends BaseFragment implements OnItemLongClickListen
 							}).show();*/
 		} else {
 			if (file.isDirectory()) {
-				getFileDir(file.getPath());
+				getFilePathList(file.getPath());
 			} else {
 				openFile(file);
 			}
@@ -147,9 +146,9 @@ public class PhotoFragment extends BaseFragment implements OnItemLongClickListen
 	 * 
 	 * @param filePath
 	 */
-	private void getFileDir(String filePath) {
+	private void getFilePathList(String filePath) {
+		currentPath = filePath;
 		/* 设置目前所在路径 */
-		path_view.setText(filePath);
 		items = new ArrayList<String>();
 		paths = new ArrayList<String>();
 		sizes = new ArrayList<String>();
@@ -202,7 +201,7 @@ public class PhotoFragment extends BaseFragment implements OnItemLongClickListen
 							if (delDir(f_del)) {
 								MyUtil.commonToast(getContext(),
 										R.string.already_del);
-								getFileDir(f_del.getParent());
+								getFilePathList(f_del.getParent());
 							} else {
 								MyUtil.commonToast(getContext(),
 										R.string.wrong);
@@ -211,7 +210,7 @@ public class PhotoFragment extends BaseFragment implements OnItemLongClickListen
 							if (delFile(f_del)) {
 								MyUtil.commonToast(getContext(),
 										R.string.already_del);
-								getFileDir(f_del.getParent());
+								getFilePathList(f_del.getParent());
 							} else {
 								MyUtil.commonToast(getContext(),
 										R.string.wrong);
@@ -312,14 +311,13 @@ public class PhotoFragment extends BaseFragment implements OnItemLongClickListen
 
 		@Override
 		public void onClick(View v) {
-			path_view = (TextView) view.findViewById(R.id.path_view);
-			File file = new File(path_view.getText().toString());
+			File file = new File(currentPath);
 			System.out.println(file.getParent());
 			if (rootPath.equals(file.getParent())) {
 				back_title.setVisibility(View.INVISIBLE);
 			}
-			if (!rootPath.equals(path_view.getText().toString())) {
-				getFileDir(file.getParent());
+			if (!rootPath.equals(currentPath)) {
+				getFilePathList(file.getParent());
 			}
 
 		}

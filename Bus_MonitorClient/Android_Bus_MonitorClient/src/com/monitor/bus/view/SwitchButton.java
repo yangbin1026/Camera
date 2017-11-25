@@ -1,4 +1,4 @@
-package com.monitor.bus.widget.switchbutton;
+package com.monitor.bus.view;
 
 import com.monitor.bus.activity.R;
 

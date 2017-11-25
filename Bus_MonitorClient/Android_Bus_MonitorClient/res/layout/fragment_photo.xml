@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/main_bg" >
+    android:background="@color/white" >
 
     <include
         android:id="@+id/titlelayout"
@@ -10,31 +10,11 @@
         android:layout_height="@dimen/title_size"
         android:layout_alignParentTop="true"
         layout="@layout/title_themes" />
-
-    <TextView
-        android:id="@+id/path_view"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/titlelayout"
-        android:drawablePadding="1dip"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:marqueeRepeatLimit="3"
-        android:padding="2dip"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
-        android:textColor="@color/white"
-        android:textSize="20sp" >
-
-        <requestFocus />
-    </TextView>
-
     <TextView
         android:id="@+id/back_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/path_view"
+        android:layout_below="@+id/titlelayout"
         android:drawableLeft="@drawable/back_folder"
         android:gravity="center|left"
         android:paddingLeft="3dp"

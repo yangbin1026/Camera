@@ -1,14 +1,18 @@
 package com.monitor.bus.activity.fragment;
 
+import com.monitor.bus.activity.LoginActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.consts.Constants;
+import com.monitor.bus.model.LoginInfo;
+import com.monitor.bus.service.CurrentVersionInfo;
 import com.monitor.bus.utils.SPUtils;
+import com.monitor.bus.view.SwitchButton;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.transition.ChangeBounds;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,98 +24,83 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-public class SettingFragment extends BaseFragment implements View.OnClickListener {
-
-	private boolean isCurDefBaiduMap;
-	private String newVerName, newAppName;// 新版本名称,新应用程序名称
-	private int newVerCode;// 新版本号
-	private int currentCode = 0;// 旧版本号
-	private ProgressDialog pbar;// 进度条对话框
-	private Handler handler = new Handler();
-
+public class SettingFragment extends BaseFragment implements View.OnClickListener,OnCheckedChangeListener{
 	private static final String TAG = "SettingActivity";
-	private EditText storeEditText, serviceEditText;
-	private TextView defMapTextView;
-	private CheckBox cbIsGpsCorrection = null;
-	private boolean IsGpsCorrection = false;
 	View view;
-
 	Button bt_change, bt_exit, bt_saveurl;
-
+	
+	
+	Button bt_logout;
+	SwitchButton sb_autologin,sb_local,sb_gps;
+	TextView tv_version,tv_showmode,tv_username;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_setting, container, false);
-		findView();
-		initPreferences();
+		setTitle();
+		initView();
+		initData();
 		return view;
 	}
 
-	private void initPreferences() {
-		String serviceUrl = SPUtils.getString((Context) getActivity(), Constants.SERVICE_URL_KEY,
-				Constants.SERVICE_URL);
-
-		String storeUrl = SPUtils.getString((Context) getActivity(), Constants.STORE_URL_KEY, Constants.STORE_URL);
-
-		serviceEditText.setText(serviceUrl);
-		storeEditText.setText(storeUrl);
-
-		isCurDefBaiduMap = SPUtils.getBoolean((Context) getActivity(), Constants.DEFAULT_MAP_KEY,
-				Constants.IS_DEFAULT_BAIDU_MAP);
-
-		defMapTextView.setText(isCurDefBaiduMap ? R.string.baiduMap : R.string.googleMap);
-
-		IsGpsCorrection = SPUtils.getBoolean((Context) getActivity(), Constants.GOOGLE_GPS_CORRRECTION,
-				Constants.IS_GOOGLE_GPS_CORRRECTION);
-		if (cbIsGpsCorrection != null) {
-			cbIsGpsCorrection.setChecked(IsGpsCorrection);
-			cbIsGpsCorrection.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					IsGpsCorrection = isChecked;
-					SPUtils.saveBooleanPreferences((Context) getActivity(), Constants.GOOGLE_GPS_CORRRECTION,
-							isChecked);
-				}
-			});
+	private void setTitle() {
+		TextView title= (TextView) view.findViewById(R.id.tilte_name);
+		title.setText(getContext().getString(R.string.pic_list));
+	}
+	private void initData() {
+		try {
+			String version=CurrentVersionInfo.getVerName(getContext());
+			tv_version.setText(version);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		LoginInfo loginInfo=SPUtils.getLoginInfo(getContext());
+		tv_username.setText(loginInfo.getUserName());
 	}
 
-	private void findView() {
-		storeEditText = (EditText) view.findViewById(R.id.storeUrl);
-		serviceEditText = (EditText) view.findViewById(R.id.serviceUrl);
-		defMapTextView = (TextView) view.findViewById(R.id.defMapText);
-		cbIsGpsCorrection = (CheckBox) view.findViewById(R.id.checkBox_googlegpsCorrection);
-		bt_change = (Button) view.findViewById(R.id.changeButton);
-		bt_change.setOnClickListener(this);
-		bt_exit = (Button) view.findViewById(R.id.exitButton);
-		bt_exit.setOnClickListener(this);
-		bt_saveurl = (Button) view.findViewById(R.id.storeButton);
-		bt_saveurl.setOnClickListener(this);
+	private void initView() {
+		bt_logout=(Button) view.findViewById(R.id.bt_logout);
+		bt_logout.setOnClickListener(this);
+		tv_version=(TextView) view.findViewById(R.id.tv_version);
+		tv_username=(TextView) view.findViewById(R.id.tv_username);
+		tv_showmode=(TextView) view.findViewById(R.id.tv_showmode);
+		sb_autologin=(SwitchButton) view.findViewById(R.id.sb_autologin);
+		sb_gps=(SwitchButton) view.findViewById(R.id.sb_gps);
+		sb_local=(SwitchButton) view.findViewById(R.id.sb_localpaser);
+		sb_autologin.setOnCheckedChangeListener(this);
+		sb_gps.setOnCheckedChangeListener(this);
+		sb_local.setOnCheckedChangeListener(this);
 	}
 
 	@Override
 	public void onClick(View arg0) {
 		switch (arg0.getId()) {
-		case R.id.changeButton:
-			Log.i(TAG, "改变"+view);
-			isCurDefBaiduMap = !isCurDefBaiduMap;
-			SPUtils.setBoolean((Context)getActivity(),Constants.DEFAULT_MAP_KEY, isCurDefBaiduMap);
-			if(isCurDefBaiduMap){
-				defMapTextView.setText(R.string.baiduMap);
-			}else{
-				defMapTextView.setText(R.string.googleMap);
-			}
+		case R.id.bt_logout:
+			//登出
+			Intent intent=new Intent(getContext(),LoginActivity.class);
+			getContext().startActivity(intent);
 			break;
-		case R.id.exitButton:
+		default:
 			break;
-		case R.id.storeButton:
+		}
 
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+		switch (arg0.getId()) {
+		case R.id.sb_autologin:
+			SPUtils.saveBoolean(getContext(), SPUtils.KEY_AUTO_LOGIN, arg1);
+			break;
+		case R.id.sb_gps:
+			SPUtils.saveBoolean(getContext(), SPUtils.KEY_GSP, arg1);
+			break;
+		case R.id.sb_localpaser:
+			SPUtils.saveBoolean(getContext(), SPUtils.KEY_LOCAL, arg1);
 			break;
 
 		default:
 			break;
 		}
-
 	}
 
 }

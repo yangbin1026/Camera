@@ -276,7 +276,7 @@ public class UserMapActivity extends Activity {
 		
 		
 		// 坐标
-		MyUtils.showToast(mContext, "Lai:" + curBusDeviceInfo.getLatitude() + "：" + curBusDeviceInfo.getLongitude());
+		MyUtils.debugToast(mContext, "Lai:" + curBusDeviceInfo.getLatitude() + "：" + curBusDeviceInfo.getLongitude());
 		LatLng llA = new LatLng(curBusDeviceInfo.getLatitude(), curBusDeviceInfo.getLongitude());
 		MarkerOptions ooA = new MarkerOptions().position(llA).icon(bdA).zIndex(9).draggable(true);
 		// 掉下动画

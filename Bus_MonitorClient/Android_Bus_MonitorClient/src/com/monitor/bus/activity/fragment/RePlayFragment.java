@@ -41,49 +41,48 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class RePlayFragment extends BaseFragment{
-	private RadioButton record_native;//本地
-	private RadioButton record_remote;//设备端
-	private Button queryDate;
-	private Button start_time;
-	private Button end_time;
-	private Spinner queryDevList;
-	private Spinner queryDevChnCount;
-	private Spinner queryRecordType;
+	private RadioButton rb_native;//本地
+	private RadioButton rb_remote;//设备端
+	private Button bt_queryDate;
+	private Button bt_start_time;
+	private Button bt_end_time;
+	private Spinner sp_queryDevList;
+	private Spinner sp_queryDevChnCount;
+	private Spinner sp_queryRecordType;
 
-	private Calendar cale;
-	private SimpleDateFormat df;
-	private List<BusDeviceInfo> listBus;
-	private List<String> mItems;
+	private Calendar calendar;
+	private SimpleDateFormat formater;
+	private List<BusDeviceInfo> listDeviceInfos;
+	private List<String> listItems;
 	private String guId;
 	View view; 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_replay, container, false);
+		getOnlineBusDevices();//查询在线的设备
 		initView();
 		return view;
 	}
 
 	void initView(){
-		queryDate = (Button)view.findViewById(R.id.queryDate);
-		start_time = (Button) view.findViewById(R.id.start_time);
-		end_time = (Button) view.findViewById(R.id.end_time);
+		bt_queryDate = (Button)view.findViewById(R.id.queryDate);
+		bt_start_time = (Button) view.findViewById(R.id.start_time);
+		bt_end_time = (Button) view.findViewById(R.id.end_time);
 
-		cale = Calendar.getInstance();
-		df = new SimpleDateFormat( "yyyy-MM-dd" );
-		queryDate.setText( df .format( cale .getTime()));
-		start_time.setText(R.string.start_text);
-		end_time.setText(R.string.end_text);
+		calendar = Calendar.getInstance();
+		formater = new SimpleDateFormat( "yyyy-MM-dd" );
+		bt_queryDate.setText( formater .format( calendar .getTime()));
+		bt_start_time.setText(R.string.start_text);
+		bt_end_time.setText(R.string.end_text);
 
 
-		record_native = (RadioButton) view.findViewById(R.id.record_native);
-		record_remote = (RadioButton) view.findViewById(R.id.record_remote);
-
-		getOnlineBusDevices();//查询在线的设备
-		if(0 == listBus.size()){
-			record_remote.setVisibility(View.GONE);
+		rb_native = (RadioButton) view.findViewById(R.id.record_native);
+		rb_remote = (RadioButton) view.findViewById(R.id.record_remote);
+		if(0 == listDeviceInfos.size()){
+			rb_remote.setVisibility(View.GONE);
 		}
 
-		record_native.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		rb_native.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -94,41 +93,37 @@ public class RePlayFragment extends BaseFragment{
 			}
 		}); 
 
-		record_remote.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		rb_remote.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
 					TableLayout remoteLayout =  (TableLayout) view.findViewById(R.id.remoteLayout);//设备端查询布局
 					remoteLayout.setVisibility(View.VISIBLE);
+					sp_queryDevList = (Spinner)view.findViewById(R.id.queryDevList);
+					sp_queryDevChnCount = (Spinner)view.findViewById(R.id.queryDevChnCount);
+					sp_queryRecordType = (Spinner)view.findViewById(R.id.queryRecordType);
 
-					queryDevList = (Spinner)view.findViewById(R.id.queryDevList);
-					queryDevChnCount = (Spinner)view.findViewById(R.id.queryDevChnCount);
-					queryRecordType = (Spinner)view.findViewById(R.id.queryRecordType);
-
-
-
-					SpinnerBusAdapter queryDevListAdapter = new SpinnerBusAdapter(getContext(), R.layout.spinner_item, listBus);
+					SpinnerBusAdapter queryDevListAdapter = new SpinnerBusAdapter(getContext(), R.layout.spinner_item, listDeviceInfos);
 					queryDevListAdapter.setDropDownViewResource(R.layout.spinner_checkview);
-					queryDevList.setAdapter(queryDevListAdapter);
+					sp_queryDevList.setAdapter(queryDevListAdapter);
 
-
-					queryDevList.setOnItemSelectedListener(new OnItemSelectedListener() {
+					sp_queryDevList.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 						@Override
 						public void onItemSelected(AdapterView<?> arg0, View arg1,
 								int location, long arg3) {
-							int chnCount = listBus.get(location).getEncoderNumber();
+							int chnCount = listDeviceInfos.get(location).getEncoderNumber();
 							//							guId = listBus.get(location).getGuId();
-							guId = listBus.get(location).getNewGuId();
-							mItems = new ArrayList<String>();
+							guId = listDeviceInfos.get(location).getNewGuId();
+							listItems = new ArrayList<String>();
 							for(int i = 1; i <= chnCount ; i++){
-								mItems.add(Constants.CHANNEL_PREFIX_NAME + i);
+								listItems.add(Constants.CHANNEL_PREFIX_NAME + i);
 							}
 
-							ArrayAdapter<String> chnCountAdapter = new ArrayAdapter<String>(getContext(),R.layout.spinner_item, mItems);
+							ArrayAdapter<String> chnCountAdapter = new ArrayAdapter<String>(getContext(),R.layout.spinner_item, listItems);
 							chnCountAdapter.setDropDownViewResource(R.layout.spinner_checkview);
-							queryDevChnCount.setAdapter(chnCountAdapter);
+							sp_queryDevChnCount.setAdapter(chnCountAdapter);
 
 						}
 
@@ -141,7 +136,7 @@ public class RePlayFragment extends BaseFragment{
 
 					ArrayAdapter<String> recordTypeAdapter = new ArrayAdapter<String>(getContext(),R.layout.spinner_item, getResources().getStringArray(R.array.recordTypeData));
 					recordTypeAdapter.setDropDownViewResource(R.layout.spinner_checkview);
-					queryRecordType.setAdapter(recordTypeAdapter);
+					sp_queryRecordType.setAdapter(recordTypeAdapter);
 				}
 			}
 		});
@@ -151,10 +146,10 @@ public class RePlayFragment extends BaseFragment{
 	 * @return
 	 */
 	public void getOnlineBusDevices(){
-		listBus = new ArrayList<BusDeviceInfo>();
+		listDeviceInfos = new ArrayList<BusDeviceInfo>();
 		for (BusDeviceInfo busInfo : Constants.BUSDEVICEDATA) {
 			if (0 != busInfo.getOnLine()) {
-				listBus.add(busInfo);
+				listDeviceInfos.add(busInfo);
 			}
 		}
 	}
@@ -168,7 +163,7 @@ public class RePlayFragment extends BaseFragment{
 			int d =dayOfMonth;
 			String month = m > 9 ? m + "" : "0" + m;
 			String day = d > 9 ? d + "" : "0" + d;
-			queryDate.setText(year+"-"+month+"-"+day);
+			bt_queryDate.setText(year+"-"+month+"-"+day);
 
 		}
 	};
@@ -181,7 +176,7 @@ public class RePlayFragment extends BaseFragment{
 			System.out.println(hourOfDay + "---------" + minute);
 			String h = hourOfDay > 9 ? (hourOfDay + "") : ("0" + hourOfDay);
 			String m = minute > 9 ? (minute + "") : ("0" + minute);
-			start_time.setText(h + ":" + m);
+			bt_start_time.setText(h + ":" + m);
 		}
 	};
 
@@ -193,7 +188,7 @@ public class RePlayFragment extends BaseFragment{
 			System.out.println(hourOfDay + "---------" + minute);
 			String h = hourOfDay > 9 ? (hourOfDay + "") : ("0" + hourOfDay);
 			String m = minute > 9 ? (minute + "") : ("0" + minute);
-			end_time.setText(h + ":" + m);
+			bt_end_time.setText(h + ":" + m);
 		}
 	};
 
@@ -224,7 +219,7 @@ public class RePlayFragment extends BaseFragment{
 	 * @param view
 	 */
 	public void showStartDatePicker(View view) {
-		new DatePickerDialog(getContext(), onStartDateListener, cale.get(Calendar.YEAR ), cale.get(Calendar.MONTH), cale.get(Calendar.DAY_OF_MONTH)).show();
+		new DatePickerDialog(getContext(), onStartDateListener, calendar.get(Calendar.YEAR ), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
 	}
 
 	/**
@@ -253,12 +248,12 @@ public class RePlayFragment extends BaseFragment{
 	 * @throws ParseException 
 	 */
 	public void queryRecord(View view) throws ParseException {
-		String queryStartTime = queryDate.getText() +" " + start_time.getText();// 获取选择的开始时间
-		String queryEndTime =  queryDate.getText()  +" " + end_time.getText();// 获取选择的结束时间
+		String queryStartTime = bt_queryDate.getText() +" " + bt_start_time.getText();// 获取选择的开始时间
+		String queryEndTime =  bt_queryDate.getText()  +" " + bt_end_time.getText();// 获取选择的结束时间
 		if(!compareTime(queryStartTime,queryEndTime)){
 			MyUtil.commonToast(getContext(), R.string.time_validate);
 		}else{
-			if(record_native.isChecked()){//本地
+			if(rb_native.isChecked()){//本地
 				Intent intent = new Intent();
 				intent.setClass(getContext(), LocalRecordActivity.class);
 				intent.putExtra("start_time", queryStartTime);
@@ -266,8 +261,8 @@ public class RePlayFragment extends BaseFragment{
 				startActivity(intent);
 			}else{//设备端
 				//String guId = queryDevList.getSelectedItem().toString();
-				int chnNumber = queryDevChnCount.getSelectedItemPosition()+1;
-				int iType = queryRecordType.getSelectedItemPosition()+1;
+				int chnNumber = sp_queryDevChnCount.getSelectedItemPosition()+1;
+				int iType = sp_queryRecordType.getSelectedItemPosition()+1;
 				Log.e("RecordQueryActivity", "guId:"+guId+"开始时间："+queryStartTime 
 						+"结束时间："+queryEndTime+"设备ID:"+guId + "=通道号："+chnNumber+"录像类型："+iType);
 				JNVPlayerUtil.JNV_N_RecQuery(guId, 0, iType, queryStartTime, queryEndTime, chnNumber, Constants.DEVRECORD_PASTH);

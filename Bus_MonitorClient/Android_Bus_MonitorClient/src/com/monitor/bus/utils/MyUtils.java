@@ -22,8 +22,16 @@ public class MyUtils {
 				bmp.getHeight(), myMatrix, true);
 		return dstBitmap;
 	}
-	
-	public static void showToast(Context context,String msg){
+	public static boolean hasUselessString(String ...strings){
+		for(String s:strings){
+			if(s==null||s.isEmpty()){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static void debugToast(Context context,String msg){
 		if(LogUtils.Debug){
 			return;
 		}

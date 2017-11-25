@@ -43,9 +43,8 @@ public class HomeActivity extends FragmentActivity implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-		mViewPager = (ViewPager) findViewById(R.id.vp_content);
-		initView();
 		initData();
+		initView();
 
 	}
 
@@ -60,6 +59,29 @@ public class HomeActivity extends FragmentActivity implements OnClickListener{
 		mFragments.add(fragment2);
 		mFragments.add(fragment3);
 		mFragments.add(fragment4);
+	}
+
+	protected void resetTabBtn(int position) { 
+		((ImageButton) ib_0).setBackgroundColor(position==0? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_1).setBackgroundColor(position==1? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_2).setBackgroundColor(position==2? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_3).setBackgroundColor(position==3? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_4).setBackgroundColor(position==4? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
+		currentFragment = mFragments.get(position);
+	}
+
+	private void initView() {
+		ib_0 = (ImageButton) findViewById(R.id.ib_1);
+		ib_1 = (ImageButton) findViewById(R.id.ib_2);
+		ib_2 = (ImageButton) findViewById(R.id.ib_3);
+		ib_3 = (ImageButton) findViewById(R.id.ib_4);
+		ib_4 = (ImageButton) findViewById(R.id.ib_5);
+		mViewPager = (ViewPager) findViewById(R.id.vp_content);
+		ib_0.setOnClickListener(this);
+		ib_1.setOnClickListener(this);
+		ib_2.setOnClickListener(this);
+		ib_3.setOnClickListener(this);
+		ib_4.setOnClickListener(this);
 		mPageAdapter = new MyFragmentPageAdapter(getSupportFragmentManager(), mFragments);
 		mViewPager.setAdapter(mPageAdapter);
 		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
@@ -78,29 +100,6 @@ public class HomeActivity extends FragmentActivity implements OnClickListener{
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
-
-	}
-
-	protected void resetTabBtn(int position) { 
-		((ImageButton) ib_0).setBackgroundColor(position==0? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
-		((ImageButton) ib_1).setBackgroundColor(position==1? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
-		((ImageButton) ib_2).setBackgroundColor(position==2? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
-		((ImageButton) ib_3).setBackgroundColor(position==3? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
-		((ImageButton) ib_4).setBackgroundColor(position==4? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
-		currentFragment = mFragments.get(position);
-	}
-
-	private void initView() {
-		ib_0 = (ImageButton) findViewById(R.id.ib_1);
-		ib_1 = (ImageButton) findViewById(R.id.ib_2);
-		ib_2 = (ImageButton) findViewById(R.id.ib_3);
-		ib_3 = (ImageButton) findViewById(R.id.ib_4);
-		ib_4 = (ImageButton) findViewById(R.id.ib_5);
-		ib_0.setOnClickListener(this);
-		ib_1.setOnClickListener(this);
-		ib_2.setOnClickListener(this);
-		ib_3.setOnClickListener(this);
-		ib_4.setOnClickListener(this);
 	}
 
 	@Override
