@@ -1,6 +1,8 @@
-package com.monitor.bus.activity.fragment;
+package com.monitor.bus.adapter;
 
 import java.util.List;
+
+import com.monitor.bus.activity.fragment.BaseFragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

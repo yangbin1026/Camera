@@ -17,14 +17,11 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edit_left" />
 
-        <TextView
-            android:id="@+id/edit_text_left"
+        <ImageView
+            android:id="@+id/iv_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@xml/edit_bg_repeat"
-            android:gravity="right|center"
-            android:paddingRight="@dimen/login_text_padding"
-            android:textColor="@color/font_color" />
+            android:scaleType="centerInside"/>
 
         <TextView
             android:id="@+id/edit_split"

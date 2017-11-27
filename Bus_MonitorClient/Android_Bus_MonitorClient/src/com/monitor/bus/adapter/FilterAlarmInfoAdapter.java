@@ -24,9 +24,6 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 public class FilterAlarmInfoAdapter extends BaseAdapter {
-	public Context context;
-	public static Map<Integer, Boolean> isSelected;
-	public LayoutInflater inflater;
 	public static final int[] str_alarm_info = { 
 			R.string.overspeed,R.string.overspeed_cancel_alarm,R.string.input_trigger,
 			R.string.motion_detection,R.string.video_lose,R.string.low_speed_alarm,
@@ -67,6 +64,13 @@ public class FilterAlarmInfoAdapter extends BaseAdapter {
 			R.string.remove_slop_over, R.string.overtime_parking,
 			R.string.remove_overtime_parking, R.string.fatigue_driving,
 			R.string.remove_fatigue_driving };
+	
+	
+	
+	
+	
+	public Context context;
+	public static Map<Integer, Boolean> isSelected;
 	public SharedPreferences sp;
 	public Editor editor;
 	public final static String[] str = new String[str_alarm_info.length];
@@ -76,7 +80,6 @@ public class FilterAlarmInfoAdapter extends BaseAdapter {
 	public FilterAlarmInfoAdapter(Context context) {
 		super();
 		this.context = context;
-		inflater = LayoutInflater.from(context);
 		init();
 	}
 
@@ -119,7 +122,7 @@ public class FilterAlarmInfoAdapter extends BaseAdapter {
 		ViewHolder viewHoler = null;
 		if (convertView == null) {
 			viewHoler = new ViewHolder();
-			View view = inflater.inflate(R.layout.filter_alarm_info, null);
+			View view = LayoutInflater.from(context).inflate(R.layout.filter_alarm_info, null);
 			viewHoler.tv_filter = (TextView) view
 					.findViewById(R.id.tv_filter_info);
 			viewHoler.checkbox_filter = (CheckBox) view

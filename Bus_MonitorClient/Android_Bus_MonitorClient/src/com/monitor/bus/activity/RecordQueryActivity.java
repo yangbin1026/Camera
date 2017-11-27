@@ -31,7 +31,7 @@ import com.jniUtil.JNVPlayerUtil;
 import com.jniUtil.MyUtil;
 import com.monitor.bus.adapter.SpinnerBusAdapter;
 import com.monitor.bus.consts.Constants;
-import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.model.DeviceInfo;
 
 /**
  * 录像查询界面
@@ -51,7 +51,7 @@ public class RecordQueryActivity extends BaseActivity {
 	private static final int END_TIMEPICKER = 3;// 结束时间
 	private Calendar cale;
 	private SimpleDateFormat df;
-	private List<BusDeviceInfo> listBus;
+	private List<DeviceInfo> listBus;
 	private List<String> mItems;
 	private String guId;
 	@SuppressLint("SimpleDateFormat")
@@ -147,8 +147,8 @@ public class RecordQueryActivity extends BaseActivity {
 	 * @return
 	 */
 	public void getOnlineBusDevices(){
-		listBus = new ArrayList<BusDeviceInfo>();
-		for (BusDeviceInfo busInfo : Constants.BUSDEVICEDATA) {
+		listBus = new ArrayList<DeviceInfo>();
+		for (DeviceInfo busInfo : Constants.DEVICE_LIST) {
 			if (0 != busInfo.getOnLine()) {
 				listBus.add(busInfo);
 			}

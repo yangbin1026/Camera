@@ -55,7 +55,7 @@ import com.jniUtil.SaveUtil;
 import com.monitor.bus.adapter.SpinnerBusAdapter;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
-import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.utils.MyUtils;
 
 
@@ -78,8 +78,8 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	static final String Apptag = "Google";
 	final String g_GpsFixFileName = "commondata.gft";
 
-	private List<BusDeviceInfo> listBus;
-	private BusDeviceInfo curCtlDevInfo = null; // 当前可操作的设备
+	private List<DeviceInfo> listBus;
+	private DeviceInfo curCtlDevInfo = null; // 当前可操作的设备
 	private String guid = null;
 
 	private LinearLayout myLayout;
@@ -123,7 +123,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
 
 		Intent intent = getIntent();
-		curCtlDevInfo = (BusDeviceInfo) intent.getSerializableExtra(UserMapActivity.KEY_DEVICE_INFO);// 获取当前设备坐标
+		curCtlDevInfo = (DeviceInfo) intent.getSerializableExtra(UserMapActivity.KEY_DEVICE_INFO);// 获取当前设备坐标
 
 		mLocationSource = new MyLocationSource();
 
@@ -297,8 +297,8 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	 * @return
 	 */
 	public void getBusDevices(){
-		listBus = new ArrayList<BusDeviceInfo>();
-		for (BusDeviceInfo busInfo : Constants.BUSDEVICEDATA) {
+		listBus = new ArrayList<DeviceInfo>();
+		for (DeviceInfo busInfo : Constants.DEVICE_LIST) {
 			if ("0".equals( busInfo.getIsDeviceGroup())) {
 				listBus.add(busInfo);
 			}

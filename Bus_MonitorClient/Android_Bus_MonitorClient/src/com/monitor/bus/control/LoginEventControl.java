@@ -30,7 +30,7 @@ import com.google.android.gms.internal.cu;
 import com.jniUtil.JNVPlayerUtil;
 import com.jniUtil.MyUtil;
 import com.jniUtil.PullParseXML;
-import com.monitor.bus.activity.BusDeviceList;
+import com.monitor.bus.activity.DeviceListActiviy;
 import com.monitor.bus.activity.HomeActivity;
 import com.monitor.bus.activity.MainListActivity;
 import com.monitor.bus.activity.R;
@@ -39,7 +39,7 @@ import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.consts.Constants.LGOINFLAG;
 import com.monitor.bus.model.AlarmInfo;
-import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.model.ServerInfo;
 import com.monitor.bus.utils.LogUtils;
 
@@ -47,7 +47,7 @@ import com.monitor.bus.utils.LogUtils;
  * 登陆回调管理类
  */
 @SuppressLint("HandlerLeak")
-public class LoginEventControl extends Object {
+public class LoginEventControl{
 	private Activity currentContext;
 	private static String TAG = "LoginEventControl";
 	private boolean loginsuccess_flag = false; // 记录是否已登陆过一次
@@ -59,12 +59,11 @@ public class LoginEventControl extends Object {
 	public static Timer alarmTimer;// 计时器
 	private SoundPool soundPool;
 	private int nGetServerIndex = 0; // 获取服务器列表次数
-	private BusDeviceInfo currentDeviceInfo;
+	private DeviceInfo currentDeviceInfo;
 	public LoginEventControl(Activity currentActivity) {
 		this.currentContext = currentActivity;
 		myNotification = new MyNotification(currentActivity);
 		myProgress = new ProgressDialog(currentActivity);
-
 		// 创建声音播放
 		soundPool = new SoundPool(5, AudioManager.STREAM_SYSTEM, 5);// 一个参数为同时播放数据流的最大个数，二数据流类型，三为声音质量
 		soundPool.load(currentContext, R.raw.alarm_sound, 1);// 把你的声音素材放到res/raw里，2个参数即为资源文件，3个为音乐的优先级
@@ -93,7 +92,7 @@ public class LoginEventControl extends Object {
 	/**
 	 * 登陆之后的回调函数
 	 * 
-	 * @param flag
+	 * @param strEvent
 	 *            0:正在登录 1:登录成功 2: 登录失败 3:退出登录 4: 流正在打开 5:流打开成功 6:流打开失败 7:流关闭
 	 * 
 	 */
@@ -205,8 +204,8 @@ public class LoginEventControl extends Object {
 						getFirstServerList();// 获取一张服务器列表
 					} else {
 						// JNVPlayerUtil.JNV_N_GetAlarmStart("");//获取报警信息
-						for (int i = 0; i < Constants.BUSDEVICEDATA.size(); i++) {
-							BusDeviceInfo info = Constants.BUSDEVICEDATA.get(i);
+						for (int i = 0; i < Constants.DEVICE_LIST.size(); i++) {
+							DeviceInfo info = Constants.DEVICE_LIST.get(i);
 							if ("0".equals(info.getIsDeviceGroup())) {
 								String guid = info.getGuId();
 								int ret = JNVPlayerUtil
@@ -246,8 +245,8 @@ public class LoginEventControl extends Object {
 						getNextServerList();
 					} else {
 						upDataServerList();
-						for (int i = 0; i < Constants.BUSDEVICEDATA.size(); i++) {
-							BusDeviceInfo info = Constants.BUSDEVICEDATA.get(i);
+						for (int i = 0; i < Constants.DEVICE_LIST.size(); i++) {
+							DeviceInfo info = Constants.DEVICE_LIST.get(i);
 							if ("0".equals(info.getIsDeviceGroup())) {
 								// String guid = info.getGuId();
 								String guid = info.getNewGuId();
@@ -274,7 +273,7 @@ public class LoginEventControl extends Object {
 					File recordFile = new File(Constants.DEVRECORD_PASTH);
 					try {
 						InputStream in = new FileInputStream(recordFile);
-						Constants.DEVRECORDINFOS = PullParseXML
+						Constants.RECORD_LIST = PullParseXML
 								.getDevRecords(in);
 						in.close();
 					} catch (FileNotFoundException e) {
@@ -327,15 +326,15 @@ public class LoginEventControl extends Object {
 					int alarmType = jo.getInt("alarmType");
 					String alarInfo = getAlarmInfo(devID, alarmChn, alarmType);
 					Log.i(TAG, "alarmChn" + alarmChn + "devID" + devID);
-					if (Constants.ALARMINFOS.size() >= 100) {// 获取的报警信息超过100条
-						Constants.ALARMINFOS.remove(0);
+					if (Constants.ALARM_LIST.size() >= 100) {// 获取的报警信息超过100条
+						Constants.ALARM_LIST.remove(0);
 					}
 
 					AlarmInfo busInfo = new AlarmInfo();
 					busInfo.setGuId(devID);
 					busInfo.setCurrentChn(alarmChn);
 					busInfo.setExpresion(alarInfo);
-					Constants.ALARMINFOS.add(busInfo);
+					Constants.ALARM_LIST.add(busInfo);
 					if (!Constants.IS_ACTIVE) {// 后台运行
 						myNotification.showNotification(alarInfo);
 					}
@@ -389,7 +388,7 @@ public class LoginEventControl extends Object {
 	 */
 	protected void upDataServerList() {
 		int i, j;
-		List<ArrayList<ServerInfo>> tmpll = Constants.SERVERDATA;
+		List<ArrayList<ServerInfo>> tmpll = Constants.SERVICE_LIST;
 		if (Constants.IS_CASCADE_SERVER) {
 			if (tmpll.size() != Constants.SERVER_TYPES)
 				Log.e(TAG, "服务器列表出错！！");
@@ -459,13 +458,13 @@ public class LoginEventControl extends Object {
 	}
 
 	protected void addServerTable(ArrayList<ServerInfo> list) {
-		for (int i = 0; i < Constants.SERVERDATA.size(); i++) {
-			if (Constants.SERVERDATA.get(i).equals(list)) {
+		for (int i = 0; i < Constants.SERVICE_LIST.size(); i++) {
+			if (Constants.SERVICE_LIST.get(i).equals(list)) {
 				Log.e("LoginEventControl", "出现重复服务器列表！！");
 				return;
 			}
 		}
-		Constants.SERVERDATA.add(list);
+		Constants.SERVICE_LIST.add(list);
 	}
 
 	/**
@@ -474,7 +473,7 @@ public class LoginEventControl extends Object {
 	protected void getFirstServerList() {
 		if (Constants.IS_CASCADE_SERVER) {
 			nGetServerIndex = 0;
-			Constants.SERVERDATA.clear();
+			Constants.SERVICE_LIST.clear();
 			JNVPlayerUtil.JNV_N_GetServerList(
 					Constants.SERVERLIST_PASTH[nGetServerIndex],
 					nGetServerIndex);// 获取服务器列表（0 中心 1信令 2媒体）
@@ -501,9 +500,9 @@ public class LoginEventControl extends Object {
 	 * @param guId
 	 * @return
 	 */
-	public BusDeviceInfo getBusInfo(String guId) {
-		Iterator<BusDeviceInfo> itr = Constants.BUSDEVICEDATA.iterator();
-		BusDeviceInfo busInfo = null;
+	public DeviceInfo getBusInfo(String guId) {
+		Iterator<DeviceInfo> itr = Constants.DEVICE_LIST.iterator();
+		DeviceInfo busInfo = null;
 		while (itr.hasNext()) {
 			busInfo = itr.next();
 			if (guId.equals(busInfo.getGuId())) {
@@ -641,7 +640,7 @@ public class LoginEventControl extends Object {
 					+ currentContext.getString(R.string.device_online);
 			// BusDeviceInfo busInfo = new BusDeviceInfo();
 
-			for (BusDeviceInfo busInfo : Constants.BUSDEVICEDATA) {
+			for (DeviceInfo busInfo : Constants.DEVICE_LIST) {
 				if (devId.equals(busInfo.getGuId())) {
 					busInfo.setOnLine(1);
 				}
@@ -651,7 +650,7 @@ public class LoginEventControl extends Object {
 
 			alarmInfo = dev_name + devList + exists
 					+ currentContext.getString(R.string.device_offline);
-			for (BusDeviceInfo busInfo : Constants.BUSDEVICEDATA) {
+			for (DeviceInfo busInfo : Constants.DEVICE_LIST) {
 				if (devId.equals(busInfo.getGuId())) {
 					busInfo.setOnLine(0);
 				}

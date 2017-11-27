@@ -19,7 +19,7 @@ import com.jniUtil.MyUtil;
 import com.monitor.bus.adapter.AlarmListAdapter;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.model.AlarmInfo;
-import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.utils.MyUtils;
 
 /**
@@ -28,7 +28,7 @@ import com.monitor.bus.utils.MyUtils;
 public class AlarmListActivity extends BaseActivity {
 	private ListView alarmListView;
 	// private static String TAG = "AlarmListActivity";
-	private BusDeviceInfo currentDeviceInfo;
+	private DeviceInfo currentDeviceInfo;
 	private List<AlarmInfo> alarms;
 
 	@Override
@@ -70,7 +70,7 @@ public class AlarmListActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		alarms = new ArrayList<AlarmInfo>();
-		alarms.addAll(Constants.ALARMINFOS);
+		alarms.addAll(Constants.ALARM_LIST);
 		
 		for (int i = 0; i < alarms.size(); i++) {
 			if (alarms.get(i).getExpresion().contains(getString(R.string.motion_detection))) {
@@ -90,9 +90,9 @@ public class AlarmListActivity extends BaseActivity {
 	 * @param guId
 	 * @return
 	 */
-	public BusDeviceInfo getBusInfo(String guId) {
-		Iterator<BusDeviceInfo> itr = Constants.BUSDEVICEDATA.iterator();
-		BusDeviceInfo busInfo = null;
+	public DeviceInfo getBusInfo(String guId) {
+		Iterator<DeviceInfo> itr = Constants.DEVICE_LIST.iterator();
+		DeviceInfo busInfo = null;
 		while (itr.hasNext()) {
 			busInfo = itr.next();
 			if (guId.equals(busInfo.getGuId())) {

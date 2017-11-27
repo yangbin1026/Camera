@@ -19,8 +19,8 @@ public class JNVPlayerUtil {
 	 * @param userName		用户名
 	 * @param psw			密码
 	 * @param timeout		登陆超时时间
-	 * @param target
-	 * @param callbackEvent	回调信息
+	 * @param target		回调对象类
+	 * @param callbackEvent	回调方法
 	 * @param lUserParam	
 	 * @return
 	 */

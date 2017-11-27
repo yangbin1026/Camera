@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.monitor.bus.activity.fragment.SettingFragment;
+import com.monitor.bus.adapter.MyFragmentPageAdapter;
 import com.monitor.bus.activity.fragment.AlarmFragment;
 import com.monitor.bus.activity.fragment.BaseFragment;
-import com.monitor.bus.activity.fragment.MyFragmentPageAdapter;
 import com.monitor.bus.activity.fragment.PhotoFragment;
 import com.monitor.bus.activity.fragment.RePlayFragment;
-import com.monitor.bus.activity.fragment.VideoFragment;
+import com.monitor.bus.activity.fragment.DeviceListFragment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -53,7 +53,7 @@ public class HomeActivity extends FragmentActivity implements OnClickListener{
 		AlarmFragment fragment3 = new AlarmFragment();
 		PhotoFragment fragment2 = new PhotoFragment();
 		RePlayFragment fragment1 = new RePlayFragment();
-		VideoFragment fragment0 = new VideoFragment();
+		DeviceListFragment fragment0 = new DeviceListFragment();
 		mFragments.add(fragment0);
 		mFragments.add(fragment1);
 		mFragments.add(fragment2);
@@ -62,11 +62,11 @@ public class HomeActivity extends FragmentActivity implements OnClickListener{
 	}
 
 	protected void resetTabBtn(int position) { 
-		((ImageButton) ib_0).setBackgroundColor(position==0? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
-		((ImageButton) ib_1).setBackgroundColor(position==1? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
-		((ImageButton) ib_2).setBackgroundColor(position==2? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
-		((ImageButton) ib_3).setBackgroundColor(position==3? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
-		((ImageButton) ib_4).setBackgroundColor(position==4? getResources().getColor(R.color.blue):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_0).setBackgroundColor(position==0? getResources().getColor(R.color.home_tab_bg):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_1).setBackgroundColor(position==1? getResources().getColor(R.color.home_tab_bg):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_2).setBackgroundColor(position==2? getResources().getColor(R.color.home_tab_bg):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_3).setBackgroundColor(position==3? getResources().getColor(R.color.home_tab_bg):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_4).setBackgroundColor(position==4? getResources().getColor(R.color.home_tab_bg):getResources().getColor(R.color.transparent));
 		currentFragment = mFragments.get(position);
 	}
 

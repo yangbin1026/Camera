@@ -39,7 +39,7 @@ import com.jniUtil.MyUtil;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.control.VideoPlayControl;
 import com.monitor.bus.database.DatabaseHelper;
-import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.view.MyVideoView;
 
 /**
@@ -49,34 +49,34 @@ import com.monitor.bus.view.MyVideoView;
 public class VideoActivity extends BaseActivity implements OnTouchListener {
 
 	private static String TAG = "VideoActivity";
+	
+	
+	
 	private MyVideoView myVideoView;
 	private Intent intent;
-	private BusDeviceInfo currentDevData;// 设备信息
+	private DeviceInfo currentDevData;// 设备信息
 	private DatabaseHelper db;// 数据库操作对象
 	String recordFilePath = null;// 当前录像文件存储路径
 	String times = "";// 当前文件名称
-	private TextView text_tilte_name;// 标题名称
+	public Timer recordTimer;// 计时器
 
 	boolean isCapturePicture = false;//是否有操作过抓拍
 	boolean record_state = false;// 当前录像状态标志 true 开始录像 false 停止录像
+	
 	private Button recordButton;// 录像按钮
-
 	//boolean monitor_state = false;// 当前监听状态标志 true 开始监听 false 停止监听
 	private Button monitorButton;// 监听按钮
-
 	//boolean talk_state = false;// 当前对讲状态标志 true 开始对讲 false 停止对讲
 	private Button talkButton;// 对讲按钮
-
 	public Button mirrorButton;// 镜像按钮
- 
 	// 云台控制
 	private ImageButton ptzUp;
 	private ImageButton ptzDown;
 	private ImageButton ptzLeft;
 	private ImageButton ptzRight;
-	public Timer recordTimer;// 计时器
+	private TextView text_tilte_name;// 标题名称
 
-	GestureDetector mGestureDetector;
+	GestureDetector mGestureDetector;//手势监测
 	private VideoPlayControl playControl;
 	
 	private float x,y;
@@ -89,7 +89,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 		Constants.INSTANCE = this;
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
 		intent = this.getIntent();
-		currentDevData = (BusDeviceInfo) intent.getSerializableExtra("videoData");
+		currentDevData = (DeviceInfo) intent.getSerializableExtra("videoData");
 		Log.i(TAG, currentDevData+"");
 	}
 	
@@ -350,11 +350,6 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 		}
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-	
 
 	/**
 	 * 实时视频播放--------暂时无用
@@ -377,18 +372,6 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 		playControl.stopStream();
 	}
 
-	/**
-	 * 进入设备列表
-	 * 
-	 * @param view
-	 */
-	public void goDeviceListActivity(View view) {
-		Intent intent = new Intent();
-		intent.setClass(this, BusDeviceList.class);
-		//intent.putExtra("busDevData", currentDevData);
-		startActivity(intent);
-		finish();
-	}
 
 	/**
 	 * 录像

@@ -10,7 +10,7 @@ import com.monitor.bus.activity.VideoActivity;
 import com.monitor.bus.adapter.AlarmListAdapter;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.model.AlarmInfo;
-import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.utils.MyUtils;
 
 import android.content.Intent;
@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 /**
@@ -31,51 +32,55 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class AlarmFragment extends BaseFragment {
 	private ListView alarmListView;
-	private BusDeviceInfo currentDeviceInfo;
+	private DeviceInfo currentDeviceInfo;
 	private List<AlarmInfo> alarms;
 	View view;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_alarm, container, false);
+		setTitle();
 		initData();
 		initView();
 		return view;
 	}
 
+	private void setTitle() {
+		TextView title= (TextView) view.findViewById(R.id.tilte_name);
+		title.setText(getContext().getString(R.string.alarm_list));
+	}
+
 	private void initData() {
 		alarms = new ArrayList<AlarmInfo>();
-		alarms.addAll(Constants.ALARMINFOS);
-
+		alarms.addAll(Constants.ALARM_LIST);
 		for (int i = 0; i < alarms.size(); i++) {
 			//报警类型是移动，震动提示用户
 			if (alarms.get(i).getExpresion().contains(getString(R.string.motion_detection))) {
 				MyUtils.Vibrate(getActivity(), 1000);
+				break;
 			}
 		}
 	}
 
 	private void initView() {
 		alarmListView = (ListView) view.findViewById(R.id.alarmListView);
-		AlarmListAdapter devRecordAdapter = new AlarmListAdapter(getContext(), alarms);
-		alarmListView.setAdapter(devRecordAdapter);
+		alarmListView.setAdapter(new AlarmListAdapter(getContext(), alarms));
 		alarmListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
-				AlarmInfo devRecordInfo = alarms.get(position);
-				currentDeviceInfo = getBusInfo(devRecordInfo.getGuId());
+				AlarmInfo alarmInfo = alarms.get(position);
+				currentDeviceInfo = getDeviceInfo(alarmInfo.getGuId());
 				Log.i("-----", "当前设备信息:" + currentDeviceInfo);
-				Log.i("------", "alarms;;;;;;;;;;;" + alarms);
 				if (alarms.get(position).getExpresion().contains(getString(R.string.motion_detection))) {
-					Log.i("------------------------", "移动侦测:" + devRecordInfo.getCurrentChn());
-					currentDeviceInfo.setCurrentChn(devRecordInfo.getCurrentChn() - 1);
+					Log.i("------------------------", "移动侦测:" + alarmInfo.getCurrentChn());
+					currentDeviceInfo.setCurrentChn(alarmInfo.getCurrentChn() - 1);
 				} else {
-					currentDeviceInfo.setCurrentChn(devRecordInfo.getCurrentChn());
+					currentDeviceInfo.setCurrentChn(alarmInfo.getCurrentChn());
 				}
 
 				if (currentDeviceInfo.getDeviceName() == null) {
-					currentDeviceInfo.setDeviceName(devRecordInfo.getGuId());
+					currentDeviceInfo.setDeviceName(alarmInfo.getGuId());
 				}
 				Intent intent = new Intent();
 				intent.putExtra("videoData", currentDeviceInfo);
@@ -91,13 +96,13 @@ public class AlarmFragment extends BaseFragment {
 	 * @param guId
 	 * @return
 	 */
-	public BusDeviceInfo getBusInfo(String guId) {
-		Iterator<BusDeviceInfo> itr = Constants.BUSDEVICEDATA.iterator();
-		BusDeviceInfo busInfo = null;
+	public DeviceInfo getDeviceInfo(String guId) {
+		Iterator<DeviceInfo> itr = Constants.DEVICE_LIST.iterator();
+		DeviceInfo deviceInfo = null;
 		while (itr.hasNext()) {
-			busInfo = itr.next();
-			if (guId.equals(busInfo.getGuId())) {
-				return busInfo;
+			deviceInfo = itr.next();
+			if (guId.equals(deviceInfo.getGuId())) {
+				return deviceInfo;
 			}
 		}
 		return null;
@@ -110,7 +115,7 @@ public class AlarmFragment extends BaseFragment {
 			onResume();
 			break;
 		case 1:
-			startFilterOptionActivity();
+			startFilterActivity();
 			break;
 		case 2:
 
@@ -120,7 +125,7 @@ public class AlarmFragment extends BaseFragment {
 	}
 
 	/* 过滤报警信息 */
-	private void startFilterOptionActivity() {
+	private void startFilterActivity() {
 		Intent intent = new Intent(getContext(), FilterOptionActivity.class);
 		startActivity(intent);
 	}

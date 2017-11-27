@@ -32,7 +32,7 @@ import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.UserGoogleMapActivity;
 import com.monitor.bus.activity.UserMapActivity;
 import com.monitor.bus.consts.Constants;
-import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.model.DeviceInfo;
 
 public class MyUtil{
 	private static String TAG = "MyUtil";
@@ -149,7 +149,7 @@ public static String getMIMEType(File f,boolean isOpen){
    * @param currentDeviceInfo
    * @return
    */
-  public static String getCurrentFilePath(String path,BusDeviceInfo currentDeviceInfo){
+  public static String getCurrentFilePath(String path,DeviceInfo currentDeviceInfo){
 	  String currentDate = getCurrentDateTime(Constants.YMD_FORMAT);
 	  String currentPath = path + currentDate + "/"+ currentDeviceInfo.getDeviceName()+"/" + currentDeviceInfo.getCurrentChn()+"/";
 	  return currentPath;

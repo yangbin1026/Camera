@@ -26,23 +26,23 @@ import com.monitor.bus.adapter.MyExpandableListAdapter;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.control.LoginEventControl;
-import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.model.DeviceInfo;
 
 /**
  * 公交设备列表
  * 
  */
-public class BusDeviceList extends BaseActivity { 
+public class DeviceListActiviy extends BaseActivity { 
 
 	private static String TAG = "BusDeviceList";
-	private List<BusDeviceInfo> devList = null;
+	private List<DeviceInfo> devList = null;
 	private List<List<Map<String, String>>> childs;// 存储列表子菜单数据
 	// private String parentId = null;
 	ExpandableListView expandView;
 	HashMap<String, String> groupMap;
 	List<HashMap<String, String>> listView;
 	MyExpandableListAdapter simpleExpandableAdapter;
-	private BusDeviceInfo curCtlDevInfo; // 当前可操作的设备
+	private DeviceInfo curCtlDevInfo; // 当前可操作的设备
 	private HashMap<String, String> groupLocationMap;// 存储组及所处位置
 	private ProgressDialog progressDialog;
 	@Override
@@ -52,7 +52,7 @@ public class BusDeviceList extends BaseActivity {
 		MyUtil.initTitleName(this, R.layout.dev_listview, R.string.dev_list);
 		expandView = (ExpandableListView) findViewById(R.id.expandView);
 		registerForContextMenu(expandView);
-		if (0 == Constants.BUSDEVICEDATA.size()) {
+		if (0 == Constants.DEVICE_LIST.size()) {
 			progressDialog = LoginEventControl.myProgress;
 			progressDialog = new ProgressDialog(this);
 			progressDialog.setTitle(R.string.loading_data_title);
@@ -84,10 +84,10 @@ public class BusDeviceList extends BaseActivity {
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
 				Intent intent = new Intent();
-				BusDeviceInfo deviceInfo = devList.get(groupPosition);
+				DeviceInfo deviceInfo = devList.get(groupPosition);
 				deviceInfo.setCurrentChn(childPosition +1);//设置设备通道号
 				intent.putExtra("videoData", deviceInfo);
-				intent.setClass(BusDeviceList.this, VideoActivity.class);
+				intent.setClass(DeviceListActiviy.this, VideoActivity.class);
 				startActivity(intent);
 				return false;
 			}
@@ -103,7 +103,7 @@ public class BusDeviceList extends BaseActivity {
 	}
 
 	public void loadDeviceInfoList(String parentId) {
-		devList = new ArrayList<BusDeviceInfo>();
+		devList = new ArrayList<DeviceInfo>();
 		listView = new ArrayList<HashMap<String, String>>();
 		childs = new ArrayList<List<Map<String, String>>>();
 		groupLocationMap = new HashMap<String, String>();
@@ -161,9 +161,9 @@ public class BusDeviceList extends BaseActivity {
 	 * @param parentId
 	 * @return
 	 */
-	private List<BusDeviceInfo> getData(String parentId) {
-		List<BusDeviceInfo> listBus = new ArrayList<BusDeviceInfo>();
-		for (BusDeviceInfo busInfo : Constants.BUSDEVICEDATA) {
+	private List<DeviceInfo> getData(String parentId) {
+		List<DeviceInfo> listBus = new ArrayList<DeviceInfo>();
+		for (DeviceInfo busInfo : Constants.DEVICE_LIST) {
 			if (parentId.equals(busInfo.getParentId())) {
 				listBus.add(busInfo);
 			}
@@ -171,9 +171,9 @@ public class BusDeviceList extends BaseActivity {
 		return listBus;
 	}
 
-	public BusDeviceInfo getParentBusInfo(String parentId) {
-		Iterator<BusDeviceInfo> itr = Constants.BUSDEVICEDATA.iterator();
-		BusDeviceInfo busInfo = null;
+	public DeviceInfo getParentBusInfo(String parentId) {
+		Iterator<DeviceInfo> itr = Constants.DEVICE_LIST.iterator();
+		DeviceInfo busInfo = null;
 		while (itr.hasNext()) {
 			busInfo = itr.next();
 			if (parentId.equals(busInfo.getGroupId())) {
@@ -214,7 +214,7 @@ public class BusDeviceList extends BaseActivity {
 		int type = ExpandableListView
 				.getPackedPositionType(info.packedPosition);
 		if (type == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-			curCtlDevInfo = (BusDeviceInfo) devList.get((int) info.id);
+			curCtlDevInfo = (DeviceInfo) devList.get((int) info.id);
 			if ("0".equals(curCtlDevInfo.getIsDeviceGroup())) {
 				menu.setHeaderTitle(R.string.devOperate);
 				menu.add(0, 0, 0, R.string.queryMap);
@@ -232,7 +232,7 @@ public class BusDeviceList extends BaseActivity {
 				startActivity(intent);
 				finish();
 			} else {
-				BusDeviceInfo busInfo = getParentBusInfo(parentId);
+				DeviceInfo busInfo = getParentBusInfo(parentId);
 
 				loadDeviceInfoList(busInfo.getParentId());
 			}

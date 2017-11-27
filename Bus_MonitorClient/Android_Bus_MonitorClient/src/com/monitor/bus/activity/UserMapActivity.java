@@ -21,7 +21,7 @@ import com.jniUtil.MyUtil;
 import com.monitor.bus.adapter.SpinnerBusAdapter;
 import com.monitor.bus.bdmap.ErrorCodeReceiver;
 import com.monitor.bus.consts.Constants;
-import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.utils.MyUtils;
 
 import android.app.Activity;
@@ -54,8 +54,8 @@ public class UserMapActivity extends Activity {
 	private String guid;
 	private boolean busListEntrance = false;// 设备列表入口
 	protected boolean IsExit = false;
-	private List<BusDeviceInfo> listBus;
-	private BusDeviceInfo curBusDeviceInfo;// 当前可操作的设备
+	private List<DeviceInfo> listBus;
+	private DeviceInfo curBusDeviceInfo;// 当前可操作的设备
 
 	private RelativeLayout rl_Layout;
 	private Spinner queryDevList;
@@ -129,7 +129,7 @@ public class UserMapActivity extends Activity {
 	}
 
 	private void initDeviceInfo(Intent intent) {
-		curBusDeviceInfo = (BusDeviceInfo) intent.getSerializableExtra(KEY_DEVICE_INFO);
+		curBusDeviceInfo = (DeviceInfo) intent.getSerializableExtra(KEY_DEVICE_INFO);
 		if (curBusDeviceInfo != null) {// 设备列表入口
 			Log.i(TAG, "deviceinfo: " + curBusDeviceInfo.toString());
 			busListEntrance = true;
@@ -236,8 +236,8 @@ public class UserMapActivity extends Activity {
 
 	// 获取所有的bus设备
 	private void getBusDevices() {
-		listBus = new ArrayList<BusDeviceInfo>();
-		for (BusDeviceInfo busInfo : Constants.BUSDEVICEDATA) {
+		listBus = new ArrayList<DeviceInfo>();
+		for (DeviceInfo busInfo : Constants.DEVICE_LIST) {
 			if ("0".equals(busInfo.getIsDeviceGroup())) {
 				listBus.add(busInfo);
 			}

@@ -79,7 +79,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".BusDeviceList"
+            android:name=".DeviceListActiviy"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity

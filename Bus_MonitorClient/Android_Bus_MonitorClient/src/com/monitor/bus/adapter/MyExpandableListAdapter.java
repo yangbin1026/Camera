@@ -21,9 +21,11 @@ import com.monitor.bus.consts.Constants;
  */
 public class MyExpandableListAdapter extends SimpleExpandableListAdapter {
 	List<HashMap<String, String>> groups = new ArrayList<HashMap<String, String>>();
+	
 	private LayoutInflater inflater;
+	
+	private ExpandableListView expandListView;
 	private View groupView;
-	private ExpandableListView expandView;
 	private ImageView expand_image;
 	private ImageView dev_image;
 	private TextView textView;
@@ -37,7 +39,7 @@ public class MyExpandableListAdapter extends SimpleExpandableListAdapter {
 		super(context, groups, viewGroups, group_strings, group_id, childs,
 				viewChilds, child_strings, child_id);
 		inflater = LayoutInflater.from(context);
-		this.expandView = expandView;
+		this.expandListView = expandView;
 		this.groups = groups;
 
 	}
@@ -45,7 +47,6 @@ public class MyExpandableListAdapter extends SimpleExpandableListAdapter {
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-		groupView = convertView;
 		if( null == groupView ){
 			groupView = inflater.inflate(R.layout.dev_listview_groups, null);
 		}
@@ -54,7 +55,7 @@ public class MyExpandableListAdapter extends SimpleExpandableListAdapter {
 		if ("0".equals(groups.get(groupPosition).get("login_status"))) {
 			expand_image.setImageResource(R.drawable.list_line);
 			dev_image.setImageResource(R.drawable.dev_alarm);
-			expandView.collapseGroup(groupPosition);
+			expandListView.collapseGroup(groupPosition);
 		} else if("1".equals(groups.get(groupPosition).get("login_status"))){
 			//dev_image.setImageResource(R.drawable.groups);
 			dev_image.setImageResource(R.drawable.g3);
@@ -86,7 +87,7 @@ public class MyExpandableListAdapter extends SimpleExpandableListAdapter {
 		else{
 			dev_image.setImageResource(R.drawable.list_line);
 			expand_image.setImageResource(R.drawable.list_line);
-			expandView.collapseGroup(groupPosition);
+			expandListView.collapseGroup(groupPosition);
 		}
 		textView = (TextView) groupView.findViewById(R.id.textGroup);
 		textView.setText((groups.get(groupPosition)).get(Constants.DEVLIST_GROUP_KEY));

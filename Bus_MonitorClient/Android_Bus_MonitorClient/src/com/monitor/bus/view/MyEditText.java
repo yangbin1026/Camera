@@ -7,6 +7,7 @@ import android.text.method.NumberKeyListener;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,7 +17,7 @@ import com.monitor.bus.activity.R;
  * 自定义控件
  */
 public class MyEditText extends LinearLayout {
-	private TextView edit_text;
+	private ImageView iv_right;
 	private EditText edit_input;
 
 	public MyEditText(Context context) {
@@ -29,9 +30,14 @@ public class MyEditText extends LinearLayout {
 		// 导入布局
 		LayoutInflater.from(context).inflate(R.layout.edittext_theme, this,
 				true);
-		edit_text = (TextView) findViewById(R.id.edit_text_left);
+		iv_right = (ImageView) findViewById(R.id.iv_right);
 		edit_input = (EditText) findViewById(R.id.edit_text_input);
 	}
+	
+	public void setImage(int resId) {
+		iv_right.setImageResource(resId);
+	}
+
 
 	/**
 	 * 设置要显示的文字
@@ -39,8 +45,7 @@ public class MyEditText extends LinearLayout {
 	 * @param textId
 	 * @param editId
 	 */
-	public void setTextViewText(int textId, String editId) {
-		edit_text.setText(textId);
+	public void setTextViewText(String editId) {
 		edit_input.setText(editId);
 	}
 

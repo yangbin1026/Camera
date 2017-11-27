@@ -44,7 +44,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
 	private void setTitle() {
 		TextView title= (TextView) view.findViewById(R.id.tilte_name);
-		title.setText(getContext().getString(R.string.pic_list));
+		title.setText(getContext().getString(R.string.setting));
 	}
 	private void initData() {
 		try {
@@ -78,6 +78,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 			//登出
 			Intent intent=new Intent(getContext(),LoginActivity.class);
 			getContext().startActivity(intent);
+			getActivity().finish();
 			break;
 		default:
 			break;

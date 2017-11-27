@@ -76,10 +76,10 @@ import com.monitor.bus.view.MyEditText;
 public class LoginActivity extends Activity implements android.view.View.OnClickListener, OnCheckedChangeListener {
 	private static String TAG = "LoginActivity";
 
-	private MyEditText userName;// 用户名
-	private MyEditText password;// 密码
-	private MyEditText login_port;// 端口
-	private MyEditText login_address;// 地址
+	private MyEditText et_userName;// 用户名
+	private MyEditText et_password;// 密码
+	private MyEditText et_login_port;// 端口
+	private MyEditText et_login_address;// 地址
 	private ProgressDialog pbar;// 进度条对话框
 	private EditText mUserName;
 	private EditText mPassword;
@@ -115,18 +115,22 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	}
 
 	private void initView() {
-		userName = (MyEditText) findViewById(R.id.userName);
-		password = (MyEditText) findViewById(R.id.login_password);
-		login_port = (MyEditText) findViewById(R.id.login_port);
-		login_address = (MyEditText) findViewById(R.id.login_address);
+		et_userName = (MyEditText) findViewById(R.id.userName);
+		et_password = (MyEditText) findViewById(R.id.login_password);
+		et_login_port = (MyEditText) findViewById(R.id.login_port);
+		et_login_address = (MyEditText) findViewById(R.id.login_address);
+		et_userName.setImage(R.drawable.account);
+		et_password.setImage(R.drawable.password);
+		et_login_port.setImage(R.drawable.port);
+		et_login_address.setImage(R.drawable.ip);
 		cb_remenber = (CheckBox) findViewById(R.id.remember);
 		cb_autoLogin = (CheckBox) findViewById(R.id.cb_auto_login);
 		cb_remenber.setOnCheckedChangeListener(this);
 		cb_autoLogin.setOnCheckedChangeListener(this);
-		mUserName = (EditText) userName.findViewById(R.id.edit_text_input);
-		mPassword = (EditText) password.findViewById(R.id.edit_text_input);
-		mIP = (EditText) login_address.findViewById(R.id.edit_text_input);
-		mPort = (EditText) login_port.findViewById(R.id.edit_text_input);
+		mUserName = (EditText) et_userName.findViewById(R.id.edit_text_input);
+		mPassword = (EditText) et_password.findViewById(R.id.edit_text_input);
+		mIP = (EditText) et_login_address.findViewById(R.id.edit_text_input);
+		mPort = (EditText) et_login_port.findViewById(R.id.edit_text_input);
 		btn_login = (Button) findViewById(R.id.login);
 		btn_login.setOnClickListener(this);
 
@@ -136,14 +140,15 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		String ip = userInfo.getString("login_address", "");
 		String port = userInfo.getString("login_port", "");
 
-		password.setTextViewText(R.string.password, p);
-		login_address.setTextViewText(R.string.login_address, ip);
-		login_port.setTextViewText(R.string.login_port, port + "");
-		password.setEditPasswordType();
-		login_port.setEditNumberType();
-		login_address.setIpConfigType();
-		userName.setTextViewText(R.string.userName, u);
-		userName.setEditFocus();
+		et_password.setTextViewText( p);
+		et_login_address.setTextViewText( ip);
+		et_login_port.setTextViewText( port + "");
+		et_userName.setTextViewText( u);
+		
+		et_password.setEditPasswordType();
+		et_login_port.setEditNumberType();
+		et_login_address.setIpConfigType();
+		et_userName.setEditFocus();
 
 		if (LogUtils.Debug) {
 			mUserName.setText("123");
@@ -167,11 +172,6 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		/*
-		 * case R.id.remember:
-		 * 
-		 * break;
-		 */
 		case R.id.login:
 			String userName = mUserName.getText().toString();
 			String password = mPassword.getText().toString();
@@ -182,14 +182,13 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 				MyUtils.toast(this, "请填写完整信息！");
 				break;
 			}
-			int nPort = Integer.parseInt(port);
 			if (cb_remenber.isChecked()) {
 				SPUtils.saveLoginInfo(this, info);
 			} else {
 				/* dbHelper.insertOrUpdate(userName, "", 0); */
 
 			}
-			login();
+			login(userName,password,ip,port);
 			break;
 		}
 	}
@@ -401,18 +400,13 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	/**
 	 * 登录
 	 */
-	public void login() {
+	public void login(String u,String p,String ip,String portStr) {
 		if (!MyUtil.isConnect(this)) {
 			Log.e(TAG, "网络没有连接");
 			Toast.makeText(this, R.string.network_error, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		if (isValidity()) {
-
-			String u = userName.getEditInputValue();
-			String p = password.getEditInputValue();
-			String ip = login_address.getEditInputValue();
-			String portStr = login_port.getEditInputValue();
 			if ("".equals(u)) {
 				return;
 			} else if ("".equals(p)) {
@@ -442,6 +436,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 				return;
 			}
 			int port = Integer.parseInt(portStr.equals("") ? "0" : portStr);
+			//登录
 			JNVPlayerUtil.JNV_N_Login(ip, port, u, p, 30, loginControl, "callbackLonginEvent", 0);
 		} else {
 			AlertDialog.Builder builder = new Builder(this);

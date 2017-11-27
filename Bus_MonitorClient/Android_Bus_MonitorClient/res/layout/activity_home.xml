@@ -30,9 +30,7 @@
 
             <ImageButton
                 android:id="@+id/ib_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
+                style="@style/home_tab"
                 android:src="@drawable/video" />
         </LinearLayout>
 
@@ -45,9 +43,7 @@
 
             <ImageButton
                 android:id="@+id/ib_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
+                style="@style/home_tab"
                 android:src="@drawable/playback" />
         </LinearLayout>
 
@@ -60,9 +56,7 @@
 
             <ImageButton
                 android:id="@+id/ib_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
+                style="@style/home_tab"
                 android:src="@drawable/photo" />
         </LinearLayout>
 
@@ -75,9 +69,7 @@
 
             <ImageButton
                 android:id="@+id/ib_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
+               style="@style/home_tab"
                 android:src="@drawable/alarm" />
         </LinearLayout>
 
@@ -90,9 +82,7 @@
 
             <ImageButton
                 android:id="@+id/ib_5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
+               style="@style/home_tab"
                 android:src="@drawable/set" />
         </LinearLayout>
     </LinearLayout>

@@ -29,6 +29,7 @@
         <RelativeLayout style="@style/setting_item" >
 
             <TextView
+                style="@style/setting_item_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="账号" />
@@ -37,13 +38,15 @@
                 android:id="@+id/tv_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:layout_alignParentRight="true"
                 android:text="123" />
         </RelativeLayout>
 
         <RelativeLayout style="@style/setting_item" >
 
             <TextView
+                style="@style/setting_item_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="自动登录" />
@@ -66,6 +69,7 @@
         <RelativeLayout style="@style/setting_item" >
 
             <TextView
+                style="@style/setting_item_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="显示模式" />
@@ -75,18 +79,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true" />
+
             <TextView
                 android:id="@+id/tv_showmode"
-                android:layout_toLeftOf="@id/iv_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/iv_mode"
                 android:text="模式" />
-
         </RelativeLayout>
 
         <RelativeLayout style="@style/setting_item" >
 
             <TextView
+                style="@style/setting_item_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="地理位置解析" />
@@ -103,6 +108,7 @@
         <RelativeLayout style="@style/setting_item" >
 
             <TextView
+                style="@style/setting_item_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="GPS矫正" />
@@ -116,7 +122,6 @@
                 app:kswThumbMargin="-5dp" />
         </RelativeLayout>
 
-
         <TextView
             style="@style/setting_title"
             android:layout_width="wrap_content"
@@ -127,6 +132,7 @@
 
             <TextView
                 android:id="@+id/tv_version"
+                style="@style/setting_item_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1.0.0" />
@@ -134,8 +140,10 @@
 
         <Button
             android:id="@+id/bt_logout"
-            android:layout_width="match_parent"
+            android:layout_width="240dp"
             android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+           	android:layout_gravity="center_horizontal"
             android:background="@drawable/bg_logout"
             android:text="退出登录" />
     </LinearLayout>

@@ -16,7 +16,7 @@ import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.RecordQueryActivity;
 import com.monitor.bus.adapter.SpinnerBusAdapter;
 import com.monitor.bus.consts.Constants;
-import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.model.DeviceInfo;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -36,6 +36,7 @@ import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TableLayout;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -52,7 +53,7 @@ public class RePlayFragment extends BaseFragment{
 
 	private Calendar calendar;
 	private SimpleDateFormat formater;
-	private List<BusDeviceInfo> listDeviceInfos;
+	private List<DeviceInfo> listDeviceInfos;
 	private List<String> listItems;
 	private String guId;
 	View view; 
@@ -60,10 +61,15 @@ public class RePlayFragment extends BaseFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_replay, container, false);
 		getOnlineBusDevices();//查询在线的设备
+		setTitle();
 		initView();
 		return view;
 	}
 
+	private void setTitle() {
+		TextView title= (TextView) view.findViewById(R.id.tilte_name);
+		title.setText(getContext().getString(R.string.alarm_list));
+	}
 	void initView(){
 		bt_queryDate = (Button)view.findViewById(R.id.queryDate);
 		bt_start_time = (Button) view.findViewById(R.id.start_time);
@@ -146,8 +152,8 @@ public class RePlayFragment extends BaseFragment{
 	 * @return
 	 */
 	public void getOnlineBusDevices(){
-		listDeviceInfos = new ArrayList<BusDeviceInfo>();
-		for (BusDeviceInfo busInfo : Constants.BUSDEVICEDATA) {
+		listDeviceInfos = new ArrayList<DeviceInfo>();
+		for (DeviceInfo busInfo : Constants.DEVICE_LIST) {
 			if (0 != busInfo.getOnLine()) {
 				listDeviceInfos.add(busInfo);
 			}

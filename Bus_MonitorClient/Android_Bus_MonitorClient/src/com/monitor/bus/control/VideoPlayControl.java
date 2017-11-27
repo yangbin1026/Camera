@@ -26,7 +26,7 @@ import com.jniUtil.MyUtil;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.database.DatabaseHelper;
-import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.model.DevRecordInfo;
 import com.monitor.bus.view.MyVideoView;
 
@@ -47,7 +47,7 @@ public  class VideoPlayControl {
 	public int replayStreamId = -1;//设备端录像返回的id，JNV_ReplayStart返回
 	public int talkId = -1;//打开对讲返回的id
 	private DatabaseHelper db;// 数据库操作对象
-	private BusDeviceInfo currentDeviceInfo;// 当前设备信息
+	private DeviceInfo currentDeviceInfo;// 当前设备信息
 	private Toast myToast;
 	//private int start_stream_flag = 0;// 打开流的标志
 	int maxjitter;
@@ -159,7 +159,7 @@ public  class VideoPlayControl {
 					recStreamId = JNVPlayerUtil.JNV_RecOpenFile(filePath, this, "callbackSetStreamInfo", "callbackPlayInfo", 0);
 			}
 		} else if (1 == Constants.STREAM_PLAY_TYPE) {// 实时视频流
-			currentDeviceInfo = (BusDeviceInfo) intent.getSerializableExtra("videoData");
+			currentDeviceInfo = (DeviceInfo) intent.getSerializableExtra("videoData");
 			initSendTalk();// 初始化对讲
 			if (currentDeviceInfo == null) {
 				MyUtil.commonToast(currentContext, R.string.not_playdata);

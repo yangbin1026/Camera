@@ -101,7 +101,7 @@ public class MainListActivity extends BaseActivity{
 					
 				case 1:
 					Intent intent_2=new Intent();
-					intent_2.setClass(mContext, BusDeviceList.class);
+					intent_2.setClass(mContext, DeviceListActiviy.class);
 					startActivity(intent_2);
 					break;
 					

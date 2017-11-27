@@ -15,7 +15,7 @@ import android.util.Log;
 import android.util.Xml;
 
 import com.monitor.bus.consts.Constants;
-import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.model.DevRecordInfo;
 import com.monitor.bus.model.ServerInfo;
 
@@ -24,11 +24,11 @@ import com.monitor.bus.model.ServerInfo;
  */
 public class PullParseXML {
 
-	public static List<BusDeviceInfo> getBusDevices(InputStream in)
+	public static List<DeviceInfo> getBusDevices(InputStream in)
 			throws XmlPullParserException, IOException {
 		boolean isCheck = false; 
-		BusDeviceInfo busInfo = null;
-		List<BusDeviceInfo> devices = null;
+		DeviceInfo busInfo = null;
+		List<DeviceInfo> devices = null;
 		XmlPullParser parser = Xml.newPullParser();
 		InputStreamReader streamReader = new InputStreamReader(in,"gb2312"); 
 		parser.setInput(streamReader);
@@ -37,12 +37,12 @@ public class PullParseXML {
 		while (event != XmlPullParser.END_DOCUMENT) {
 			switch (event) {
 			case XmlPullParser.START_DOCUMENT:// 判断当前事件是否是文档开始事件
-				devices = new ArrayList<BusDeviceInfo>();
+				devices = new ArrayList<DeviceInfo>();
 				//Constants.BUSDEVICEDATA.clear();
 				break;
 			case XmlPullParser.START_TAG:// 判断当前事件是否是标签元素开始事件
 				if ("device".equals(parser.getName())) {// 判断开始标签元素是否是name
-					busInfo = new BusDeviceInfo();
+					busInfo = new DeviceInfo();
 					busInfo.setGroupId(parser.getAttributeValue(null,"GroupID"));
 					busInfo.setParentId(parser.getAttributeValue(null,"ParentID"));
 					busInfo.setIsDeviceGroup(parser.getAttributeValue(null,"IsDeviceGroup"));
@@ -154,7 +154,7 @@ public class PullParseXML {
 		return devices;
 	}
 
-	private static boolean isDeviceValid(BusDeviceInfo busInfo) {
+	private static boolean isDeviceValid(DeviceInfo busInfo) {
 		if( "".equals(busInfo.getCmdServerID()) 
 				|| "".equals(busInfo.getMediaServerID())){
 			return false;
@@ -169,12 +169,12 @@ public class PullParseXML {
 	 * @throws IOException
 	 */
 	public static  void getSortBusDevices(InputStream in) throws XmlPullParserException, IOException{
-		Constants.BUSDEVICEDATA.clear();
-		Constants.BUSDEVICEDATA = getBusDevices(in);
-		Collections.sort(Constants.BUSDEVICEDATA, new Comparator<BusDeviceInfo>() {
+		Constants.DEVICE_LIST.clear();
+		Constants.DEVICE_LIST = getBusDevices(in);
+		Collections.sort(Constants.DEVICE_LIST, new Comparator<DeviceInfo>() {
 
 			@Override
-			public int compare(BusDeviceInfo lhs, BusDeviceInfo rhs) {
+			public int compare(DeviceInfo lhs, DeviceInfo rhs) {
 
 				return rhs.getOnLine() - lhs.getOnLine();
 			}

@@ -5,6 +5,8 @@
 	<color name="transparent">#00000000</color><!-- 透明 -->
 	<color name="blue">#ff0000ff</color><!-- 蓝色 -->
 	
+	<color name="home_tab_bg">#4f0000ff</color><!-- 蓝色 -->
+	
 	<!--        mycolor     -->
 	<color name="title_color">#000000</color><!-- 标题字体颜色 -->
 	<!--<color name="close_color">#6d6d6d</color> 录像、监听、对讲、方向的关闭 的字体颜色 -->

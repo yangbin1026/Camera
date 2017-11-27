@@ -36,14 +36,14 @@ public class DevRecordListActivity extends BaseActivity {
 		Intent intent = getIntent();
 		guId = intent.getStringExtra("guid");
 		recordListView = (ListView) findViewById(R.id.localListView);  
-		if( 0 == Constants.DEVRECORDINFOS.size()){
+		if( 0 == Constants.RECORD_LIST.size()){
 			LoginEventControl.myProgress = ProgressDialog.show(this, getString(R.string.loading_data_title), getString(R.string.waiting),true,true);
 		}
 		recordListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long arg3) {
-				DevRecordInfo devRecordInfo = Constants.DEVRECORDINFOS.get(position);
+				DevRecordInfo devRecordInfo = Constants.RECORD_LIST.get(position);
 				devRecordInfo.setGuId(guId);
 				Intent intent = new Intent();
 				intent.putExtra("devRecordInfo", devRecordInfo);
@@ -57,7 +57,7 @@ public class DevRecordListActivity extends BaseActivity {
 	@Override
 	protected void onResume() { 
 		registerBoradcastReceiver();//注册广播接收器
-		DevRecordListAdapter devRecordAdapter = new DevRecordListAdapter(this,Constants.DEVRECORDINFOS);
+		DevRecordListAdapter devRecordAdapter = new DevRecordListAdapter(this,Constants.RECORD_LIST);
 		recordListView.setAdapter(devRecordAdapter);
 		super.onResume();
 	}
@@ -74,7 +74,7 @@ public class DevRecordListActivity extends BaseActivity {
 		if(devRecordFile.exists()){	//存在删除
 			devRecordFile.delete();
 		}
-		Constants.DEVRECORDINFOS.clear();
+		Constants.RECORD_LIST.clear();
 		super.onDestroy();
 	}
 
@@ -95,9 +95,9 @@ public class DevRecordListActivity extends BaseActivity {
             	Log.i(TAG, "========广播接收器=======当前登陆状态:"+eventType);
             	if(eventType == CALLBACKFLAG.GET_EVENT_RECLIST){
             		LoginEventControl.myProgress.dismiss();
-            		DevRecordListAdapter devRecordAdapter = new DevRecordListAdapter(DevRecordListActivity.this,Constants.DEVRECORDINFOS);
+            		DevRecordListAdapter devRecordAdapter = new DevRecordListAdapter(DevRecordListActivity.this,Constants.RECORD_LIST);
             		recordListView.setAdapter(devRecordAdapter);
-            		if(Constants.DEVRECORDINFOS.size() == 0){
+            		if(Constants.RECORD_LIST.size() == 0){
             			MyUtil.commonToast(DevRecordListActivity.this, R.string.not_dev_recordfile);
             		}
             	}

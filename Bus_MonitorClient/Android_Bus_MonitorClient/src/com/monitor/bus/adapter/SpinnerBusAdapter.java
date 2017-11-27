@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.monitor.bus.activity.R;
-import com.monitor.bus.model.BusDeviceInfo;
+import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.utils.LogUtils;
 
 /**
@@ -21,11 +21,11 @@ import com.monitor.bus.utils.LogUtils;
 public class SpinnerBusAdapter extends ArrayAdapter<Object> {
 
 	private LayoutInflater mInflater;
-	private List<BusDeviceInfo> items;
+	private List<DeviceInfo> items;
 	private TextView busItem;
 	private int SpinnerItemLayout;
 	public SpinnerBusAdapter(Context context, int textViewResourceId,
-			List<BusDeviceInfo> objects) {
+			List<DeviceInfo> objects) {
 		super(context, textViewResourceId);
 		mInflater = LayoutInflater.from(context);
 		items = objects;
