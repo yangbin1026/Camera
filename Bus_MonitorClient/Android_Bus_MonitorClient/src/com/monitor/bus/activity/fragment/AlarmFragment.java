@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -30,7 +31,7 @@ import android.widget.AdapterView.OnItemClickListener;
  * @author Administrator
  *
  */
-public class AlarmFragment extends BaseFragment {
+public class AlarmFragment extends BaseFragment implements View.OnClickListener{
 	private ListView alarmListView;
 	private DeviceInfo currentDeviceInfo;
 	private List<AlarmInfo> alarms;
@@ -48,6 +49,9 @@ public class AlarmFragment extends BaseFragment {
 	private void setTitle() {
 		TextView title= (TextView) view.findViewById(R.id.tilte_name);
 		title.setText(getContext().getString(R.string.alarm_list));
+		ImageButton ib_setting=(ImageButton) view.findViewById(R.id.ib_setting);
+		ib_setting.setVisibility(View.VISIBLE);
+		ib_setting.setOnClickListener(this);
 	}
 
 	private void initData() {
@@ -128,6 +132,24 @@ public class AlarmFragment extends BaseFragment {
 	private void startFilterActivity() {
 		Intent intent = new Intent(getContext(), FilterOptionActivity.class);
 		startActivity(intent);
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		switch (arg0.getId()) {
+		case R.id.ib_setting:
+			showPopWindow();
+			break;
+
+		default:
+			break;
+		}
+		
+	}
+
+	private void showPopWindow() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

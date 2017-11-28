@@ -197,10 +197,10 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
 		switch (arg0.getId()) {
 		case R.id.remember:
-
+			SPUtils.saveBoolean(this, SPUtils.KEY_REMEMBER_USERINFO, arg1);
 			break;
 		case R.id.cb_auto_login:
-
+			SPUtils.saveBoolean(this, SPUtils.KEY_AUTO_LOGIN, arg1);
 			break;
 
 		default:

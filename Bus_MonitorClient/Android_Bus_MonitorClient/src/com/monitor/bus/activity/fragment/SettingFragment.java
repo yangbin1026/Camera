@@ -55,6 +55,13 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 		}
 		LoginInfo loginInfo=SPUtils.getLoginInfo(getContext());
 		tv_username.setText(loginInfo.getUserName());
+		
+		boolean autoLogin=SPUtils.getBoolean(getContext(), SPUtils.KEY_AUTO_LOGIN, false);
+		boolean gps=SPUtils.getBoolean(getContext(), SPUtils.KEY_GSP, false);
+		boolean local=SPUtils.getBoolean(getContext(), SPUtils.KEY_LOCAL, false);
+		sb_autologin.setChecked(autoLogin);
+		sb_gps.setChecked(gps);
+		sb_local.setChecked(local);
 	}
 
 	private void initView() {
@@ -76,6 +83,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 		switch (arg0.getId()) {
 		case R.id.bt_logout:
 			//登出
+			SPUtils.saveBoolean(getContext(), SPUtils.KEY_AUTO_LOGIN, false);
 			Intent intent=new Intent(getContext(),LoginActivity.class);
 			getContext().startActivity(intent);
 			getActivity().finish();

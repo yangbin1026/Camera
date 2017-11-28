@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerVertical="true"
-        android:background="#0A68C0"
+        android:background="@color/home_tab_blue_qian"
         android:orientation="horizontal"
         android:weightSum="5" >
 

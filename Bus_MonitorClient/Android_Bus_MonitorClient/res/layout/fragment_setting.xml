@@ -30,16 +30,16 @@
 
             <TextView
                 style="@style/setting_item_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="账号" />
 
             <TextView
                 android:id="@+id/tv_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:textSize="18dp"
                 android:text="123" />
         </RelativeLayout>
 
@@ -47,8 +47,6 @@
 
             <TextView
                 style="@style/setting_item_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="自动登录" />
 
             <com.monitor.bus.view.SwitchButton
@@ -57,6 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 app:kswThumbMargin="-5dp" />
         </RelativeLayout>
 
@@ -70,8 +69,6 @@
 
             <TextView
                 style="@style/setting_item_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="显示模式" />
 
             <ImageView
@@ -84,6 +81,9 @@
                 android:id="@+id/tv_showmode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="3dp"
+                android:textSize="18dp"
                 android:layout_toLeftOf="@id/iv_mode"
                 android:text="模式" />
         </RelativeLayout>
@@ -93,7 +93,7 @@
             <TextView
                 style="@style/setting_item_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="地理位置解析" />
 
             <com.monitor.bus.view.SwitchButton
@@ -102,6 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 app:kswThumbMargin="-5dp" />
         </RelativeLayout>
 
@@ -109,8 +110,6 @@
 
             <TextView
                 style="@style/setting_item_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="GPS矫正" />
 
             <com.monitor.bus.view.SwitchButton
@@ -119,6 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 app:kswThumbMargin="-5dp" />
         </RelativeLayout>
 
@@ -134,17 +134,20 @@
                 android:id="@+id/tv_version"
                 style="@style/setting_item_text"
                 android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:textSize="18dp"
                 android:layout_height="wrap_content"
                 android:text="1.0.0" />
         </RelativeLayout>
 
         <Button
             android:id="@+id/bt_logout"
-            android:layout_width="240dp"
-            android:layout_height="30dp"
+            android:layout_width="280dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-           	android:layout_gravity="center_horizontal"
             android:background="@drawable/bg_logout"
+            android:textSize="20dp"
             android:text="退出登录" />
     </LinearLayout>
 

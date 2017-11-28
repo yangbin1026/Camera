@@ -15,6 +15,12 @@
 	<color name="bg_line_gray">#c0bfc3</color>
 	<color name="bg_my_gray">#f0eff5</color>
 	
+	<color name="find_line">#7ec0dc</color>
+	
+	
+	<color name="home_tab_blue_qian">#408adf</color>
+	<color name="home_tab_blue_sheng">#257ae5</color>
+	
 	
 	<color name="ksw_md_ripple_normal">#1E000000</color>
 	<color name="ksw_md_ripple_checked">#33019285</color>

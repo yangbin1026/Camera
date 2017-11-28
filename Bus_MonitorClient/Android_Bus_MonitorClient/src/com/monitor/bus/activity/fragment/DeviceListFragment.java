@@ -66,17 +66,6 @@ public class DeviceListFragment extends BaseFragment {
 		return view;
 	}
 
-	private void showWaittingDialog() {
-		if (0 == Constants.DEVICE_LIST.size()) {
-			progressDialog = LoginEventControl.myProgress;
-			progressDialog = new ProgressDialog(getContext());
-			progressDialog.setTitle(R.string.loading_data_title);
-			progressDialog.setMessage(this.getString(R.string.waiting));
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.show();
-		}
-	}
-
 	private void setTitle() {
 		TextView title = (TextView) view.findViewById(R.id.tilte_name);
 		title.setText(getContext().getString(R.string.dev_list));
@@ -84,10 +73,9 @@ public class DeviceListFragment extends BaseFragment {
 
 	@Override
 	public void onDestroyView() {
-		getContext().unregisterReceiver(mBroadcastReceiver);
+		unregisterReceiver();
 		super.onDestroyView();
 	}
-
 	private void initView() {
 		expListView = (ExpandableListView) view.findViewById(R.id.expandView);
 		expListView.setOnGroupClickListener(new OnGroupClickListener() {// 组单击事件
@@ -225,11 +213,31 @@ public class DeviceListFragment extends BaseFragment {
 		return false;
 	}
 
-	public void registerBoradcastReceiver() {
+	private void registerBoradcastReceiver() {
 		IntentFilter myIntentFilter = new IntentFilter();
 		myIntentFilter.addAction("ACTION_NAME");
 		// 注册广播
 		getContext().registerReceiver(mBroadcastReceiver, myIntentFilter);
+	}
+
+	private void unregisterReceiver() {
+		getContext().unregisterReceiver(mBroadcastReceiver);
+	}
+
+	private void showWaittingDialog() {
+		if (0 == Constants.DEVICE_LIST.size()) {
+			progressDialog = LoginEventControl.myProgress;
+			progressDialog = new ProgressDialog(getContext());
+			progressDialog.setTitle(R.string.loading_data_title);
+			progressDialog.setMessage(this.getString(R.string.waiting));
+			progressDialog.setCanceledOnTouchOutside(false);
+			progressDialog.show();
+		}
+	}
+	private void disMissWaittingDialog() {
+		if(progressDialog!=null){
+			progressDialog.dismiss();
+		}
 	}
 
 	// 广播接收器
@@ -242,7 +250,7 @@ public class DeviceListFragment extends BaseFragment {
 				Log.i(TAG, "========广播接收器=======当前登陆状态:" + eventType);
 				if (!Constants.IS_CASCADE_SERVER && eventType == CALLBACKFLAG.GET_EVENT_DEVLIST
 						|| Constants.IS_CASCADE_SERVER && eventType == CALLBACKFLAG.JNET_EET_EVENT_SERVER_LIST) {
-					progressDialog.dismiss();
+					disMissWaittingDialog();
 					loadDeviceInfoList("0");
 				} else {
 					String DEVID = intent.getStringExtra("devID");//
@@ -258,6 +266,8 @@ public class DeviceListFragment extends BaseFragment {
 				}
 			}
 		}
+
+	
 
 	};
 }

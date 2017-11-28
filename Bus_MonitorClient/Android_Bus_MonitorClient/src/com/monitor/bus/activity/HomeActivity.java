@@ -62,11 +62,11 @@ public class HomeActivity extends FragmentActivity implements OnClickListener{
 	}
 
 	protected void resetTabBtn(int position) { 
-		((ImageButton) ib_0).setBackgroundColor(position==0? getResources().getColor(R.color.home_tab_bg):getResources().getColor(R.color.transparent));
-		((ImageButton) ib_1).setBackgroundColor(position==1? getResources().getColor(R.color.home_tab_bg):getResources().getColor(R.color.transparent));
-		((ImageButton) ib_2).setBackgroundColor(position==2? getResources().getColor(R.color.home_tab_bg):getResources().getColor(R.color.transparent));
-		((ImageButton) ib_3).setBackgroundColor(position==3? getResources().getColor(R.color.home_tab_bg):getResources().getColor(R.color.transparent));
-		((ImageButton) ib_4).setBackgroundColor(position==4? getResources().getColor(R.color.home_tab_bg):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_0).setBackgroundColor(position==0? getResources().getColor(R.color.home_tab_blue_sheng):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_1).setBackgroundColor(position==1? getResources().getColor(R.color.home_tab_blue_sheng):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_2).setBackgroundColor(position==2? getResources().getColor(R.color.home_tab_blue_sheng):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_3).setBackgroundColor(position==3? getResources().getColor(R.color.home_tab_blue_sheng):getResources().getColor(R.color.transparent));
+		((ImageButton) ib_4).setBackgroundColor(position==4? getResources().getColor(R.color.home_tab_blue_sheng):getResources().getColor(R.color.transparent));
 		currentFragment = mFragments.get(position);
 	}
 

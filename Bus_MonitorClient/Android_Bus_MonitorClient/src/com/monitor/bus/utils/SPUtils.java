@@ -12,16 +12,17 @@ public class SPUtils {
 	private static SharedPreferences sp_login;
 	private static String TAG= SPUtils.class.getSimpleName();
 	private static final String MY_SP_KEY = "appkey";
-	public static final String KEY_AUTO_LOGIN="key_auto_login";
-	public static final String KEY_GSP="key_gps";
-	public static final String KEY_LOCAL="key_local";
 	
 	
 	private static final String LOGIN_INFO="login_info";
+	public static final String KEY_AUTO_LOGIN="key_auto_login";
+	public static final String KEY_GSP="key_gps";
+	public static final String KEY_LOCAL="key_local";
 	private static final String KEY_INFO_NAME="login_name";
 	private static final String KEY_INFO_PW="login_pw";
 	private static final String KEY_INFO_IP="login_ip";
 	private static final String KEY_INFO_PORT="login_port";
+	public static final String KEY_REMEMBER_USERINFO = "remember_userinfo";
 	
 	
 	
