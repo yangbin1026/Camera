@@ -8,6 +8,7 @@ import com.monitor.bus.activity.FilterOptionActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.VideoActivity;
 import com.monitor.bus.adapter.AlarmListAdapter;
+import com.monitor.bus.adapter.AlarmSelectorAdapter;
 import com.monitor.bus.bean.AlarmManager;
 import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
@@ -17,27 +18,35 @@ import com.monitor.bus.utils.MyUtils;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat.LayoutParams;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * 警报页面
+ * 
  * @author Administrator
  *
  */
-public class AlarmFragment extends BaseFragment implements View.OnClickListener{
+public class AlarmFragment extends BaseFragment implements View.OnClickListener {
 	private ListView alarmListView;
 	private DeviceInfo currentDeviceInfo;
 	private List<AlarmInfo> alarms;
 	View view;
+	
+	AlarmManager alarmManger=AlarmManager.getInstance();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,9 +58,9 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener{
 	}
 
 	private void setTitle() {
-		TextView title= (TextView) view.findViewById(R.id.tilte_name);
+		TextView title = (TextView) view.findViewById(R.id.tilte_name);
 		title.setText(getContext().getString(R.string.alarm_list));
-		ImageButton ib_setting=(ImageButton) view.findViewById(R.id.ib_setting);
+		ImageButton ib_setting = (ImageButton) view.findViewById(R.id.ib_setting);
 		ib_setting.setVisibility(View.VISIBLE);
 		ib_setting.setOnClickListener(this);
 	}
@@ -60,7 +69,7 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener{
 		alarms = new ArrayList<AlarmInfo>();
 		alarms.addAll(AlarmManager.getInstance().getAlarmList());
 		for (int i = 0; i < alarms.size(); i++) {
-			//报警类型是移动，震动提示用户
+			// 报警类型是移动，震动提示用户
 			if (alarms.get(i).getAlarmString().contains(getString(R.string.motion_detection))) {
 				MyUtils.Vibrate(getActivity(), 1000);
 				break;
@@ -146,12 +155,29 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener{
 		default:
 			break;
 		}
-		
+
 	}
 
 	private void showPopWindow() {
-		// TODO Auto-generated method stub
-		
+		View contentView = LayoutInflater.from(getContext()).inflate(R.layout.pop_alarm, null);
+		PopupWindow mPopWindow = new PopupWindow(contentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
+				true);
+		mPopWindow.setContentView(contentView);
+		ListView lv_alarm_pop = (ListView) contentView.findViewById(R.id.lv_alarm_choose);
+		AlarmSelectorAdapter adapter = new AlarmSelectorAdapter(getContext(),
+				alarmManger.getAlarmTypeString());
+		lv_alarm_pop.setAdapter(adapter);
+		lv_alarm_pop.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				int type=alarmManger.getAlarmType()[arg2];
+				MyUtils.toast(getContext(), ""+type);
+			}
+		});
+
+		// 显示PopupWindow
+		mPopWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
 	}
 
 }
