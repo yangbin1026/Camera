@@ -18,7 +18,9 @@
         android:layout_below="@id/include1"
         android:orientation="vertical" >
 
-        <RelativeLayout style="@style/finding_item" >
+        <RelativeLayout
+            android:id="@+id/rl_1"
+            style="@style/finding_item" >
 
             <TextView
                 style="@style/finding_text"
@@ -33,7 +35,7 @@
                 android:src="@drawable/alert" />
 
             <TextView
-                android:id="@+id/tv_username"
+                android:id="@+id/tv_select_device"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -49,7 +51,9 @@
                 android:background="@color/find_line" />
         </RelativeLayout>
 
-        <RelativeLayout style="@style/finding_item" >
+        <RelativeLayout
+            android:id="@+id/rl_2"
+            style="@style/finding_item" >
 
             <TextView
                 style="@style/finding_text"
@@ -80,7 +84,9 @@
                 android:background="@color/find_line" />
         </RelativeLayout>
 
-        <RelativeLayout style="@style/finding_item" >
+        <RelativeLayout
+            android:id="@+id/rl_3"
+            style="@style/finding_item" >
 
             <TextView
                 style="@style/finding_text"
@@ -95,6 +101,7 @@
                 android:src="@drawable/alert" />
 
             <TextView
+                android:id="@+id/tv_channel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -110,7 +117,9 @@
                 android:background="@color/find_line" />
         </RelativeLayout>
 
-        <RelativeLayout style="@style/finding_item" >
+        <RelativeLayout
+            android:id="@+id/rl_4"
+            style="@style/finding_item" >
 
             <TextView
                 style="@style/finding_text"
@@ -125,6 +134,7 @@
                 android:src="@drawable/alert" />
 
             <TextView
+                android:id="@+id/tv_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -140,7 +150,9 @@
                 android:background="@color/find_line" />
         </RelativeLayout>
 
-        <RelativeLayout style="@style/finding_item" >
+        <RelativeLayout
+            android:id="@+id/rl_5"
+            style="@style/finding_item" >
 
             <TextView
                 style="@style/finding_text"
@@ -155,6 +167,7 @@
                 android:src="@drawable/alert" />
 
             <TextView
+                android:id="@+id/tv_select_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -170,7 +183,9 @@
                 android:background="@color/find_line" />
         </RelativeLayout>
 
-        <RelativeLayout style="@style/finding_item" >
+        <RelativeLayout
+            android:id="@+id/rl_6"
+            style="@style/finding_item" >
 
             <TextView
                 style="@style/finding_text"
@@ -185,6 +200,7 @@
                 android:src="@drawable/alert" />
 
             <TextView
+                android:id="@+id/tv_start_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -200,7 +216,9 @@
                 android:background="@color/find_line" />
         </RelativeLayout>
 
-        <RelativeLayout style="@style/finding_item" >
+        <RelativeLayout
+            android:id="@+id/rl_7"
+            style="@style/finding_item" >
 
             <TextView
                 style="@style/finding_text"
@@ -215,6 +233,7 @@
                 android:src="@drawable/alert" />
 
             <TextView
+                android:id="@+id/tv_end_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"

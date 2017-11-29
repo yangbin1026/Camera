@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jniUtil.MyUtil;
-import com.monitor.bus.activity.FilelistActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.adapter.FileListAdapter;
 import com.monitor.bus.consts.Constants;

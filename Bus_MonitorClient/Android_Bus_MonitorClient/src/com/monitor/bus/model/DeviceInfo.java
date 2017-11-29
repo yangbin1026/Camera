@@ -18,7 +18,7 @@ public class DeviceInfo implements Serializable{
 	private String	deviceName;//设备名称
 	private String	guId;//
 	private String		sn;
-	private	int		onLine;//是否在线 
+	private	int		onLine;//是否在线    0:在线
 	private	String	maxSpeed;//最大速度
 	private	String	minSpeed;//最小速度
 	private Double	longitude;

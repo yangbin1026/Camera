@@ -59,10 +59,6 @@ public class RecordQueryActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		MyUtil.initTitleName(this,R.layout.record_query,R.string.query);
-		queryDate = (Button) findViewById(R.id.queryDate);
-		start_time = (Button) findViewById(R.id.start_time);
-		end_time = (Button) findViewById(R.id.end_time);
 
 		cale = Calendar.getInstance();
 		df = new SimpleDateFormat( "yyyy-MM-dd" );
@@ -71,8 +67,6 @@ public class RecordQueryActivity extends BaseActivity {
 		end_time.setText(R.string.end_text);
 
 
-		record_native = (RadioButton) findViewById(R.id.record_native);
-		record_remote = (RadioButton) findViewById(R.id.record_remote);
 
 		getOnlineBusDevices();//查询在线的设备
 		if(0 == listBus.size()){
@@ -84,8 +78,6 @@ public class RecordQueryActivity extends BaseActivity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
-					TableLayout remoteLayout =  (TableLayout) findViewById(R.id.remoteLayout);//设备端查询布局
-					remoteLayout.setVisibility(View.GONE);
 				}
 			}
 		}); 
@@ -95,12 +87,6 @@ public class RecordQueryActivity extends BaseActivity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
-					TableLayout remoteLayout =  (TableLayout) findViewById(R.id.remoteLayout);//设备端查询布局
-					remoteLayout.setVisibility(View.VISIBLE);
-
-					queryDevList = (Spinner)findViewById(R.id.queryDevList);
-					queryDevChnCount = (Spinner)findViewById(R.id.queryDevChnCount);
-					queryRecordType = (Spinner)findViewById(R.id.queryRecordType);
 
 
 

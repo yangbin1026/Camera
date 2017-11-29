@@ -35,6 +35,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -42,7 +43,7 @@ import android.widget.TimePicker;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-public class RePlayFragment extends BaseFragment {
+public class RePlayFragment extends BaseFragment implements View.OnClickListener{
 	private RadioButton rb_native;// 本地
 	private RadioButton rb_remote;// 设备端
 	private Button bt_queryDate;
@@ -54,15 +55,18 @@ public class RePlayFragment extends BaseFragment {
 
 	private Calendar calendar;
 	private SimpleDateFormat formater;
-	private List<DeviceInfo> listDeviceInfos;
+	private List<DeviceInfo> deviceList;
 	private List<String> listItems;
 	private String guId;
 	View view;
-
+	
+	TextView tv_select_device,tv_file_local,tv_channel,tv_type,tv_select_time,tv_start_time,tv_end_time;
+	RelativeLayout rl_1,rl_2,rl_3,rl_4,rl_5,rl_6,rl_7;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_replay, container, false);
-		getOnlineBusDevices();// 查询在线的设备
+		deviceList=DeviceManager.getInstance().getOnlineDevice();
+		
 		setTitle();
 		initView();
 		return view;
@@ -74,46 +78,44 @@ public class RePlayFragment extends BaseFragment {
 	}
 
 	void initView() {
-		bt_queryDate = (Button) view.findViewById(R.id.queryDate);
-		bt_start_time = (Button) view.findViewById(R.id.start_time);
-		bt_end_time = (Button) view.findViewById(R.id.end_time);
-
+		tv_channel=(TextView) view.findViewById(R.id.tv_channel);
+		tv_end_time=(TextView) view.findViewById(R.id.tv_end_time);
+		tv_file_local=(TextView) view.findViewById(R.id.tv_find_local);
+		tv_select_device=(TextView) view.findViewById(R.id.tv_select_device);
+		tv_select_time=(TextView) view.findViewById(R.id.tv_select_time);
+		tv_start_time=(TextView) view.findViewById(R.id.tv_start_time);
+		tv_type=(TextView) view.findViewById(R.id.tv_type);
+		rl_1=(RelativeLayout) view.findViewById(R.id.rl_1);
+		rl_2=(RelativeLayout) view.findViewById(R.id.rl_2);
+		rl_3=(RelativeLayout) view.findViewById(R.id.rl_3);
+		rl_4=(RelativeLayout) view.findViewById(R.id.rl_4);
+		rl_5=(RelativeLayout) view.findViewById(R.id.rl_5);
+		rl_6=(RelativeLayout) view.findViewById(R.id.rl_6);
+		rl_7=(RelativeLayout) view.findViewById(R.id.rl_7);
+		rl_1.setOnClickListener(this);
+		rl_2.setOnClickListener(this);
+		rl_3.setOnClickListener(this);
+		rl_4.setOnClickListener(this);
+		rl_5.setOnClickListener(this);
+		rl_6.setOnClickListener(this);
+		rl_7.setOnClickListener(this);
+		
+		
+		
 		calendar = Calendar.getInstance();
 		formater = new SimpleDateFormat("yyyy-MM-dd");
-		bt_queryDate.setText(formater.format(calendar.getTime()));
-		bt_start_time.setText(R.string.start_text);
-		bt_end_time.setText(R.string.end_text);
 
-		rb_native = (RadioButton) view.findViewById(R.id.record_native);
-		rb_remote = (RadioButton) view.findViewById(R.id.record_remote);
-		if (0 == listDeviceInfos.size()) {
-			rb_remote.setVisibility(View.GONE);
-		}
 
-		rb_native.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (isChecked) {
-					TableLayout remoteLayout = (TableLayout) view.findViewById(R.id.remoteLayout);// 设备端查询布局
-					remoteLayout.setVisibility(View.GONE);
-				}
-			}
-		});
-
+		//远程录像
 		rb_remote.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (isChecked) {
-					TableLayout remoteLayout = (TableLayout) view.findViewById(R.id.remoteLayout);// 设备端查询布局
-					remoteLayout.setVisibility(View.VISIBLE);
 					sp_queryDevList = (Spinner) view.findViewById(R.id.queryDevList);
-					sp_queryDevChnCount = (Spinner) view.findViewById(R.id.queryDevChnCount);
-					sp_queryRecordType = (Spinner) view.findViewById(R.id.queryRecordType);
 
 					SpinnerBusAdapter queryDevListAdapter = new SpinnerBusAdapter(getContext(), R.layout.spinner_item,
-							listDeviceInfos);
+							deviceList);
 					queryDevListAdapter.setDropDownViewResource(R.layout.spinner_checkview);
 					sp_queryDevList.setAdapter(queryDevListAdapter);
 
@@ -121,9 +123,9 @@ public class RePlayFragment extends BaseFragment {
 
 						@Override
 						public void onItemSelected(AdapterView<?> arg0, View arg1, int location, long arg3) {
-							int chnCount = listDeviceInfos.get(location).getEncoderNumber();
+							int chnCount = deviceList.get(location).getEncoderNumber();
 							// guId = listBus.get(location).getGuId();
-							guId = listDeviceInfos.get(location).getNewGuId();
+							guId = deviceList.get(location).getNewGuId();
 							listItems = new ArrayList<String>();
 							for (int i = 1; i <= chnCount; i++) {
 								listItems.add(Constants.CHANNEL_PREFIX_NAME + i);
@@ -152,19 +154,6 @@ public class RePlayFragment extends BaseFragment {
 		});
 	}
 
-	/**
-	 * 获取在线的bus设备
-	 * 
-	 * @return
-	 */
-	public void getOnlineBusDevices() {
-		listDeviceInfos = new ArrayList<DeviceInfo>();
-		for (DeviceInfo busInfo : DeviceManager.getInstance().getDeviceList()) {
-			if (0 != busInfo.getOnLine()) {
-				listDeviceInfos.add(busInfo);
-			}
-		}
-	}
 
 	DatePickerDialog.OnDateSetListener onStartDateListener = new DatePickerDialog.OnDateSetListener() {
 
@@ -305,5 +294,11 @@ public class RePlayFragment extends BaseFragment {
 		} else {
 			return true;
 		}
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

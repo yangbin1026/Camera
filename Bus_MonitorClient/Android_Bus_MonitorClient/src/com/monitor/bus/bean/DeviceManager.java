@@ -52,5 +52,20 @@ public class DeviceManager {
 		return mDeviceList.size();
 	}
 	
+	/**
+	 * 获取在线的bus设备
+	 * 
+	 * @return
+	 */
+	public ArrayList<DeviceInfo> getOnlineDevice() {
+		ArrayList<DeviceInfo> list = new ArrayList<DeviceInfo>();
+		for (DeviceInfo busInfo : mDeviceList ) {
+			if (0 != busInfo.getOnLine()) {
+				list.add(busInfo);
+			}
+		}
+		return list;
+	}
+	
 
 }

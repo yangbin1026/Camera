@@ -7,7 +7,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Color;
 
-import com.monitor.bus.activity.AlarmListActivity;
+import com.monitor.bus.activity.HomeActivity;
 import com.monitor.bus.activity.R;
 /**
  * @Description: Notification扩展类
@@ -50,7 +50,7 @@ public class MyNotification {
         notification.ledOnMS = 5000; 
         // 设置通知的事件消息
         CharSequence contentTitle = currentContext.getString(R.string.product_name); // 通知栏标题
-        notificationIntent = new Intent(currentContext,AlarmListActivity.class);
+        notificationIntent = new Intent(currentContext,HomeActivity.class);
         notificationIntent.setAction(Intent.ACTION_MAIN);
         notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         

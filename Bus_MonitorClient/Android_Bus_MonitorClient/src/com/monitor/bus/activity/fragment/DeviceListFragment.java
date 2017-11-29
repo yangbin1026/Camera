@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jniUtil.MyUtil;
-import com.monitor.bus.activity.DeviceListActiviy;
-import com.monitor.bus.activity.MainListActivity;
+import com.monitor.bus.activity.HomeActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.UserMapActivity;
 import com.monitor.bus.activity.VideoActivity;
@@ -208,7 +207,7 @@ public class DeviceListFragment extends BaseFragment {
 			return true;
 		} else {
 			Intent intent = new Intent();
-			intent.setClass(getContext(), MainListActivity.class);
+			intent.setClass(getContext(), HomeActivity.class);
 			startActivity(intent);
 		}
 		return false;

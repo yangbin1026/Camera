@@ -30,7 +30,6 @@ import com.jniUtil.JNVPlayerUtil;
 import com.jniUtil.MyUtil;
 import com.jniUtil.PullParseXML;
 import com.monitor.bus.activity.HomeActivity;
-import com.monitor.bus.activity.MainListActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.adapter.MyNotification;
 import com.monitor.bus.consts.Constants;
@@ -159,11 +158,7 @@ public class LoginEventControl{
 				if (!loginsuccess_flag) {
 					myProgress.dismiss();
 					Intent intent = new Intent();
-					if(LogUtils.Debug){
-						intent.setClass(currentContext, HomeActivity.class);
-					}else {
-						intent.setClass(currentContext, MainListActivity.class);
-					}
+					intent.setClass(currentContext, HomeActivity.class);
 					currentContext.startActivity(intent);
 					currentContext.finish();
 				}
