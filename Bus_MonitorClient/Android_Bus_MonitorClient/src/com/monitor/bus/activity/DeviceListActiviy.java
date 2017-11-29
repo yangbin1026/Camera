@@ -23,6 +23,7 @@ import android.widget.ExpandableListView.OnGroupClickListener;
 
 import com.jniUtil.MyUtil;
 import com.monitor.bus.adapter.MyExpandableListAdapter;
+import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.control.LoginEventControl;
@@ -52,7 +53,7 @@ public class DeviceListActiviy extends BaseActivity {
 		MyUtil.initTitleName(this, R.layout.dev_listview, R.string.dev_list);
 		expandView = (ExpandableListView) findViewById(R.id.expandView);
 		registerForContextMenu(expandView);
-		if (0 == Constants.DEVICE_LIST.size()) {
+		if (0 ==DeviceManager.getInstance().getDeviceList().size()) {
 			progressDialog = LoginEventControl.myProgress;
 			progressDialog = new ProgressDialog(this);
 			progressDialog.setTitle(R.string.loading_data_title);
@@ -163,7 +164,7 @@ public class DeviceListActiviy extends BaseActivity {
 	 */
 	private List<DeviceInfo> getData(String parentId) {
 		List<DeviceInfo> listBus = new ArrayList<DeviceInfo>();
-		for (DeviceInfo busInfo : Constants.DEVICE_LIST) {
+		for (DeviceInfo busInfo : DeviceManager.getInstance().getDeviceList()) {
 			if (parentId.equals(busInfo.getParentId())) {
 				listBus.add(busInfo);
 			}
@@ -172,7 +173,7 @@ public class DeviceListActiviy extends BaseActivity {
 	}
 
 	public DeviceInfo getParentBusInfo(String parentId) {
-		Iterator<DeviceInfo> itr = Constants.DEVICE_LIST.iterator();
+		Iterator<DeviceInfo> itr = DeviceManager.getInstance().getDeviceList().iterator();
 		DeviceInfo busInfo = null;
 		while (itr.hasNext()) {
 			busInfo = itr.next();

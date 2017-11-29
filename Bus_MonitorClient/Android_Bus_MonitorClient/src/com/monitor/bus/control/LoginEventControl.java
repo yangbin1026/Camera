@@ -26,11 +26,9 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.internal.cu;
 import com.jniUtil.JNVPlayerUtil;
 import com.jniUtil.MyUtil;
 import com.jniUtil.PullParseXML;
-import com.monitor.bus.activity.DeviceListActiviy;
 import com.monitor.bus.activity.HomeActivity;
 import com.monitor.bus.activity.MainListActivity;
 import com.monitor.bus.activity.R;
@@ -42,6 +40,8 @@ import com.monitor.bus.model.AlarmInfo;
 import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.model.ServerInfo;
 import com.monitor.bus.utils.LogUtils;
+import com.monitor.bus.bean.AlarmManager;
+import com.monitor.bus.bean.DeviceManager;
 
 /**
  * 登陆回调管理类
@@ -204,8 +204,8 @@ public class LoginEventControl{
 						getFirstServerList();// 获取一张服务器列表
 					} else {
 						// JNVPlayerUtil.JNV_N_GetAlarmStart("");//获取报警信息
-						for (int i = 0; i < Constants.DEVICE_LIST.size(); i++) {
-							DeviceInfo info = Constants.DEVICE_LIST.get(i);
+						for (int i = 0; i <DeviceManager.getInstance().getSize(); i++) {
+							DeviceInfo info = DeviceManager.getInstance().getDeviceList().get(i);
 							if ("0".equals(info.getIsDeviceGroup())) {
 								String guid = info.getGuId();
 								int ret = JNVPlayerUtil
@@ -245,8 +245,8 @@ public class LoginEventControl{
 						getNextServerList();
 					} else {
 						upDataServerList();
-						for (int i = 0; i < Constants.DEVICE_LIST.size(); i++) {
-							DeviceInfo info = Constants.DEVICE_LIST.get(i);
+						for (int i = 0; i < DeviceManager.getInstance().getSize(); i++) {
+							DeviceInfo info = DeviceManager.getInstance().getDeviceList().get(i);
 							if ("0".equals(info.getIsDeviceGroup())) {
 								// String guid = info.getGuId();
 								String guid = info.getNewGuId();
@@ -301,23 +301,7 @@ public class LoginEventControl{
 				Log.i(TAG, "=========>流关闭!");
 				break;
 			case CALLBACKFLAG.DEVICE_ALARM_EVENT:// 报警事件
-				if (!alarm_times) {// 一次报警时播放声音
-					soundPool.play(1, 1, 1, 0, 0, 1);
-					// 创建定时器，60秒执行一次
-					alarmTimer.scheduleAtFixedRate(new TimerTask() {
-						@Override
-						public void run() {
-							Log.e(TAG, "+++++++++++++报警线程ID："
-									+ Thread.currentThread().getId()
-									+ "+++++++++is_alarm_flag：" + is_alarm_flag);
-							if (is_alarm_flag) {
-								soundPool.play(1, 1, 1, 0, 0, 1);
-								is_alarm_flag = false;
-							}
-						}
-					}, 0, 60000);
-					alarm_times = true;
-				}
+				doAlarm();
 				is_alarm_flag = true;
 				try {
 					JSONObject jo = new JSONObject(msg.obj + "");
@@ -325,16 +309,20 @@ public class LoginEventControl{
 					int alarmChn = jo.getInt("alarmChn") + 1;
 					int alarmType = jo.getInt("alarmType");
 					String alarInfo = getAlarmInfo(devID, alarmChn, alarmType);
-					Log.i(TAG, "alarmChn" + alarmChn + "devID" + devID);
-					if (Constants.ALARM_LIST.size() >= 100) {// 获取的报警信息超过100条
-						Constants.ALARM_LIST.remove(0);
-					}
-
+					
 					AlarmInfo busInfo = new AlarmInfo();
-					busInfo.setGuId(devID);
-					busInfo.setCurrentChn(alarmChn);
-					busInfo.setExpresion(alarInfo);
-					Constants.ALARM_LIST.add(busInfo);
+					busInfo.setDeviceId(devID);
+					busInfo.setChannelId(alarmChn);
+					busInfo.setAlarmType(alarmType);
+					busInfo.setAlarmString(alarInfo);
+					
+					AlarmManager manager = AlarmManager.getInstance();
+					Log.i(TAG, "alarmChn" + alarmChn + "devID" + devID);
+					if (manager.getSize() >= 100) {// 获取的报警信息超过100条
+						manager.removeFirst();
+					}
+					
+					manager.addAlarmInfo(busInfo);
 					if (!Constants.IS_ACTIVE) {// 后台运行
 						myNotification.showNotification(alarInfo);
 					}
@@ -380,6 +368,26 @@ public class LoginEventControl{
 			}
 
 			super.handleMessage(msg);
+		}
+
+		private void doAlarm() {
+			if (!alarm_times) {// 一次报警时播放声音
+				soundPool.play(1, 1, 1, 0, 0, 1);
+				// 创建定时器，60秒执行一次
+				alarmTimer.scheduleAtFixedRate(new TimerTask() {
+					@Override
+					public void run() {
+						Log.e(TAG, "+++++++++++++报警线程ID："
+								+ Thread.currentThread().getId()
+								+ "+++++++++is_alarm_flag：" + is_alarm_flag);
+						if (is_alarm_flag) {
+							soundPool.play(1, 1, 1, 0, 0, 1);
+							is_alarm_flag = false;
+						}
+					}
+				}, 0, 60000);
+				alarm_times = true;
+			}
 		}
 	};
 
@@ -501,7 +509,7 @@ public class LoginEventControl{
 	 * @return
 	 */
 	public DeviceInfo getBusInfo(String guId) {
-		Iterator<DeviceInfo> itr = Constants.DEVICE_LIST.iterator();
+		Iterator<DeviceInfo> itr = DeviceManager.getInstance().getDeviceList().iterator();
 		DeviceInfo busInfo = null;
 		while (itr.hasNext()) {
 			busInfo = itr.next();
@@ -640,7 +648,7 @@ public class LoginEventControl{
 					+ currentContext.getString(R.string.device_online);
 			// BusDeviceInfo busInfo = new BusDeviceInfo();
 
-			for (DeviceInfo busInfo : Constants.DEVICE_LIST) {
+			for (DeviceInfo busInfo : DeviceManager.getInstance().getDeviceList()) {
 				if (devId.equals(busInfo.getGuId())) {
 					busInfo.setOnLine(1);
 				}
@@ -650,7 +658,7 @@ public class LoginEventControl{
 
 			alarmInfo = dev_name + devList + exists
 					+ currentContext.getString(R.string.device_offline);
-			for (DeviceInfo busInfo : Constants.DEVICE_LIST) {
+			for (DeviceInfo busInfo : DeviceManager.getInstance().getDeviceList()) {
 				if (devId.equals(busInfo.getGuId())) {
 					busInfo.setOnLine(0);
 				}

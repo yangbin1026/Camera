@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.util.Log;
 import android.util.Xml;
 
+import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.model.DevRecordInfo;
@@ -169,16 +170,9 @@ public class PullParseXML {
 	 * @throws IOException
 	 */
 	public static  void getSortBusDevices(InputStream in) throws XmlPullParserException, IOException{
-		Constants.DEVICE_LIST.clear();
-		Constants.DEVICE_LIST = getBusDevices(in);
-		Collections.sort(Constants.DEVICE_LIST, new Comparator<DeviceInfo>() {
-
-			@Override
-			public int compare(DeviceInfo lhs, DeviceInfo rhs) {
-
-				return rhs.getOnLine() - lhs.getOnLine();
-			}
-		});
+		DeviceManager manager= DeviceManager.getInstance();
+		manager.setDeviceList(getBusDevices(in));
+		manager.sort();
 	}
 
 

@@ -20,6 +20,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.jniUtil.MyUtil;
 import com.monitor.bus.adapter.SpinnerBusAdapter;
 import com.monitor.bus.bdmap.ErrorCodeReceiver;
+import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.utils.MyUtils;
@@ -237,7 +238,7 @@ public class UserMapActivity extends Activity {
 	// 获取所有的bus设备
 	private void getBusDevices() {
 		listBus = new ArrayList<DeviceInfo>();
-		for (DeviceInfo busInfo : Constants.DEVICE_LIST) {
+		for (DeviceInfo busInfo :DeviceManager.getInstance().getDeviceList()) {
 			if ("0".equals(busInfo.getIsDeviceGroup())) {
 				listBus.add(busInfo);
 			}

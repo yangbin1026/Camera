@@ -53,6 +53,7 @@ import com.jniUtil.JNVPlayerUtil;
 import com.jniUtil.MyUtil;
 import com.jniUtil.SaveUtil;
 import com.monitor.bus.adapter.SpinnerBusAdapter;
+import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.model.DeviceInfo;
@@ -298,7 +299,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	 */
 	public void getBusDevices(){
 		listBus = new ArrayList<DeviceInfo>();
-		for (DeviceInfo busInfo : Constants.DEVICE_LIST) {
+		for (DeviceInfo busInfo : DeviceManager.getInstance().getDeviceList()) {
 			if ("0".equals( busInfo.getIsDeviceGroup())) {
 				listBus.add(busInfo);
 			}

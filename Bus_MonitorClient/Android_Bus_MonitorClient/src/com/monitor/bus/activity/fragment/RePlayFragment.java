@@ -15,6 +15,7 @@ import com.monitor.bus.activity.LocalRecordActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.RecordQueryActivity;
 import com.monitor.bus.adapter.SpinnerBusAdapter;
+import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.model.DeviceInfo;
 
@@ -158,7 +159,7 @@ public class RePlayFragment extends BaseFragment {
 	 */
 	public void getOnlineBusDevices() {
 		listDeviceInfos = new ArrayList<DeviceInfo>();
-		for (DeviceInfo busInfo : Constants.DEVICE_LIST) {
+		for (DeviceInfo busInfo : DeviceManager.getInstance().getDeviceList()) {
 			if (0 != busInfo.getOnLine()) {
 				listDeviceInfos.add(busInfo);
 			}

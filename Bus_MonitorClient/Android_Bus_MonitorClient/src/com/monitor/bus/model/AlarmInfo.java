@@ -4,34 +4,51 @@ package com.monitor.bus.model;
  * 报警信息
  */
 public class AlarmInfo {
-	private String guId;//设备ID
-	private int currentChn;//当前通道号
-	private String expresion;//报警描述
+	private String deviceId;//设备ID
+	private int channelId;//当前通道号
+	private String alarmString;//报警描述
+	private int alarmType;
+	private String deviceName;
 	
 	
-	public String getGuId() {
-		return guId;
+	public String getDeviceId() {
+		return deviceId;
 	}
-	public void setGuId(String guId) {
-		this.guId = guId;
+	public int getAlarmType() {
+		return alarmType;
 	}
-	public int getCurrentChn() {
-		return currentChn;
+	public void setAlarmType(int alarmType) {
+		this.alarmType = alarmType;
 	}
-	public void setCurrentChn(int currentChn) {
-		this.currentChn = currentChn;
+	public String getDeviceName() {
+		return deviceName;
 	}
-	public String getExpresion() {
-		return expresion;
+	public void setDeviceName(String deviceName) {
+		this.deviceName = deviceName;
 	}
-	public void setExpresion(String expresion) {
-		this.expresion = expresion;
+	public String getdeviceId() {
+		return deviceId;
+	}
+	public void setDeviceId(String guId) {
+		this.deviceId = guId;
+	}
+	public int getChannelId() {
+		return channelId;
+	}
+	public void setChannelId(int currentChn) {
+		this.channelId = currentChn;
+	}
+	public String getAlarmString() {
+		return alarmString;
+	}
+	public void setAlarmString(String expresion) {
+		this.alarmString = expresion;
 	}
 	
 	@Override
 	public String toString() {
-		return "AlarmInfo [guId=" + guId + ", currentChn=" + currentChn
-				+ ", expresion=" + expresion +"]";
+		return "AlarmInfo [guId=" + deviceId + ", currentChn=" + channelId
+				+ ", expresion=" + alarmString +"]";
 	}
 	
 }

@@ -17,6 +17,8 @@ import android.widget.ListView;
 
 import com.jniUtil.MyUtil;
 import com.monitor.bus.adapter.AlarmListAdapter;
+import com.monitor.bus.bean.AlarmManager;
+import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.model.AlarmInfo;
 import com.monitor.bus.model.DeviceInfo;
@@ -42,22 +44,22 @@ public class AlarmListActivity extends BaseActivity {
 					int position, long arg3) {
 
 				AlarmInfo devRecordInfo = alarms.get(position);
-				currentDeviceInfo = getBusInfo(devRecordInfo.getGuId());
+				currentDeviceInfo = getBusInfo(devRecordInfo.getdeviceId());
 				/*Toast.makeText(getBaseContext(), currentDeviceInfo.getDeviceName(), 0).show();*/
 				Log.i("-----", "当前设备信息:" + currentDeviceInfo);
 				Log.i("------", "alarms;;;;;;;;;;;" + alarms);
-				if (alarms.get(position).getExpresion().contains(getString(R.string.motion_detection))) {
+				if (alarms.get(position).getAlarmString().contains(getString(R.string.motion_detection))) {
 					Log.i("------------------------",
-							"移动侦测:" + devRecordInfo.getCurrentChn());
+							"移动侦测:" + devRecordInfo.getChannelId());
 					currentDeviceInfo.setCurrentChn(devRecordInfo
-							.getCurrentChn() - 1);
+							.getChannelId() - 1);
 				} else {
 					currentDeviceInfo.setCurrentChn(devRecordInfo
-							.getCurrentChn());
+							.getChannelId());
 				}
 
 				if (currentDeviceInfo.getDeviceName() == null) {
-					currentDeviceInfo.setDeviceName(devRecordInfo.getGuId());
+					currentDeviceInfo.setDeviceName(devRecordInfo.getdeviceId());
 				}
 				Intent intent = new Intent();
 				intent.putExtra("videoData", currentDeviceInfo);
@@ -70,10 +72,10 @@ public class AlarmListActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		alarms = new ArrayList<AlarmInfo>();
-		alarms.addAll(Constants.ALARM_LIST);
+		alarms.addAll(AlarmManager.getInstance().getAlarmList());
 		
 		for (int i = 0; i < alarms.size(); i++) {
-			if (alarms.get(i).getExpresion().contains(getString(R.string.motion_detection))) {
+			if (alarms.get(i).getAlarmString().contains(getString(R.string.motion_detection))) {
 				MyUtils
 						.Vibrate(AlarmListActivity.this, 1000);// 震动提示用户
 			}
@@ -91,7 +93,7 @@ public class AlarmListActivity extends BaseActivity {
 	 * @return
 	 */
 	public DeviceInfo getBusInfo(String guId) {
-		Iterator<DeviceInfo> itr = Constants.DEVICE_LIST.iterator();
+		Iterator<DeviceInfo> itr = DeviceManager.getInstance().getDeviceList().iterator();
 		DeviceInfo busInfo = null;
 		while (itr.hasNext()) {
 			busInfo = itr.next();

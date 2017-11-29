@@ -140,10 +140,8 @@ public class Constants {
 	public static Activity INSTANCE; 
 	
 	
-	public static List<DeviceInfo> DEVICE_LIST = new ArrayList<DeviceInfo>();//设备信息
 	public static List<ArrayList<ServerInfo>> SERVICE_LIST = new ArrayList<ArrayList<ServerInfo>>();//服务器信息
 	public static List<DevRecordInfo> RECORD_LIST = new ArrayList<DevRecordInfo>();//设备端录像
-	public static List<AlarmInfo> ALARM_LIST = new ArrayList<AlarmInfo>();//报警信息
 	
 	public static boolean IS_CASCADE_SERVER = false; //是否是级联服务器
 	public static final int SERVER_TYPES 	= 3;	//服务器类型数

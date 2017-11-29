@@ -8,6 +8,8 @@ import com.monitor.bus.activity.FilterOptionActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.VideoActivity;
 import com.monitor.bus.adapter.AlarmListAdapter;
+import com.monitor.bus.bean.AlarmManager;
+import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.model.AlarmInfo;
 import com.monitor.bus.model.DeviceInfo;
@@ -56,10 +58,10 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener{
 
 	private void initData() {
 		alarms = new ArrayList<AlarmInfo>();
-		alarms.addAll(Constants.ALARM_LIST);
+		alarms.addAll(AlarmManager.getInstance().getAlarmList());
 		for (int i = 0; i < alarms.size(); i++) {
 			//报警类型是移动，震动提示用户
-			if (alarms.get(i).getExpresion().contains(getString(R.string.motion_detection))) {
+			if (alarms.get(i).getAlarmString().contains(getString(R.string.motion_detection))) {
 				MyUtils.Vibrate(getActivity(), 1000);
 				break;
 			}
@@ -74,17 +76,17 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener{
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
 				AlarmInfo alarmInfo = alarms.get(position);
-				currentDeviceInfo = getDeviceInfo(alarmInfo.getGuId());
+				currentDeviceInfo = getDeviceInfo(alarmInfo.getdeviceId());
 				Log.i("-----", "当前设备信息:" + currentDeviceInfo);
-				if (alarms.get(position).getExpresion().contains(getString(R.string.motion_detection))) {
-					Log.i("------------------------", "移动侦测:" + alarmInfo.getCurrentChn());
-					currentDeviceInfo.setCurrentChn(alarmInfo.getCurrentChn() - 1);
+				if (alarms.get(position).getAlarmString().contains(getString(R.string.motion_detection))) {
+					Log.i("------------------------", "移动侦测:" + alarmInfo.getChannelId());
+					currentDeviceInfo.setCurrentChn(alarmInfo.getChannelId() - 1);
 				} else {
-					currentDeviceInfo.setCurrentChn(alarmInfo.getCurrentChn());
+					currentDeviceInfo.setCurrentChn(alarmInfo.getChannelId());
 				}
 
 				if (currentDeviceInfo.getDeviceName() == null) {
-					currentDeviceInfo.setDeviceName(alarmInfo.getGuId());
+					currentDeviceInfo.setDeviceName(alarmInfo.getdeviceId());
 				}
 				Intent intent = new Intent();
 				intent.putExtra("videoData", currentDeviceInfo);
@@ -101,7 +103,7 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener{
 	 * @return
 	 */
 	public DeviceInfo getDeviceInfo(String guId) {
-		Iterator<DeviceInfo> itr = Constants.DEVICE_LIST.iterator();
+		Iterator<DeviceInfo> itr = DeviceManager.getInstance().getDeviceList().iterator();
 		DeviceInfo deviceInfo = null;
 		while (itr.hasNext()) {
 			deviceInfo = itr.next();

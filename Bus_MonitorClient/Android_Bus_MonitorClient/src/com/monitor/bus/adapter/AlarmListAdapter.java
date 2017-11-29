@@ -56,7 +56,7 @@ public class AlarmListAdapter extends BaseAdapter{
 		numText = (TextView) convertView.findViewById(R.id.numText);
 		alarmText = 	(TextView) convertView.findViewById(R.id.alarmText);
 		numText.setText( (position +1) +"");
-		alarmText.setText(items.get(position).getExpresion());
+		alarmText.setText(items.get(position).getAlarmString());
 		return convertView;
 	} 
   

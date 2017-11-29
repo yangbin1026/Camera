@@ -13,6 +13,7 @@ import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.UserMapActivity;
 import com.monitor.bus.activity.VideoActivity;
 import com.monitor.bus.adapter.MyExpandableListAdapter;
+import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.control.LoginEventControl;
@@ -164,7 +165,7 @@ public class DeviceListFragment extends BaseFragment {
 	 */
 	private List<DeviceInfo> getData(String parentId) {
 		List<DeviceInfo> listBus = new ArrayList<DeviceInfo>();
-		for (DeviceInfo busInfo : Constants.DEVICE_LIST) {
+		for (DeviceInfo busInfo : DeviceManager.getInstance().getDeviceList()) {
 			if (parentId.equals(busInfo.getParentId())) {
 				listBus.add(busInfo);
 			}
@@ -173,7 +174,7 @@ public class DeviceListFragment extends BaseFragment {
 	}
 
 	public DeviceInfo getParentBusInfo(String parentId) {
-		Iterator<DeviceInfo> itr = Constants.DEVICE_LIST.iterator();
+		Iterator<DeviceInfo> itr =DeviceManager.getInstance().getDeviceList().iterator();
 		DeviceInfo busInfo = null;
 		while (itr.hasNext()) {
 			busInfo = itr.next();
@@ -225,7 +226,7 @@ public class DeviceListFragment extends BaseFragment {
 	}
 
 	private void showWaittingDialog() {
-		if (0 == Constants.DEVICE_LIST.size()) {
+		if (0 == DeviceManager.getInstance().getDeviceList().size()) {
 			progressDialog = LoginEventControl.myProgress;
 			progressDialog = new ProgressDialog(getContext());
 			progressDialog.setTitle(R.string.loading_data_title);

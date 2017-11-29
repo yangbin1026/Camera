@@ -30,6 +30,7 @@ import android.widget.TimePicker;
 import com.jniUtil.JNVPlayerUtil;
 import com.jniUtil.MyUtil;
 import com.monitor.bus.adapter.SpinnerBusAdapter;
+import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.model.DeviceInfo;
 
@@ -148,7 +149,7 @@ public class RecordQueryActivity extends BaseActivity {
 	 */
 	public void getOnlineBusDevices(){
 		listBus = new ArrayList<DeviceInfo>();
-		for (DeviceInfo busInfo : Constants.DEVICE_LIST) {
+		for (DeviceInfo busInfo : DeviceManager.getInstance().getDeviceList()) {
 			if (0 != busInfo.getOnLine()) {
 				listBus.add(busInfo);
 			}
