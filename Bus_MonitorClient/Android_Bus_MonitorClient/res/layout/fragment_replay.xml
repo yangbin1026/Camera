@@ -48,7 +48,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/line_height"
                 android:layout_alignParentBottom="true"
-                android:background="@color/find_line" />
+                android:background="@color/find_line"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -81,7 +83,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/line_height"
                 android:layout_alignParentBottom="true"
-                android:background="@color/find_line" />
+                android:background="@color/find_line"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -114,7 +118,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/line_height"
                 android:layout_alignParentBottom="true"
-                android:background="@color/find_line" />
+                android:background="@color/find_line"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -147,7 +153,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/line_height"
                 android:layout_alignParentBottom="true"
-                android:background="@color/find_line" />
+                android:background="@color/find_line"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -180,7 +188,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/line_height"
                 android:layout_alignParentBottom="true"
-                android:background="@color/find_line" />
+                android:background="@color/find_line"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -213,7 +223,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/line_height"
                 android:layout_alignParentBottom="true"
-                android:background="@color/find_line" />
+                android:background="@color/find_line"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -257,6 +269,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_logout"
             android:text="搜索"
+            android:textColor="@color/white"
             android:textSize="20dp" />
     </LinearLayout>
 

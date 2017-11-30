@@ -156,6 +156,7 @@
     <string name="capture_success">抓拍成功！</string>
     <!-- 录像 -->
     <string name="record">录像</string>
+    <string name="find_record">录像查找</string>
     <string name="record_fail">录像失败！</string>
     <string name="stop_recordfail">停止录像失败！</string>
     <!-- test -->

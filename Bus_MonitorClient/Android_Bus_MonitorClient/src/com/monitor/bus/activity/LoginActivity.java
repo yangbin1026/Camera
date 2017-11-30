@@ -137,12 +137,11 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		if(autoLogin){
 			cb_autoLogin.setChecked(true);
 		}
-		
-		SharedPreferences userInfo = getSharedPreferences("user_info", 0);
-		String u = userInfo.getString("userName", "");
-		String p = userInfo.getString("password", "");
-		String ip = userInfo.getString("login_address", "");
-		String port = userInfo.getString("login_port", "");
+		LoginInfo info= SPUtils.getLoginInfo(this);
+		String u = info.getUserName();
+		String p = info.getPassWord();
+		String ip = info.getIp();
+		String port = info.getPort();
 
 		et_password.setEditText(p);
 		et_login_address.setEditText(ip);
@@ -159,7 +158,6 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 			et_login_address.setEditText("183.61.171.28");
 			et_login_port.setEditText("6008");
 		}
-		
 		if(autoLogin){
 			login(u, p, ip, port);
 		}

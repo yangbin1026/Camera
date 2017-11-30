@@ -14,141 +14,155 @@
         android:layout_alignParentTop="true"
         layout="@layout/title_themes" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_my_gray"
-        android:orientation="vertical" >
+        android:background="@color/bg_my_gray" >
 
-        <TextView
-            style="@style/setting_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="用户" />
-
-        <RelativeLayout style="@style/setting_item" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bg_my_gray"
+            android:orientation="vertical" >
 
             <TextView
-                style="@style/setting_item_text"
-                android:text="账号" />
-
-            <TextView
-                android:id="@+id/tv_username"
+                style="@style/setting_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="5dp"
-                android:textSize="18dp"
-                android:text="123" />
-        </RelativeLayout>
+                android:text="用户" />
 
-        <RelativeLayout style="@style/setting_item" >
+            <RelativeLayout style="@style/setting_item" >
 
-            <TextView
-                style="@style/setting_item_text"
-                android:text="自动登录" />
+                <TextView
+                    style="@style/setting_item_text"
+                    android:text="账号" />
 
-            <com.monitor.bus.view.SwitchButton
-                android:id="@+id/sb_autologin"
-                style="@style/SwitchButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                app:kswThumbMargin="-5dp" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/tv_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:text="123"
+                    android:textSize="18dp" />
+            </RelativeLayout>
 
-        <TextView
-            style="@style/setting_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="设置" />
+            <RelativeLayout style="@style/setting_item" >
 
-        <RelativeLayout style="@style/setting_item" >
+                <TextView
+                    style="@style/setting_item_text"
+                    android:text="自动登录" />
 
-            <TextView
-                style="@style/setting_item_text"
-                android:text="显示模式" />
-
-            <ImageView
-                android:id="@+id/iv_mode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true" />
+                <com.monitor.bus.view.SwitchButton
+                    android:id="@+id/sb_autologin"
+                    style="@style/SwitchButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    app:kswThumbMargin="-5dp" />
+            </RelativeLayout>
 
             <TextView
-                android:id="@+id/tv_showmode"
+                style="@style/setting_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="3dp"
-                android:textSize="18dp"
-                android:layout_toLeftOf="@id/iv_mode"
-                android:text="模式" />
-        </RelativeLayout>
+                android:text="设置" />
 
-        <RelativeLayout style="@style/setting_item" >
+            <RelativeLayout style="@style/setting_item" >
+
+                <TextView
+                    style="@style/setting_item_text"
+                    android:text="显示模式" />
+
+                <ImageView
+                    android:id="@+id/iv_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true" />
+
+                <TextView
+                    android:id="@+id/tv_showmode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="3dp"
+                    android:layout_toLeftOf="@id/iv_mode"
+                    android:text="模式"
+                    android:textSize="18dp" />
+            </RelativeLayout>
+
+            <RelativeLayout style="@style/setting_item" >
+
+                <TextView
+                    style="@style/setting_item_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="地理位置解析" />
+
+                <com.monitor.bus.view.SwitchButton
+                    android:id="@+id/sb_localpaser"
+                    style="@style/SwitchButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    app:kswThumbMargin="-5dp" />
+            </RelativeLayout>
+
+            <RelativeLayout style="@style/setting_item" >
+
+                <TextView
+                    style="@style/setting_item_text"
+                    android:text="GPS矫正" />
+
+                <com.monitor.bus.view.SwitchButton
+                    android:id="@+id/sb_gps"
+                    style="@style/SwitchButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    app:kswThumbMargin="-5dp" />
+            </RelativeLayout>
+
+            <RelativeLayout style="@style/setting_item" >
+
+                <TextView
+                    style="@style/setting_item_text"
+                    android:text="速度单位" />
+            </RelativeLayout>
 
             <TextView
-                style="@style/setting_item_text"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="地理位置解析" />
-
-            <com.monitor.bus.view.SwitchButton
-                android:id="@+id/sb_localpaser"
-                style="@style/SwitchButtonStyle"
+                style="@style/setting_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                app:kswThumbMargin="-5dp" />
-        </RelativeLayout>
+                android:text="版本" />
 
-        <RelativeLayout style="@style/setting_item" >
+            <RelativeLayout style="@style/setting_item" >
 
-            <TextView
-                style="@style/setting_item_text"
-                android:text="GPS矫正" />
+                <TextView
+                    android:id="@+id/tv_version"
+                    style="@style/setting_item_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="1.0.0"
+                    android:textSize="18dp" />
+            </RelativeLayout>
 
-            <com.monitor.bus.view.SwitchButton
-                android:id="@+id/sb_gps"
-                style="@style/SwitchButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                app:kswThumbMargin="-5dp" />
-        </RelativeLayout>
-
-        <TextView
-            style="@style/setting_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="版本" />
-
-        <RelativeLayout style="@style/setting_item" >
-
-            <TextView
-                android:id="@+id/tv_version"
-                style="@style/setting_item_text"
-                android:layout_width="wrap_content"
-                android:layout_centerVertical="true"
-                android:textSize="18dp"
-                android:layout_height="wrap_content"
-                android:text="1.0.0" />
-        </RelativeLayout>
-
-        <Button
-            android:id="@+id/bt_logout"
-            android:layout_width="280dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_logout"
-            android:textSize="20dp"
-            android:text="退出登录" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/bt_logout"
+                android:layout_width="280dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_logout"
+                android:text="退出登录"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

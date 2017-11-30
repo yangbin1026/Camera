@@ -59,7 +59,6 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	TextView tv_select_device,tv_file_local,tv_channel,tv_type,tv_select_time,tv_start_time,tv_end_time;
 	RelativeLayout rl_1,rl_2,rl_3,rl_4,rl_5,rl_6,rl_7;
 	Button bt_find;
-	
 	private Dialog dateDialog, timeDialog, chooseDialog;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,7 +72,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 
 	private void setTitle() {
 		TextView title = (TextView) view.findViewById(R.id.tilte_name);
-		title.setText(getContext().getString(R.string.alarm_list));
+		title.setText(getContext().getString(R.string.find_record));
 	}
 
 	void initView() {
@@ -220,7 +219,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	 * 
 	 * @param view
 	 */
-	public void showStartDatePicker(View view) {
+	public void showStartDatePicker() {
 		new DatePickerDialog(getContext(), onStartDateListener, calendar.get(Calendar.YEAR),
 				calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
 	}
@@ -230,7 +229,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	 * 
 	 * @param view
 	 */
-	public void showStartTimePicker(View view) {
+	public void showStartTimePicker() {
 		new TimePickerDialog(getContext(), onStartTimeListener, 0, 0, true).show();
 		;
 
@@ -241,7 +240,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	 * 
 	 * @param view
 	 */
-	public void showEndTimePicker(View view) {
+	public void showEndTimePicker() {
 		new TimePickerDialog(getContext(), onEndTimeListener, 23, 59, true).show();
 	}
 
@@ -370,25 +369,32 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	public void onClick(View arg0) {
 		switch (arg0.getId()) {
 		case R.id.rl_1:
-			
 			break;
 		case R.id.rl_2:
 			
 			break;
 		case R.id.rl_3:
-			
+			showTimePick();
 			break;
 		case R.id.rl_4:
-			
+			List<String> test=new ArrayList<String>();
+			test.add("1234");
+			test.add("111");
+			test.add("5555");
+			showChooseDialog(test);
 			break;
 		case R.id.rl_5:
-			
+			List<Integer> time=new ArrayList<Integer>();
+			time.add(2017);
+			time.add(3);
+			time.add(3);
+			showDateDialog(time);
 			break;
 		case R.id.rl_6:
-			
+			showStartTimePicker();
 			break;
 		case R.id.rl_7:
-			
+			showEndTimePicker();
 			break;
 		case R.id.bt_find:
 			

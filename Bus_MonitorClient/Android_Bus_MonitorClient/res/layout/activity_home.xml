@@ -31,6 +31,7 @@
             <ImageButton
                 android:id="@+id/ib_1"
                 style="@style/home_tab"
+                android:background="@color/home_tab_blue_sheng"
                 android:src="@drawable/video" />
         </LinearLayout>
 

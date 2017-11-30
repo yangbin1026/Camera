@@ -203,13 +203,11 @@ public class DeviceListFragment extends BaseFragment {
 	public boolean onBackPress() {
 		if (deviceList.size() != 0 && "0".equals(deviceList.get(0).getParentId())) {
 			DeviceInfo busInfo = getParentBusInfo(deviceList.get(0).getParentId());
-			loadDeviceInfoList(busInfo.getParentId());
+			if(busInfo!=null){
+				loadDeviceInfoList(busInfo.getParentId());
+			}
 			return true;
-		} else {
-			Intent intent = new Intent();
-			intent.setClass(getContext(), HomeActivity.class);
-			startActivity(intent);
-		}
+		} 
 		return false;
 	}
 

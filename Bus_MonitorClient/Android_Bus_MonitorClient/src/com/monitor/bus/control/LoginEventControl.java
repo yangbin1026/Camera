@@ -49,7 +49,6 @@ import com.monitor.bus.bean.DeviceManager;
 public class LoginEventControl{
 	private Activity currentContext;
 	private static String TAG = "LoginEventControl";
-	private boolean loginsuccess_flag = false; // 记录是否已登陆过一次
 	private boolean is_alarm_flag = false;// 记录是否有报警
 	private boolean alarm_times = false;// 记录是否已报警过一次
 	private Message msg;
@@ -142,27 +141,22 @@ public class LoginEventControl{
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case CALLBACKFLAG.LOGIN_ING:// 登陆中
-				if (!loginsuccess_flag) {
 					/* myProgress = new ProgressDialog(currentContext); */
 					myProgress.setTitle(R.string.login_loading_title);
 					myProgress.setMessage(currentContext
 							.getString(R.string.waiting));
 					myProgress.setCanceledOnTouchOutside(false);
 					myProgress.show();
-				}
 				break;
 
 			case CALLBACKFLAG.LOGIN_SUCCESS:// 登陆成功
 				Log.e(TAG, "登陆成功！！");
 				JNVPlayerUtil.JNV_N_GetDevList(Constants.DEVICELIST_PASTH);// 获取设备列表
-				if (!loginsuccess_flag) {
 					myProgress.dismiss();
 					Intent intent = new Intent();
 					intent.setClass(currentContext, HomeActivity.class);
 					currentContext.startActivity(intent);
 					currentContext.finish();
-				}
-				loginsuccess_flag = true;
 				break;
 
 			case CALLBACKFLAG.LONGIN_FAILD:// 登陆失败

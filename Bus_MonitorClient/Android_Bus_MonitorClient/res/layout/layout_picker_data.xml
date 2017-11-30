@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.example.liangmutian.mypicker.LoopView
+                <com.monitor.bus.view.dialog.LoopView
                     android:id="@+id/loop_data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
