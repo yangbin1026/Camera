@@ -39,6 +39,17 @@ public class AlarmManager {
 		return alarmList;
 	}
 
+	public List<AlarmInfo> getAlarmListbyType(int type) {
+		List<AlarmInfo> list=new ArrayList<AlarmInfo>();
+		for(AlarmInfo info: alarmList){
+			if(info.getAlarmType()==type){
+				list.add(info);
+			}
+		}
+		return list;
+	}
+
+
 	public int getSize() {
 		return alarmList.size();
 	}

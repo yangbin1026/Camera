@@ -31,6 +31,10 @@ public class AlarmListAdapter extends BaseAdapter{
 		items = it;
 	}
 	
+	public void setData(List<AlarmInfo> it){
+		items= it;
+	}
+	
 	@Override
 	public int getCount() {
 		return items.size();

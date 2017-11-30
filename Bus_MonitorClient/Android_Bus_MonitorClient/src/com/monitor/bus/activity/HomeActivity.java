@@ -59,6 +59,7 @@ public class HomeActivity extends FragmentActivity implements OnClickListener{
 		mFragments.add(fragment2);
 		mFragments.add(fragment3);
 		mFragments.add(fragment4);
+		currentFragment=mFragments.get(0);
 	}
 
 	protected void resetTabBtn(int position) { 

@@ -42,35 +42,39 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class AlarmFragment extends BaseFragment implements View.OnClickListener {
 	private ListView alarmListView;
+	private AlarmListAdapter mAlarmAdapter;
+
 	private DeviceInfo currentDeviceInfo;
-	private List<AlarmInfo> alarms;
-	View view;
+	private List<AlarmInfo> alarmList = new ArrayList<AlarmInfo>();
+	View contentView;
+	View popContentView;
+	PopupWindow mPopWindow;
 	
-	AlarmManager alarmManger=AlarmManager.getInstance();
+	AlarmManager alarmManger = AlarmManager.getInstance();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.fragment_alarm, container, false);
+		contentView = inflater.inflate(R.layout.fragment_alarm, container, false);
 		setTitle();
 		initData();
 		initView();
-		return view;
+		return contentView;
 	}
 
 	private void setTitle() {
-		TextView title = (TextView) view.findViewById(R.id.tilte_name);
+		TextView title = (TextView) contentView.findViewById(R.id.tilte_name);
 		title.setText(getContext().getString(R.string.alarm_list));
-		ImageButton ib_setting = (ImageButton) view.findViewById(R.id.ib_setting);
+		ImageButton ib_setting = (ImageButton) contentView.findViewById(R.id.ib_setting);
 		ib_setting.setVisibility(View.VISIBLE);
 		ib_setting.setOnClickListener(this);
 	}
 
 	private void initData() {
-		alarms = new ArrayList<AlarmInfo>();
-		alarms.addAll(AlarmManager.getInstance().getAlarmList());
-		for (int i = 0; i < alarms.size(); i++) {
+		MyUtils.toast(getContext(), "addSize:" + alarmManger.getSize());
+		alarmList.addAll(alarmManger.getAlarmList());
+		for (int i = 0; i < alarmList.size(); i++) {
 			// 报警类型是移动，震动提示用户
-			if (alarms.get(i).getAlarmString().contains(getString(R.string.motion_detection))) {
+			if (alarmList.get(i).getAlarmString().contains(getString(R.string.motion_detection))) {
 				MyUtils.Vibrate(getActivity(), 1000);
 				break;
 			}
@@ -78,16 +82,22 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 	}
 
 	private void initView() {
-		alarmListView = (ListView) view.findViewById(R.id.alarmListView);
-		alarmListView.setAdapter(new AlarmListAdapter(getContext(), alarms));
+		alarmListView = (ListView) contentView.findViewById(R.id.alarmListView);
+		mAlarmAdapter = new AlarmListAdapter(getContext(), alarmList);
+		popContentView = LayoutInflater.from(getContext()).inflate(R.layout.pop_alarm, null);
+		mPopWindow = new PopupWindow(popContentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
+		mPopWindow.setContentView(popContentView);
+
+		alarmListView.setAdapter(mAlarmAdapter);
+
 		alarmListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
-				AlarmInfo alarmInfo = alarms.get(position);
+				AlarmInfo alarmInfo = alarmList.get(position);
 				currentDeviceInfo = getDeviceInfo(alarmInfo.getdeviceId());
 				Log.i("-----", "当前设备信息:" + currentDeviceInfo);
-				if (alarms.get(position).getAlarmString().contains(getString(R.string.motion_detection))) {
+				if (alarmList.get(position).getAlarmString().contains(getString(R.string.motion_detection))) {
 					Log.i("------------------------", "移动侦测:" + alarmInfo.getChannelId());
 					currentDeviceInfo.setCurrentChn(alarmInfo.getChannelId() - 1);
 				} else {
@@ -159,25 +169,22 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 	}
 
 	private void showPopWindow() {
-		View contentView = LayoutInflater.from(getContext()).inflate(R.layout.pop_alarm, null);
-		PopupWindow mPopWindow = new PopupWindow(contentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
-				true);
-		mPopWindow.setContentView(contentView);
-		ListView lv_alarm_pop = (ListView) contentView.findViewById(R.id.lv_alarm_choose);
-		AlarmSelectorAdapter adapter = new AlarmSelectorAdapter(getContext(),
-				alarmManger.getAlarmTypeString());
+		ListView lv_alarm_pop = (ListView) popContentView.findViewById(R.id.lv_alarm_choose);
+		AlarmSelectorAdapter adapter = new AlarmSelectorAdapter(getContext(), alarmManger.getAlarmTypeString());
 		lv_alarm_pop.setAdapter(adapter);
 		lv_alarm_pop.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				int type=alarmManger.getAlarmType()[arg2];
-				MyUtils.toast(getContext(), ""+type);
+				int type = alarmManger.getAlarmType()[arg2];
+				mAlarmAdapter.setData(alarmManger.getAlarmListbyType(type));
+				mAlarmAdapter.notifyDataSetChanged();
+				mPopWindow.dismiss();
 			}
 		});
 
 		// 显示PopupWindow
-		mPopWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+		mPopWindow.showAtLocation(contentView, Gravity.TOP, 0, 0);
 	}
 
 }

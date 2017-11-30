@@ -4,6 +4,15 @@
     <string name="menu_settings">Settings</string>
     <string name="app_name">Mobile Video Monitor Client</string>
     <string name="country">other</string>
+    
+       <string name="timepicker_year">年</string>
+    <string name="timepicker_month">月</string>
+    <string name="timepicker_day">日</string>
+    <string name="timepicker_hour">时</string>
+    <string name="timepicker_min">分</string>
+    <string name="timepicker_title">选择时间</string>
+    <string name="timepicker_finish">确认</string>
+    <string name="timepicker_title_default">设置</string>
 
     <!-- 登陆 -->
     <string name="init_user">Please enter a username</string>

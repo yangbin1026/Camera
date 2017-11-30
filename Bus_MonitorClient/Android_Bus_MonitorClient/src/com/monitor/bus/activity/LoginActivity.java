@@ -81,10 +81,6 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	private MyEditText et_login_port;// 端口
 	private MyEditText et_login_address;// 地址
 	private ProgressDialog pbar;// 进度条对话框
-	private EditText mUserName;
-	private EditText mPassword;
-	private EditText mIP;
-	private EditText mPort;
 	private Button btn_login;
 	private CheckBox cb_remenber, cb_autoLogin;
 
@@ -112,6 +108,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		loginControl = new LoginEventControl(this);
 		JNVPlayerUtil.JNV_Init(Constants.SCREEN_COUNT);// 初始化so
 		initView();
+		initData();
 	}
 
 	private void initView() {
@@ -127,34 +124,44 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		cb_autoLogin = (CheckBox) findViewById(R.id.cb_auto_login);
 		cb_remenber.setOnCheckedChangeListener(this);
 		cb_autoLogin.setOnCheckedChangeListener(this);
-		mUserName = (EditText) et_userName.findViewById(R.id.edit_text_input);
-		mPassword = (EditText) et_password.findViewById(R.id.edit_text_input);
-		mIP = (EditText) et_login_address.findViewById(R.id.edit_text_input);
-		mPort = (EditText) et_login_port.findViewById(R.id.edit_text_input);
 		btn_login = (Button) findViewById(R.id.login);
 		btn_login.setOnClickListener(this);
+	}
 
+	private void initData() {
+		boolean savePwd=SPUtils.getBoolean(this, SPUtils.KEY_REMEMBER_USERINFO, true);
+		boolean autoLogin=SPUtils.getBoolean(this, SPUtils.KEY_AUTO_LOGIN, false);
+		if(savePwd){
+			cb_remenber.setChecked(true);
+		}
+		if(autoLogin){
+			cb_autoLogin.setChecked(true);
+		}
+		
 		SharedPreferences userInfo = getSharedPreferences("user_info", 0);
 		String u = userInfo.getString("userName", "");
 		String p = userInfo.getString("password", "");
 		String ip = userInfo.getString("login_address", "");
 		String port = userInfo.getString("login_port", "");
 
-		et_password.setTextViewText( p);
-		et_login_address.setTextViewText( ip);
-		et_login_port.setTextViewText( port + "");
-		et_userName.setTextViewText( u);
-		
+		et_password.setEditText(p);
+		et_login_address.setEditText(ip);
+		et_login_port.setEditText(port + "");
+		et_userName.setEditText(u);
 		et_password.setEditPasswordType();
 		et_login_port.setEditNumberType();
 		et_login_address.setIpConfigType();
 		et_userName.setEditFocus();
 
 		if (LogUtils.Debug) {
-			mUserName.setText("123");
-			mPassword.setText("123");
-			mIP.setText("183.61.171.28");
-			mPort.setText("6008");
+			et_userName.setEditText("123");
+			et_password.setEditText("123");
+			et_login_address.setEditText("183.61.171.28");
+			et_login_port.setEditText("6008");
+		}
+		
+		if(autoLogin){
+			login(u, p, ip, port);
 		}
 	}
 
@@ -173,22 +180,15 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.login:
-			String userName = mUserName.getText().toString();
-			String password = mPassword.getText().toString();
-			String ip = mIP.getText().toString();
-			String port=mPort.getText().toString();
-			LoginInfo info=new LoginInfo(userName, port, password, ip);
-			if(MyUtils.hasUselessString(userName,password,ip,port)){
-				MyUtils.toast(this, "请填写完整信息！");
-				break;
-			}
+			String userName = et_userName.getEditText();
+			String password = et_password.getEditText();
+			String ip = et_login_address.getEditText();
+			String port = et_login_port.getEditText();
+			LoginInfo info = new LoginInfo(userName, port, password, ip);
 			if (cb_remenber.isChecked()) {
 				SPUtils.saveLoginInfo(this, info);
-			} else {
-				/* dbHelper.insertOrUpdate(userName, "", 0); */
-
 			}
-			login(userName,password,ip,port);
+			login(userName, password, ip, port);
 			break;
 		}
 	}
@@ -400,31 +400,23 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	/**
 	 * 登录
 	 */
-	public void login(String u,String p,String ip,String portStr) {
+	public void login(String u, String p, String ip, String portStr) {
+		if (MyUtils.hasUselessString(u, p, ip, portStr)) {
+			MyUtils.toast(this, "请填写完整信息！");
+			return;
+		}
 		if (!MyUtil.isConnect(this)) {
-			Log.e(TAG, "网络没有连接");
-			Toast.makeText(this, R.string.network_error, Toast.LENGTH_SHORT).show();
+			MyUtils.toast(this, getString(R.string.network_error));
 			return;
 		}
 		if (isValidity()) {
-			if ("".equals(u)) {
-				return;
-			} else if ("".equals(p)) {
-				return;
-			} else if ("".equals(ip)) {
-				return;
-			} else if ("".equals(portStr)) {
-				return;
-			}
 			try {
 				// 解析域名的IP地址
 				iAdd = InetAddress.getByName(ip);
 				// 得到字符串形式的IP地址
 				ip = iAdd.getHostAddress();
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
 			} catch (Exception e) {
-				ip = "";
+				e.printStackTrace();
 			} finally {
 
 			}
@@ -436,14 +428,13 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 				return;
 			}
 			int port = Integer.parseInt(portStr.equals("") ? "0" : portStr);
-			//登录
+			// 登录
 			JNVPlayerUtil.JNV_N_Login(ip, port, u, p, 30, loginControl, "callbackLonginEvent", 0);
 		} else {
 			AlertDialog.Builder builder = new Builder(this);
 			builder.setMessage(R.string.lose_efficacy);
 			builder.setTitle(R.string.prompt);
 			builder.setPositiveButton(R.string.confirm, new OnClickListener() {
-
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.dismiss();

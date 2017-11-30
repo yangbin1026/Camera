@@ -45,7 +45,7 @@ public class MyEditText extends LinearLayout {
 	 * @param textId
 	 * @param editId
 	 */
-	public void setTextViewText(String editId) {
+	public void setEditText(String editId) {
 		edit_input.setText(editId);
 	}
 
@@ -54,7 +54,7 @@ public class MyEditText extends LinearLayout {
 	 * 
 	 * @return
 	 */
-	public String getEditInputValue() {
+	public String getEditText() {
 		return edit_input.getText().toString();
 	}
 
