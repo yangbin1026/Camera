@@ -57,7 +57,8 @@ import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.model.DeviceInfo;
-import com.monitor.bus.utils.MyUtils;
+import com.monitor.bus.utils.LogUtils;
+import com.monitor.bus.utils.MUtils;
 
 
 public class UserGoogleMapActivity extends FragmentActivity{ 
@@ -95,7 +96,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 		public void handleMessage(Message msg) {
 			switch(msg.what){
 			case 1:
-				Log.i(TAG, "请求GPS信息参数："+guid); 
+				LogUtils.i(TAG, "请求GPS信息参数："+guid); 
 				JNVPlayerUtil.JNV_N_GetGPSStart(guid);//请求下发GPS数据
 				break;
 			case 2:
@@ -267,7 +268,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	 * @param zoom   不进行缩放时，指定为0
 	 */
 	private void moveCamera(LatLng latLng,int zoom) {
-		//		Log.i(TAG, "移动摄像头："+latLng);
+		//		LogUtils.i(TAG, "移动摄像头："+latLng);
 		if(zoom==0){
 			if(isAnimationEnd) mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng)); 
 		}else{
@@ -283,13 +284,13 @@ public class UserGoogleMapActivity extends FragmentActivity{
 
 		@Override
 		public void onFinish() {
-			Log.i(TAG, "动画结束了！！");
+			LogUtils.i(TAG, "动画结束了！！");
 			isAnimationEnd = true;
 		}
 
 		@Override
 		public void onCancel() {
-			Log.i(TAG, "动画被取消了！！");
+			LogUtils.i(TAG, "动画被取消了！！");
 		}
 	};
 
@@ -308,16 +309,15 @@ public class UserGoogleMapActivity extends FragmentActivity{
 
 	/**
 	 * 初始化对应设备的GPS信息
-	 * @param curCtlDevInfo
 	 */
 	public void initDevLocationGPS(){
-		Log.i(TAG, "运行到initDevLocationGPS");
+		LogUtils.i(TAG, "运行到initDevLocationGPS");
 		if( validateGps()){
 			//			double longitude = MyUtil.convertDoubleType6(curCtlDevInfo.getLongitude());
 			//			double latitude = MyUtil.convertDoubleType6(curCtlDevInfo.getLatitude());
 			double longitude = curCtlDevInfo.getLongitude();
 			double latitude = curCtlDevInfo.getLatitude();
-			Log.i(TAG, "表中获得：lon="+longitude+",lat="+latitude);
+			LogUtils.i(TAG, "表中获得：lon="+longitude+",lat="+latitude);
 			//			GeoPoint myPoint =CoordinateConvert.bundleDecode(CoordinateConvert.fromWgs84ToBaidu(new GeoPoint((int)(latitude*1e6), (int)(longitude*1e6))));//GPS转换为百度地图坐标 
 			//			LatLng myPoint = new LatLng(latitude, longitude);
 			LatLng myPoint =MyUtil.fromWgs84ToGoogle(latitude, longitude);
@@ -341,7 +341,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 		}
 		//		guid = curCtlDevInfo.getGuId();
 		guid = curCtlDevInfo.getNewGuId();  
-		//		Log.i(TAG, "请求GPS信息参数："+guid); 
+		//		LogUtils.i(TAG, "请求GPS信息参数："+guid); 
 		//		JNVPlayerUtil.JNV_N_GetGPSStart(guid);//请求下发GPS数据
 //		handler.sendEmptyMessageDelayed(1, 1000);//延迟1秒执行获取GPS，防止前面界面的停止获取延迟
 		handler.sendEmptyMessage(1);
@@ -351,7 +351,6 @@ public class UserGoogleMapActivity extends FragmentActivity{
 
 	/**
 	 * 验证是否具有有效的GPS数据
-	 * @param curCtlDevInfo
 	 * @return
 	 */
 	public boolean validateGps(){
@@ -409,7 +408,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 		@Override 
 		public void onItemSelected(AdapterView<?> arg0, View arg1,
 				int location, long arg3) {
-			Log.i(TAG, "选择了"+location);
+			LogUtils.i(TAG, "选择了"+location);
 			if(guid != null){
 				JNVPlayerUtil.JNV_N_GetGPSStop(guid);
 				guid = "";
@@ -461,7 +460,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 
 		String provider = locationManager.getBestProvider(criteria, true);
 
-		Log.i(TAG,"位置提供者"+provider);
+		LogUtils.i(TAG,"位置提供者"+provider);
 
 		location = locationManager
 				.getLastKnownLocation(provider);//locationManager.GPS_PROVIDER
@@ -477,12 +476,12 @@ public class UserGoogleMapActivity extends FragmentActivity{
 
 			@Override
 			public void onProviderDisabled(String provider) {
-				Log.i("onProviderDisabled", "come in");
+				LogUtils.i("onProviderDisabled", "come in");
 			}
 
 			@Override
 			public void onProviderEnabled(String provider) {
-				Log.i("onProviderEnabled", "come in");
+				LogUtils.i("onProviderEnabled", "come in");
 			}
 
 			@Override
@@ -497,7 +496,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	 * @param location
 	 */
 	private void updateLocation(Location location) {
-		Log.i(TAG, "更新位置："+location);
+		LogUtils.i(TAG, "更新位置："+location);
 
 		LatLng tmp = MyUtil.fromWgs84ToGoogle(
 				location.getLatitude(), location.getLongitude());
@@ -560,7 +559,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 				if(isBroadcastRegister && eventType == CALLBACKFLAG.DEVICE_EVENT_GPS_INFO){//GPS基本
 
 					String gpsDevID = intent.getStringExtra("gpsDevID");
-//					Log.i(TAG, "当前设备："+curCtlDevInfo);
+//					LogUtils.i(TAG, "当前设备："+curCtlDevInfo);
 					if(curCtlDevInfo!=null && curCtlDevInfo.getGuId().equals(gpsDevID)){
 						//						Log.e(TAG, "====有木有接收到广播");
 						double longitude = intent.getDoubleExtra("gpsBaseLongitude", 0);
@@ -572,7 +571,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 						if(!curPoint.equals(prePoint)){
 							Bitmap bmp = BitmapFactory.decodeResource(getResources(),
 									R.drawable.bus_image_map);
-							Bitmap dstBitmap = MyUtils.getRotatedBmp(bmp, baseDirect);
+							Bitmap dstBitmap = MUtils.getRotatedBmp(bmp, baseDirect);
 							mMarker.setIcon(BitmapDescriptorFactory.fromBitmap(dstBitmap));
 
 							mLatLngs.add(curPoint);

@@ -11,18 +11,22 @@ public class DeviceInfo implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private String	groupId;//组ID
+	private	String	groupName;//组名称
+
 	private	String	parentId;//父ID
 	private	String 	isDeviceGroup;//是否为设备的组
-	private	String	groupName;//组名称
 	private String	deviceId;//设备ID
 	private String	deviceName;//设备名称
-	private String	guId;//
-	private String		sn;
+	private String	guId;//唯一标示id
+	private String	sn;
 	private	int		onLine;//是否在线    0:在线
 	private	String	maxSpeed;//最大速度
 	private	String	minSpeed;//最小速度
+	private int 	currentChn;//当前通道
 	private Double	longitude;
 	private	Double	latitude;
+	
+	
 	private	int		encoderNumber;
 	private	String	deviceType;
 	private	String	maxSpeedNation;
@@ -32,8 +36,7 @@ public class DeviceInfo implements Serializable{
 	private	String	model;
 	private	String	plateNum;
 	private	String 	lineId;
-	private	String	driver;
-	private int 	currentChn;
+	private	String	driver;//司机
 
 	private String	centerServerID; //中心服务器
 	private String	cmdServerID;	//信令服务器
@@ -88,7 +91,7 @@ public class DeviceInfo implements Serializable{
 			
 			String str = guId+"#"+ this.getCenterServerID()
 					+ "#" + this.getCmdServerID() + "#" + this.getMediaServerID();
-//			Log.i("BuSDeviceInfo", str);
+//			LogUtils.i("BuSDeviceInfo", str);
 			return str;
 		}
 		return guId;

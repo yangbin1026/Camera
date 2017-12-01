@@ -16,6 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.monitor.bus.consts.Constants;
+import com.monitor.bus.utils.LogUtils;
 
 /**
  * 数据库Helper类
@@ -39,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		Log.i(TAG, "++++++++++++ 开始创建数据库");
+		LogUtils.i(TAG, "++++++++++++ 开始创建数据库");
 		createTable(db);
 	}
 
@@ -60,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.i(TAG, "+++++++++++++++++++更新判断数据库");
+		LogUtils.i(TAG, "+++++++++++++++++++更新判断数据库");
 		db.execSQL("drop table if exists andr_playback;");
 		onCreate(db);
 	}
@@ -111,12 +112,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		 * @return
 		 */
 		public ArrayList<HashMap<String, String>> queryRecordInfoList(String start,String end){
-			Log.i(TAG, "++++++++++查询某个时间段的所有录像记录");
+			LogUtils.i(TAG, "++++++++++查询某个时间段的所有录像记录");
 			SQLiteDatabase db = this.getReadableDatabase();
 			Cursor cursor = db.query("andr_playback",
 					new String[] { "ID,REC_FILENAME,REC_PATH,REC_FILENAME" },
 					"REC_DATE >= datetime('" + start+ "') AND REC_DATE <= datetime('" + end + "')",null, "", "", "ID");
-			Log.i(TAG, "++++++++++所有录像记录数:"+ cursor.getCount());
+			LogUtils.i(TAG, "++++++++++所有录像记录数:"+ cursor.getCount());
 			ArrayList<HashMap<String, String>> testLocalListView = new ArrayList<HashMap<String, String>>();
 			while (cursor.moveToNext()) {
 				HashMap<String, String> map = new HashMap<String, String>();

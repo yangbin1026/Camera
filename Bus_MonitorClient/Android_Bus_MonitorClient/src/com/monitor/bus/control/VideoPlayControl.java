@@ -27,6 +27,7 @@ import com.monitor.bus.activity.R;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.database.DatabaseHelper;
 import com.monitor.bus.model.DeviceInfo;
+import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.model.DevRecordInfo;
 import com.monitor.bus.view.MyVideoView;
 
@@ -84,7 +85,7 @@ public  class VideoPlayControl {
 			videoView.postInvalidate();
 		}else if(lType==1){//音频 
 			if(Constants.ISOPEN_AUDIO){
-				Log.i(TAG, "音频信息。。。。。。。。。。。。。。。数据大小："+lSize+"大小："+lpBuf.length);
+				LogUtils.i(TAG, "音频信息。。。。。。。。。。。。。。。数据大小："+lSize+"大小："+lpBuf.length);
 				writeAudioTrack(lpBuf,lSize);
 			}
 		}else{//无
@@ -435,10 +436,10 @@ public  class VideoPlayControl {
 		@Override
 		public void run() {
 			
-			Log.i(TAG, "+++++++++++++对讲线程ID："+ Thread.currentThread().getId()+"+++++++++name："+Thread.currentThread().getName());
+			LogUtils.i(TAG, "+++++++++++++对讲线程ID："+ Thread.currentThread().getId()+"+++++++++name："+Thread.currentThread().getName());
 			while (Constants.ISOPEN_TALK) {// 打开对讲成功
 				int size = readAudioRecord();
-				//Log.i(TAG, "=========>size:"+size);
+				//LogUtils.i(TAG, "=========>size:"+size);
 				if (size <= 0) continue; 
 				
 //				try {

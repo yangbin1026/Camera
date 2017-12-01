@@ -51,46 +51,52 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 public class RePlayFragment extends BaseFragment implements View.OnClickListener{
 	private Calendar calendar;
 	private SimpleDateFormat formater;
-	private List<DeviceInfo> deviceList;
 	private List<String> listItems;
 	private String guId;
-	View view;
 	
+	View contentView;
 	TextView tv_select_device,tv_file_local,tv_channel,tv_type,tv_select_time,tv_start_time,tv_end_time;
 	RelativeLayout rl_1,rl_2,rl_3,rl_4,rl_5,rl_6,rl_7;
 	Button bt_find;
 	private Dialog dateDialog, timeDialog, chooseDialog;
+
+	private List<DeviceInfo> deviceList;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.fragment_replay, container, false);
+		contentView = inflater.inflate(R.layout.fragment_replay, container, false);
 		deviceList=DeviceManager.getInstance().getOnlineDevice();
 		
 		setTitle();
 		initView();
-		return view;
+		initData();
+		return contentView;
+	}
+
+	private void initData() {
+		deviceList=DeviceManager.getInstance().getDeviceList();
 	}
 
 	private void setTitle() {
-		TextView title = (TextView) view.findViewById(R.id.tilte_name);
+		TextView title = (TextView) contentView.findViewById(R.id.tilte_name);
 		title.setText(getContext().getString(R.string.find_record));
 	}
 
 	void initView() {
-		tv_channel=(TextView) view.findViewById(R.id.tv_channel);
-		tv_end_time=(TextView) view.findViewById(R.id.tv_end_time);
-		tv_file_local=(TextView) view.findViewById(R.id.tv_find_local);
-		tv_select_device=(TextView) view.findViewById(R.id.tv_select_device);
-		tv_select_time=(TextView) view.findViewById(R.id.tv_select_time);
-		tv_start_time=(TextView) view.findViewById(R.id.tv_start_time);
-		tv_type=(TextView) view.findViewById(R.id.tv_type);
-		rl_1=(RelativeLayout) view.findViewById(R.id.rl_1);
-		rl_2=(RelativeLayout) view.findViewById(R.id.rl_2);
-		rl_3=(RelativeLayout) view.findViewById(R.id.rl_3);
-		rl_4=(RelativeLayout) view.findViewById(R.id.rl_4);
-		rl_5=(RelativeLayout) view.findViewById(R.id.rl_5);
-		rl_6=(RelativeLayout) view.findViewById(R.id.rl_6);
-		rl_7=(RelativeLayout) view.findViewById(R.id.rl_7);
-		bt_find=(Button) view.findViewById(R.id.bt_find);
+		tv_channel=(TextView) contentView.findViewById(R.id.tv_channel);
+		tv_end_time=(TextView) contentView.findViewById(R.id.tv_end_time);
+		tv_file_local=(TextView) contentView.findViewById(R.id.tv_find_local);
+		tv_select_device=(TextView) contentView.findViewById(R.id.tv_select_device);
+		tv_select_time=(TextView) contentView.findViewById(R.id.tv_select_time);
+		tv_start_time=(TextView) contentView.findViewById(R.id.tv_start_time);
+		tv_type=(TextView) contentView.findViewById(R.id.tv_type);
+		rl_1=(RelativeLayout) contentView.findViewById(R.id.rl_1);
+		rl_2=(RelativeLayout) contentView.findViewById(R.id.rl_2);
+		rl_3=(RelativeLayout) contentView.findViewById(R.id.rl_3);
+		rl_4=(RelativeLayout) contentView.findViewById(R.id.rl_4);
+		rl_5=(RelativeLayout) contentView.findViewById(R.id.rl_5);
+		rl_6=(RelativeLayout) contentView.findViewById(R.id.rl_6);
+		rl_7=(RelativeLayout) contentView.findViewById(R.id.rl_7);
+		bt_find=(Button) contentView.findViewById(R.id.bt_find);
 		bt_find.setOnClickListener(this);
 		rl_1.setOnClickListener(this);
 		rl_2.setOnClickListener(this);
@@ -217,7 +223,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	/**
 	 * 弹出日期选择框
 	 * 
-	 * @param view
+	 * @param contentView
 	 */
 	public void showStartDatePicker() {
 		new DatePickerDialog(getContext(), onStartDateListener, calendar.get(Calendar.YEAR),
@@ -227,7 +233,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	/**
 	 * 弹出开始时间选择框
 	 * 
-	 * @param view
+	 * @param contentView
 	 */
 	public void showStartTimePicker() {
 		new TimePickerDialog(getContext(), onStartTimeListener, 0, 0, true).show();
@@ -238,7 +244,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	/**
 	 * 弹出结束时间选择框
 	 * 
-	 * @param view
+	 * @param contentView
 	 */
 	public void showEndTimePicker() {
 		new TimePickerDialog(getContext(), onEndTimeListener, 23, 59, true).show();
@@ -247,7 +253,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	/**
 	 * 按条件查询相应的录像记录 点击事件
 	 * 
-	 * @param view
+	 * @param contentView
 	 * @throws ParseException
 	 */
 	public void queryRecord() throws ParseException {
@@ -355,9 +361,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
             timeDialog = builder.setOnTimeSelectedListener(new MyTimePickerDialog.OnTimeSelectedListener() {
                 @Override
                 public void onTimeSelected(int[] times) {
-
 //                    mTextView.setText(times[0] + ":" + times[1]);
-
                 }
             }).create();
         }
@@ -368,33 +372,47 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	@Override
 	public void onClick(View arg0) {
 		switch (arg0.getId()) {
-		case R.id.rl_1:
+		case R.id.rl_1://设备
+			List<String> device=new ArrayList<String>();
+			for(DeviceInfo info:deviceList){
+				device.add(info.getDeviceName());
+			}
+			showChooseDialog(device);
 			break;
-		case R.id.rl_2:
-			
+		case R.id.rl_2://文件位置
+			List<String> file=new ArrayList<String>();
+			file.add("本地录像");
+			file.add("远程录像");
+			showChooseDialog(file);
 			break;
-		case R.id.rl_3:
-			showTimePick();
+		case R.id.rl_3://通道
+			List<String> channel=new ArrayList<String>();
+			channel.add("通道1");
+			channel.add("通道2");
+			channel.add("通道3");
+			channel.add("通道4");
+			channel.add("通道5");
+			showChooseDialog(channel);
 			break;
-		case R.id.rl_4:
+		case R.id.rl_4://录像类型
 			List<String> test=new ArrayList<String>();
-			test.add("1234");
-			test.add("111");
-			test.add("5555");
+			test.add("本地录像");
+			test.add("远程录像");
 			showChooseDialog(test);
 			break;
-		case R.id.rl_5:
+		case R.id.rl_5://日期
 			List<Integer> time=new ArrayList<Integer>();
 			time.add(2017);
 			time.add(3);
 			time.add(3);
 			showDateDialog(time);
 			break;
-		case R.id.rl_6:
-			showStartTimePicker();
+		case R.id.rl_6://开始时间
+			showTimePick();
 			break;
-		case R.id.rl_7:
-			showEndTimePicker();
+		case R.id.rl_7://结束时间
+//			showEndTimePicker();
+			showTimePick();
 			break;
 		case R.id.bt_find:
 			

@@ -99,7 +99,6 @@ public class SplashActivity extends Activity {
 				android.R.anim.fade_out);
 
 		setContentView(R.layout.logo);
-		Log.i("++++++++++++++", "logoactivity.............");
 		if (Constants.HAS_LOGO) {
 			imageView = (ImageView) findViewById(R.id.logo);
 			// 语言环境不是中国

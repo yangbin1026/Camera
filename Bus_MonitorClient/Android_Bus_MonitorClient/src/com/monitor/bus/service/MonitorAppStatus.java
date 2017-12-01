@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.jniUtil.JNVPlayerUtil;
+import com.monitor.bus.utils.LogUtils;
 
 /**
  * @Description: 监听CPU使用率
@@ -33,14 +34,14 @@ public class MonitorAppStatus extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 	        mhandler.post(monitorStatus);   //Handler将线程马上加入到线程队列去，没有延时	
-	        Log.i(TAG, "++++++++++++++启动服务");
+	        LogUtils.i(TAG, "++++++++++++++启动服务");
 	        
 		return super.onStartCommand(intent, flags, startId);
 	}
 	
 	 @Override
 	    public void onDestroy() {
-		 Log.i(TAG, "++++++++++++++终止服务");
+		 LogUtils.i(TAG, "++++++++++++++终止服务");
 		 mhandler.removeCallbacks(monitorStatus);
 	        super.onDestroy();
 	    } 
@@ -52,7 +53,7 @@ public class MonitorAppStatus extends Service {
 		//匿名内部类方式，实现run()方法
 		public void run() {
             try { 
-            	//Log.i(TAG, "其实我一直在默默无闻。。。。。。。");
+            	//LogUtils.i(TAG, "其实我一直在默默无闻。。。。。。。");
             	int cpuCount = JNVPlayerUtil.JNV_UpdateCpuInfo();
             	for(int i = 0;i<=cpuCount;i++){
             		

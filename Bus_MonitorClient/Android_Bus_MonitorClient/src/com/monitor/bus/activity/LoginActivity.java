@@ -65,7 +65,7 @@ import com.monitor.bus.model.LoginInfo;
 import com.monitor.bus.service.CurrentVersionInfo;
 import com.monitor.bus.service.GetUpdateJsonInfo;
 import com.monitor.bus.utils.LogUtils;
-import com.monitor.bus.utils.MyUtils;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.utils.SPUtils;
 import com.monitor.bus.view.MyEditText;
 
@@ -129,15 +129,15 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	}
 
 	private void initData() {
-		boolean savePwd=SPUtils.getBoolean(this, SPUtils.KEY_REMEMBER_USERINFO, true);
-		boolean autoLogin=SPUtils.getBoolean(this, SPUtils.KEY_AUTO_LOGIN, false);
-		if(savePwd){
+		boolean savePwd = SPUtils.getBoolean(this, SPUtils.KEY_REMEMBER_USERINFO, true);
+		boolean autoLogin = SPUtils.getBoolean(this, SPUtils.KEY_AUTO_LOGIN, false);
+		if (savePwd) {
 			cb_remenber.setChecked(true);
 		}
-		if(autoLogin){
+		if (autoLogin) {
 			cb_autoLogin.setChecked(true);
 		}
-		LoginInfo info= SPUtils.getLoginInfo(this);
+		LoginInfo info = SPUtils.getLoginInfo(this);
 		String u = info.getUserName();
 		String p = info.getPassWord();
 		String ip = info.getIp();
@@ -158,7 +158,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 			et_login_address.setEditText("183.61.171.28");
 			et_login_port.setEditText("6008");
 		}
-		if(autoLogin){
+		if (autoLogin) {
 			login(u, p, ip, port);
 		}
 	}
@@ -211,7 +211,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	 * 进行版本的比较，提示是否更新当前的应用
 	 */
 	private void checkToUpdate() {
-		Log.i(".....................", "checkToUpdate()" + "....");
+		LogUtils.i(".....................", "checkToUpdate()" + "....");
 		if (getServerVersion()) {
 
 			try {
@@ -288,14 +288,14 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 					response = client.execute(get);
 					HttpEntity entity = response.getEntity();
 					long length = entity.getContentLength();
-					Log.i("------------", "length : " + (int) length);
+					LogUtils.i("------------", "length : " + (int) length);
 					InputStream is = entity.getContent();
 					FileOutputStream fileOutputStream = null;
 					if (is == null) {
 						throw new RuntimeException("inputStream is null");
 					}
 					File file = new File(Environment.getExternalStorageDirectory() + "/", newAppName);
-					Log.i("==============", "file : " + file.getAbsolutePath().toString());
+					LogUtils.i("==============", "file : " + file.getAbsolutePath().toString());
 					fileOutputStream = new FileOutputStream(file);
 					/*
 					 * fileOutputStream =
@@ -370,13 +370,13 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	 */
 	private boolean getServerVersion() {
 		try {
-			Log.i("--------------", "ip:" + Constants.SERVER_IP);
+			LogUtils.i("--------------", "ip:" + Constants.SERVER_IP);
 			String newVerJSON = GetUpdateJsonInfo.getUpdateVerJSON(Constants.SERVER_IP + "version_jilian.json");
-			Log.i("--------------", "newVerJSON:" + newVerJSON);
+			LogUtils.i("--------------", "newVerJSON:" + newVerJSON);
 			JSONArray jsonArray = new JSONArray(newVerJSON);
 			if (jsonArray.length() > 0) {
 				JSONObject obj = jsonArray.getJSONObject(0);
-				Log.i("--------------", "obj:" + obj.toString());
+				LogUtils.i("--------------", "obj:" + obj.toString());
 				try {
 					newVerCode = Integer.parseInt(obj.getString("verCode"));
 					newVerName = obj.getString("verName");
@@ -399,12 +399,12 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	 * 登录
 	 */
 	public void login(String u, String p, String ip, String portStr) {
-		if (MyUtils.hasUselessString(u, p, ip, portStr)) {
-			MyUtils.toast(this, "请填写完整信息！");
+		if (MUtils.hasUselessString(u, p, ip, portStr)) {
+			MUtils.toast(this, "请填写完整信息！");
 			return;
 		}
 		if (!MyUtil.isConnect(this)) {
-			MyUtils.toast(this, getString(R.string.network_error));
+			MUtils.toast(this, getString(R.string.network_error));
 			return;
 		}
 		if (isValidity()) {
@@ -427,6 +427,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 			}
 			int port = Integer.parseInt(portStr.equals("") ? "0" : portStr);
 			// 登录
+			LogUtils.getInstance().localLog(TAG, "doJNI_login" + u + p + ip + port);
 			JNVPlayerUtil.JNV_N_Login(ip, port, u, p, 30, loginControl, "callbackLonginEvent", 0);
 		} else {
 			AlertDialog.Builder builder = new Builder(this);

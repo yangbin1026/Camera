@@ -36,7 +36,7 @@ public class GpsToBaiduUtil {
 			HttpResponse response = httpClient.execute(httpGet);
 			if (conn.getResponseCode() == 200) {
 				strResult = EntityUtils.toString(response.getEntity());
-				Log.i("Baidu Map api:", strResult);
+//				LogUtils.i("Baidu Map api:", strResult);
 				JSONObject jsonObject = new JSONObject(strResult);
 				String x = jsonObject.getString("x");
 				String y = jsonObject.getString("y");

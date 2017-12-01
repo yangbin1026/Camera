@@ -40,6 +40,7 @@ import com.monitor.bus.consts.Constants;
 import com.monitor.bus.control.VideoPlayControl;
 import com.monitor.bus.database.DatabaseHelper;
 import com.monitor.bus.model.DeviceInfo;
+import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.view.MyVideoView;
 
 /**
@@ -90,7 +91,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
 		intent = this.getIntent();
 		currentDevData = (DeviceInfo) intent.getSerializableExtra("videoData");
-		Log.i(TAG, currentDevData+"");
+		LogUtils.i(TAG, currentDevData+"");
 	}
 	
 	@Override
@@ -335,7 +336,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 		if(isCapturePicture){
 			sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, 
 					Uri.parse("file://"+ Environment.getExternalStorageDirectory())));// 刷新相册环境
-			Log.i(TAG, "++++++++++onDestroy！");
+			LogUtils.i(TAG, "++++++++++onDestroy！");
 		}
 		super.onDestroy();
 	}
@@ -376,7 +377,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 	/**
 	 * 录像
 	 * 
-	 * @param view
+	 * @param contentView
 	 * @throws ParseException
 	 */
 	public void startRecordVideo() {
@@ -391,7 +392,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 		}
 		times = MyUtil.getCurrentDateTime(Constants.YMD_HMS_FORMAT);
 		String path = recordFilePath + times + Constants.RECORD_FILE_FORMAT;
-		Log.i(TAG, "-------------开始录像！");
+		LogUtils.i(TAG, "-------------开始录像！");
 		int i = playControl.RecordStart(path);
 		if (i == 0) {
 			MyUtil.commonToast(this, R.string.record_fail);
@@ -403,7 +404,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 		recordTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				Log.i(TAG, "+++++++++++++录像线程ID："+ Thread.currentThread().getId()+"+++++++++名称："+Thread.currentThread().getName());
+				LogUtils.i(TAG, "+++++++++++++录像线程ID："+ Thread.currentThread().getId()+"+++++++++名称："+Thread.currentThread().getName());
 				if (myVideoView.is_draw_circle) {
 					myVideoView.is_draw_circle = false;
 				} else {
@@ -420,7 +421,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 	 * @throws ParseException
 	 */
 	public void stopRecordVideo() throws ParseException {
-		Log.i(TAG, "-------------停止录像！");
+		LogUtils.i(TAG, "-------------停止录像！");
 		int i = playControl.RecordStop();
 		if (i == 1) {
 			db.insertRecordInfo(times, times + Constants.RECORD_FILE_FORMAT,recordFilePath);
@@ -436,7 +437,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 	/**
 	 * 云台控制-上
 	 * 
-	 * @param view
+	 * @param contentView
 	 */
 	public void upPTZCtrl() {
 		if (!isNormalPlay()) {
@@ -481,7 +482,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 	/**
 	 * 云台控制-停止
 	 * 
-	 * @param view
+	 * @param contentView
 	 */
 	public void stopPtzCtrl() {
 		if (!isNormalPlay()) {
@@ -546,13 +547,13 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 		RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);//按键布局
 		RelativeLayout videoLayout = (RelativeLayout) findViewById(R.id.titlelayout);//标题布局
 		if(0 == Constants.FLAG_FULLSCREEN){
-			Log.i(TAG, "+++++++++++++++++横向");
+			LogUtils.i(TAG, "+++++++++++++++++横向");
 			relativeLayout.setVisibility(View.GONE);// 隐藏布局
 			videoLayout.setVisibility(View.GONE);
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//横屏
 			Constants.FLAG_FULLSCREEN = 1;// 重置
 		}else{
-			Log.i(TAG, "+++++++++++++++++竖向");
+			LogUtils.i(TAG, "+++++++++++++++++竖向");
 			relativeLayout.setVisibility(View.VISIBLE);// 显示布局
 			videoLayout.setVisibility(View.VISIBLE);
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//竖屏
@@ -580,19 +581,19 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 
 				if (e1.getX() - e2.getX() > 50) {
 					leftPTZCtrl();
-					Log.i(TAG, "+++++++++++++++++左");
+					LogUtils.i(TAG, "+++++++++++++++++左");
 					return true;
 				} else if (e1.getX() - e2.getX() < -50) {
 					rightPTZCtrl();
-					Log.i(TAG, "+++++++++++++++++右");
+					LogUtils.i(TAG, "+++++++++++++++++右");
 					return true;
 				} else if (e1.getY() - e2.getY() > 50) {
 					upPTZCtrl();
-					Log.i(TAG, "+++++++++++++++++上");
+					LogUtils.i(TAG, "+++++++++++++++++上");
 					return true;
 				} else if (e1.getY() - e2.getY() < -50) {
 					downPTZCtrl();
-					Log.i(TAG, "+++++++++++++++++下");
+					LogUtils.i(TAG, "+++++++++++++++++下");
 					return true;
 				}
 			return super.onScroll(e1, e2, distanceX, distanceY);
@@ -617,7 +618,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
-		Log.i(TAG, "+++++onConfigurationChanged++++++++newConfig:"+newConfig.orientation);
+		LogUtils.i(TAG, "+++++onConfigurationChanged++++++++newConfig:"+newConfig.orientation);
 		Constants.SCREEN_CHANGE_STATUS = true;
 		super.onConfigurationChanged(newConfig);
 	}

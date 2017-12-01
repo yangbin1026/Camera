@@ -19,6 +19,7 @@ import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.control.LoginEventControl;
 import com.monitor.bus.model.DevRecordInfo;
+import com.monitor.bus.utils.LogUtils;
 
 /**
  * 设备端录像文件列表
@@ -92,7 +93,7 @@ public class DevRecordListActivity extends BaseActivity {
             String action = intent.getAction(); 
             if(action.equals("ACTION_NAME")){ 
             	int eventType = intent.getIntExtra("eventType", 0);// 
-            	Log.i(TAG, "========广播接收器=======当前登陆状态:"+eventType);
+            	LogUtils.i(TAG, "========广播接收器=======当前登陆状态:"+eventType);
             	if(eventType == CALLBACKFLAG.GET_EVENT_RECLIST){
             		LoginEventControl.myProgress.dismiss();
             		DevRecordListAdapter devRecordAdapter = new DevRecordListAdapter(DevRecordListActivity.this,Constants.RECORD_LIST);

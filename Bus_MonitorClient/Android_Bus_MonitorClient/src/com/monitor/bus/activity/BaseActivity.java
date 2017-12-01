@@ -37,7 +37,6 @@ public class BaseActivity extends Activity {
 			  //Constants.INSTANCE = this;
 			if(!isCompleteExit){//
 				if(Constants.IS_ACTIVE){
-					Log.i(TAG, "app 进入后台-------------");
 					myNotification.showNotification(null);
 					// 全局变量
 					Constants.IS_ACTIVE = false; // 记录当前已经进入后台
@@ -51,7 +50,6 @@ public class BaseActivity extends Activity {
 		super.onResume();
 		if (!Constants.IS_ACTIVE) {
 			// app 从后台唤醒，进入前台
-			Log.i(TAG, "app 从后台唤醒，进入前台-------------");
 			myNotification.cancelNotification();
 			Constants.IS_ACTIVE = true;
 		}

@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.monitor.bus.activity.R;
 import com.monitor.bus.model.AlarmInfo;
-import com.monitor.bus.utils.MyUtils;
+import com.monitor.bus.utils.MUtils;
 
 /**
  * 显示报警信息的列表适配器

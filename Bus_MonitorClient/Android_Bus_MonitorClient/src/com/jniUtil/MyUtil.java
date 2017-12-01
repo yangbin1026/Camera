@@ -131,7 +131,7 @@ public static String getMIMEType(File f,boolean isOpen){
    * @param currentTitle 当前标题内容
    */
   public static void initTitleName(Activity currentContext,int currentLayout, int currentTitle){
-	  Log.i(TAG, "++++++++++++初始化当前的布局和标题名称");
+//	  Log.i(TAG, "++++++++++++初始化当前的布局和标题名称");
 	  currentContext.setContentView(currentLayout);
 	  // 设置标题栏内容
 	  tilte_name = (TextView)currentContext.findViewById(R.id.tilte_name);
@@ -217,7 +217,7 @@ public static String getCurrentDateTime(String fomat){
 				} 
 			} 
 		} catch (Exception e) { 
-			Log.v("error",e.toString()); 
+			e.printStackTrace();
 		} 
 		return false; 
 	} 
@@ -329,7 +329,7 @@ public static String getCurrentDateTime(String fomat){
 				Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		
 		String storeUrl = spf.getString(Constants.STORE_URL_KEY, Constants.STORE_URL);
-		Log.i(TAG, "谷歌市场下载地址："+storeUrl);
+//		Log.i(TAG, "谷歌市场下载地址："+storeUrl);
 		return Uri.parse(storeUrl);
 	}
 	
@@ -342,7 +342,7 @@ public static String getCurrentDateTime(String fomat){
 		
 		String serviceUrl 
 		= spf.getString(Constants.SERVICE_URL_KEY, Constants.SERVICE_URL);
-		Log.i(TAG, "谷歌服务下载地址："+serviceUrl);
+//		Log.i(TAG, "谷歌服务下载地址："+serviceUrl);
 		return Uri.parse(serviceUrl);
 	}
 	

@@ -23,7 +23,8 @@ import com.monitor.bus.bdmap.ErrorCodeReceiver;
 import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.model.DeviceInfo;
-import com.monitor.bus.utils.MyUtils;
+import com.monitor.bus.utils.LogUtils;
+import com.monitor.bus.utils.MUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -132,7 +133,7 @@ public class UserMapActivity extends Activity {
 	private void initDeviceInfo(Intent intent) {
 		curBusDeviceInfo = (DeviceInfo) intent.getSerializableExtra(KEY_DEVICE_INFO);
 		if (curBusDeviceInfo != null) {// 设备列表入口
-			Log.i(TAG, "deviceinfo: " + curBusDeviceInfo.toString());
+			LogUtils.i(TAG, "deviceinfo: " + curBusDeviceInfo.toString());
 			busListEntrance = true;
 			rl_Layout = (RelativeLayout) findViewById(R.id.devSelect);// 设备下拉列表布局隐藏
 			rl_Layout.setVisibility(View.GONE);
@@ -145,7 +146,7 @@ public class UserMapActivity extends Activity {
 				// getCurrentLocation();// 定位手机的位置
 			} else {
 				curBusDeviceInfo = listBus.get(0);
-				Log.i(TAG, "deviceinfo: " + curBusDeviceInfo.toString());
+				LogUtils.i(TAG, "deviceinfo: " + curBusDeviceInfo.toString());
 
 				queryDevList = (Spinner) findViewById(R.id.spinner_queryDevList);
 				SpinnerBusAdapter queryDevListAdapter = new SpinnerBusAdapter(this, R.layout.spinner_item, listBus);
@@ -210,7 +211,7 @@ public class UserMapActivity extends Activity {
 	 * 
 	 * if (IsExit) return;
 	 * 
-	 * Log.i("ii", "获取的gps:经度:" + longitude + " 纬度:" + latitude); String
+	 * LogUtils.i("ii", "获取的gps:经度:" + longitude + " 纬度:" + latitude); String
 	 * guid_tmp = guid; Map<String, String> maps = new HashMap<String,
 	 * String>(); maps = GpsToBaiduUtil.ConvertGpsToBaidu(guid_tmp, latitude,
 	 * longitude); if (maps != null && maps.size() > 0) { guid_tmp =
@@ -218,12 +219,12 @@ public class UserMapActivity extends Activity {
 	 * 
 	 * if (IsExit) return;
 	 * 
-	 * Log.i("ii", "百度api解析数据:" + maps.get("x") + "  " + maps.get("y"));
+	 * LogUtils.i("ii", "百度api解析数据:" + maps.get("x") + "  " + maps.get("y"));
 	 * BASE64Decoder decoder = new BASE64Decoder(); String x = null, y = null; x
 	 * = maps.get("x"); y = maps.get("y"); byte[] byte_x =
 	 * decoder.decodeBuffer(x); byte[] byte_y = decoder.decodeBuffer(y); if
 	 * (Double.parseDouble(new String(byte_x)) == 0.0 || Double.parseDouble(new
-	 * String(byte_y)) == 0.0) { onReceive(context, intent); } Log.i("ii",
+	 * String(byte_y)) == 0.0) { onReceive(context, intent); } LogUtils.i("ii",
 	 * "run()经度:" + Double.parseDouble(new String(byte_x)) + " 纬度:" +
 	 * Double.parseDouble(new String(byte_y))); Message msg = new Message();
 	 * Bundle bundle = new Bundle(); bundle.putDouble("lat",
@@ -248,7 +249,7 @@ public class UserMapActivity extends Activity {
 	/**
 	 * 清除所有Overlay
 	 *
-	 * @param view
+	 * @param contentView
 	 */
 	public void clearOverlay() {
 		mBaiduMap.clear();
@@ -265,7 +266,7 @@ public class UserMapActivity extends Activity {
 	 */
 	private void initOverlay() {
 		if(null==curBusDeviceInfo){
-			MyUtils.toast(mContext, "未监测到设备");
+			MUtils.toast(mContext, "未监测到设备");
 		}
 		center = new LatLng(curBusDeviceInfo.getLatitude(), curBusDeviceInfo.getLongitude());
 		// 定义地图状态
@@ -277,7 +278,7 @@ public class UserMapActivity extends Activity {
 		
 		
 		// 坐标
-		MyUtils.debugToast(mContext, "Lai:" + curBusDeviceInfo.getLatitude() + "：" + curBusDeviceInfo.getLongitude());
+		MUtils.debugToast(mContext, "Lai:" + curBusDeviceInfo.getLatitude() + "：" + curBusDeviceInfo.getLongitude());
 		LatLng llA = new LatLng(curBusDeviceInfo.getLatitude(), curBusDeviceInfo.getLongitude());
 		MarkerOptions ooA = new MarkerOptions().position(llA).icon(bdA).zIndex(9).draggable(true);
 		// 掉下动画

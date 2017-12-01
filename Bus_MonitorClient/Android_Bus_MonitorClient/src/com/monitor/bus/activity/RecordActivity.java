@@ -19,6 +19,7 @@ import com.jniUtil.MyUtil;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.control.VideoPlayControl;
 import com.monitor.bus.model.DevRecordInfo;
+import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.view.MyVideoView;
 
 /**
@@ -35,7 +36,7 @@ public class RecordActivity extends BaseActivity implements OnTouchListener{
 	private DevRecordInfo devRecordInfo;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.i(TAG, "+++++++++++++++++回放Activity onCreate");
+		LogUtils.i(TAG, "+++++++++++++++++回放Activity onCreate");
 		super.onCreate(savedInstanceState);
 		MyUtil.initTitleName(this,R.layout.record_stream,R.string.record_stream);
 		Constants.STREAM_PLAY_TYPE = 2;//设置播放类型为录像回放
@@ -58,7 +59,7 @@ public class RecordActivity extends BaseActivity implements OnTouchListener{
 
 	@Override
 	protected void onDestroy() {
-		Log.i(TAG, "+++++++++++++++++回放Activity销毁");
+		LogUtils.i(TAG, "+++++++++++++++++回放Activity销毁");
 		playControl.track.release();
 		playControl.track = null;
 
@@ -69,7 +70,7 @@ public class RecordActivity extends BaseActivity implements OnTouchListener{
 
 	@Override
 	protected void onRestart() {
-		Log.i(TAG, "++++++onRestart++++++++++回放Activity onCreate");
+		LogUtils.i(TAG, "++++++onRestart++++++++++回放Activity onCreate");
 		super.onRestart();
 	}
 	
@@ -122,13 +123,13 @@ public class RecordActivity extends BaseActivity implements OnTouchListener{
 			
 		}else{
 			if(!play_or_pause){//暂停
-				Log.i(TAG, "本地录像播放====暂停");
+				LogUtils.i(TAG, "本地录像播放====暂停");
 				playControl.track.pause();
 				playControl.pauseVideo();
 				play_or_pause=true;
 				pauseButton.setText(R.string.play);
 			}else{//继续播放
-				Log.i(TAG, "本地录像播放====继续播放");
+				LogUtils.i(TAG, "本地录像播放====继续播放");
 				playControl.track.play();
 				playControl.resumePlayFileVideo();
 				play_or_pause=false;
@@ -164,13 +165,13 @@ public class RecordActivity extends BaseActivity implements OnTouchListener{
 		 LinearLayout linearLayout = (LinearLayout) findViewById(R.id.record_linear);
 		 RelativeLayout videoLayout = (RelativeLayout) findViewById(R.id.video_title);//标题布局
 		if(0 == Constants.FLAG_FULLSCREEN){
-			Log.i(TAG, "+++++++++++++++++横向");
+			LogUtils.i(TAG, "+++++++++++++++++横向");
 			linearLayout.setVisibility(View.GONE);// 隐藏布局
 			videoLayout.setVisibility(View.GONE);
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//横屏
 			Constants.FLAG_FULLSCREEN = 1;// 重置
 		}else{
-			Log.i(TAG, "+++++++++++++++++竖向");
+			LogUtils.i(TAG, "+++++++++++++++++竖向");
 			linearLayout.setVisibility(View.VISIBLE);// 显示布局
 			videoLayout.setVisibility(View.VISIBLE);
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//竖屏

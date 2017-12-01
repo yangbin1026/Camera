@@ -10,7 +10,7 @@ import android.graphics.Matrix;
 import android.os.Vibrator;
 import android.widget.Toast;
 
-public class MyUtils {
+public class MUtils {
 	/**
 	 * 获取旋转后的位图
 	 */

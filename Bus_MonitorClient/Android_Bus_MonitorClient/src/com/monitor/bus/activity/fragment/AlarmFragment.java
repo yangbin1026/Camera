@@ -14,7 +14,8 @@ import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.model.AlarmInfo;
 import com.monitor.bus.model.DeviceInfo;
-import com.monitor.bus.utils.MyUtils;
+import com.monitor.bus.utils.LogUtils;
+import com.monitor.bus.utils.MUtils;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -70,12 +71,12 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 	}
 
 	private void initData() {
-		MyUtils.toast(getContext(), "addSize:" + alarmManger.getSize());
+		MUtils.toast(getContext(), "addSize:" + alarmManger.getSize());
 		alarmList.addAll(alarmManger.getAlarmList());
 		for (int i = 0; i < alarmList.size(); i++) {
 			// 报警类型是移动，震动提示用户
 			if (alarmList.get(i).getAlarmString().contains(getString(R.string.motion_detection))) {
-				MyUtils.Vibrate(getActivity(), 1000);
+				MUtils.Vibrate(getActivity(), 1000);
 				break;
 			}
 		}
@@ -96,9 +97,8 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 
 				AlarmInfo alarmInfo = alarmList.get(position);
 				currentDeviceInfo = getDeviceInfo(alarmInfo.getdeviceId());
-				Log.i("-----", "当前设备信息:" + currentDeviceInfo);
+				LogUtils.i("-----", "当前设备信息:" + currentDeviceInfo);
 				if (alarmList.get(position).getAlarmString().contains(getString(R.string.motion_detection))) {
-					Log.i("------------------------", "移动侦测:" + alarmInfo.getChannelId());
 					currentDeviceInfo.setCurrentChn(alarmInfo.getChannelId() - 1);
 				} else {
 					currentDeviceInfo.setCurrentChn(alarmInfo.getChannelId());

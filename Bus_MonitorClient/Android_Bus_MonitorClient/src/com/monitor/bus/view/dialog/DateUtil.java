@@ -163,14 +163,12 @@ public class DateUtil {
     public static int getFirstDayWeek(int year, int month) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, 1);
-        Log.d("DateView", "DateView:First:" + calendar.getFirstDayOfWeek());
         return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     public static String getDayWeek(int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
-        Log.d("DateView", "DateView:First:" + calendar.getFirstDayOfWeek());
 
         switch (calendar.get(Calendar.DAY_OF_WEEK)) {
             case 1:

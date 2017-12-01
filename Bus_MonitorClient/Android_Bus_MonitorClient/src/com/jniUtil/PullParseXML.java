@@ -19,6 +19,7 @@ import com.monitor.bus.consts.Constants;
 import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.model.DevRecordInfo;
 import com.monitor.bus.model.ServerInfo;
+import com.monitor.bus.utils.LogUtils;
 
 /**
  * 解析XML文件
@@ -89,9 +90,7 @@ public class PullParseXML {
 							busInfo.setMinSpeedRapid(parser.getAttributeValue(null,"MinSpeedRapid"));
 						} 
 						catch (Exception e) {
-							// TODO: handle exception
 							e.printStackTrace();
-							Log.i("+++++++++++", "越界错误");
 						}
 						/*
 						busInfo.setModel(parser.getAttributeValue(18));
@@ -112,12 +111,12 @@ public class PullParseXML {
 								}
 							}
 							if(bCasCadeServer){
-								Log.e("PullParseXML", "服务器为级联服务器！！");
+								LogUtils.i("PullParseXML", "服务器为级联服务器！！");
 								Constants.IS_CASCADE_SERVER = true;
 								/*jni*/
 								JNVPlayerUtil.JNV_N_SetConnectServerType(1);//上传到JNI层
 							}else{
-								Log.e("PullParseXML", "服务器为单服务器！！");
+								LogUtils.i("PullParseXML", "服务器为单服务器！！");
 								Constants.IS_CASCADE_SERVER = false; 
 								/*jni*/
 								JNVPlayerUtil.JNV_N_SetConnectServerType(0);

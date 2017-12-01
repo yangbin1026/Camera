@@ -79,7 +79,7 @@ public class LoginEventControl{
 			jo = new JSONObject(strEvent);
 			int eventType = jo.getInt("eventType");
 			if (eventType == 1) {
-				Log.i(TAG, "登陆成功！！");
+				LogUtils.i(TAG, "登陆成功！！");
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -98,7 +98,7 @@ public class LoginEventControl{
 			throws JSONException {
 
 		strEvent = strEvent.replace("NaN", "1");
-		Log.i(TAG, "callbackEvent:"+iUserParam+","+strEvent);
+		LogUtils.i(TAG, "callbackEvent:"+iUserParam+","+strEvent);
 		JSONObject jo = new JSONObject(strEvent);
 		int eventType = jo.getInt("eventType");
 		msg = myHandler.obtainMessage();
@@ -200,7 +200,7 @@ public class LoginEventControl{
 								int ret = JNVPlayerUtil
 										.JNV_N_GetAlarmStart(guid);// 获取报警信息
 								if (ret != 0) {
-									Log.i(TAG, "申请获取报警信息出错" + info);
+									LogUtils.i(TAG, "申请获取报警信息出错" + info);
 								}
 							}
 						}
@@ -244,7 +244,7 @@ public class LoginEventControl{
 								if (ret != 0) {
 									// if(info.getOnLine()==1){
 									// {
-									Log.i(TAG, "申请获取报警信息出错" + info);
+									LogUtils.i(TAG, "申请获取报警信息出错" + info);
 								}
 							}
 						}
@@ -279,15 +279,15 @@ public class LoginEventControl{
 				break;
 
 			case CALLBACKFLAG.STREAM_OPEN_SUCCESS: // 流打开成功
-				Log.i(TAG, "=========>流打开成功!");
+				LogUtils.i(TAG, "=========>流打开成功!");
 				break;
 
 			case CALLBACKFLAG.STREAM_OPEN_FAILD: // 流打开失败
-				Log.i(TAG, "=========>流打开失败!");
+				LogUtils.i(TAG, "=========>流打开失败!");
 				break;
 
 			case CALLBACKFLAG.STREAM_CLOSED:// 流关闭
-				Log.i(TAG, "=========>流关闭!");
+				LogUtils.i(TAG, "=========>流关闭!");
 				break;
 			case CALLBACKFLAG.DEVICE_ALARM_EVENT:// 报警事件
 				doAlarm();
@@ -306,7 +306,7 @@ public class LoginEventControl{
 					busInfo.setAlarmString(alarInfo);
 					
 					AlarmManager manager = AlarmManager.getInstance();
-					Log.i(TAG, "alarmChn" + alarmChn + "devID" + devID);
+					LogUtils.i(TAG, "alarmChn" + alarmChn + "devID" + devID);
 					if (manager.getSize() >= 100) {// 获取的报警信息超过100条
 						manager.removeFirst();
 					}
@@ -333,7 +333,7 @@ public class LoginEventControl{
 					JSONObject jo = new JSONObject(msg.obj + "");
 					double longitude = jo.getDouble("gpsBaseLongitude");
 					double latitude = jo.getDouble("gpsBaseLatitude");
-					//Log.i(TAG, "接收到的：lon=" + longitude + ",lat=" + latitude);
+					//LogUtils.i(TAG, "接收到的：lon=" + longitude + ",lat=" + latitude);
 
 					int baseDirect = jo.getInt("gpsBaseDirect");
 					String guId = jo.getString("gpsDevID");
@@ -401,7 +401,7 @@ public class LoginEventControl{
 						int ret = JNVPlayerUtil.JNV_N_AddServerInfo(
 								tmp.getServerID(), tmp.getServerIp(),
 								tmp.getServerPort(), i);
-						Log.i(TAG, "加入服务器信息，返回：" + ret);
+						LogUtils.i(TAG, "加入服务器信息，返回：" + ret);
 					}
 				}
 			}
@@ -413,7 +413,7 @@ public class LoginEventControl{
 	 */
 	protected String switchFlag(int arg) {
 		String ret = "";
-		Log.i(TAG, "switch:" + arg);
+		LogUtils.i(TAG, "switch:" + arg);
 		switch (arg) {
 		// case LGOINFLAG.LOGIN_SUCCESS:
 		//
@@ -450,7 +450,7 @@ public class LoginEventControl{
 			}
 			break;
 		}
-		Log.i(TAG, "错误标志信息：" + ret);
+		LogUtils.i(TAG, "错误标志信息：" + ret);
 		return ret;
 	}
 
@@ -528,7 +528,7 @@ public class LoginEventControl{
 		/*AlarmInfo devRecordInfo = alarms.get(0);*/
 		/*AlarmInfo devRecordInfo = null;*/
 		currentDeviceInfo = getBusInfo(devId);
-		/*Log.i("+++++++++++", devRecordInfo.getGuId()+ "+" + devId);*/
+		/*LogUtils.i("+++++++++++", devRecordInfo.getGuId()+ "+" + devId);*/
 		String dev_name = currentDeviceInfo.getDeviceName();
 		if (1 == alarmType) {// 超速
 			alarmInfo = dev_name + devList + exists

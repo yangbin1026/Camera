@@ -6,10 +6,12 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.monitor.bus.model.DeviceInfo;
+import com.monitor.bus.utils.LogUtils;
 
 
 public class DeviceManager {
-	private List<DeviceInfo> mDeviceList = new ArrayList<DeviceInfo>();//报警信息
+	private static final String TAG= DeviceManager.class.getSimpleName();
+	private List<DeviceInfo> mDeviceList = new ArrayList<DeviceInfo>();//设备列表
 	static DeviceManager manager;
 	private DeviceManager(){
 		
@@ -23,7 +25,11 @@ public class DeviceManager {
 	}
 	
 	public void addDeviceInfo(DeviceInfo info){
+		if(info==null){
+			return;
+		}
 		mDeviceList.add(info);
+		LogUtils.getInstance().localLog(TAG, ""+info.toString());
 	}
 	public void setDeviceList(List<DeviceInfo> list){
 		mDeviceList=list;
@@ -65,6 +71,15 @@ public class DeviceManager {
 			}
 		}
 		return list;
+	}
+	public ArrayList<DeviceInfo> getDeviceInfoByParentId(String parentId){
+		ArrayList<DeviceInfo> deviceList = new ArrayList<DeviceInfo>();
+		for (DeviceInfo info :mDeviceList) {
+			if (parentId.equals(info.getParentId())) {
+				deviceList.add(info);
+			}
+		}
+		return deviceList;
 	}
 	
 

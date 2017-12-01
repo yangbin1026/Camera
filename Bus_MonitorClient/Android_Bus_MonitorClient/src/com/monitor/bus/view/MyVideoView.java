@@ -16,6 +16,7 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.monitor.bus.consts.Constants;
+import com.monitor.bus.utils.LogUtils;
 
 /**
  * 自定义视频回放窗口类
@@ -54,7 +55,7 @@ public class MyVideoView extends ImageView {
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-		Log.i(TAG, "++++++++++++w:"+w+"++++++++h:"+h+"+++++++++oldw:"+oldw+"++++++++++oldh:"+oldh);
+		LogUtils.i(TAG, "++++++++++++w:"+w+"++++++++h:"+h+"+++++++++oldw:"+oldw+"++++++++++oldh:"+oldh);
 		if (2 == Constants.STREAM_PLAY_TYPE ||
 			Constants.SCREEN_CHANGE_STATUS || 
 			1 == Constants.STREAM_PLAY_TYPE ) {// 录像回放
@@ -116,11 +117,7 @@ public class MyVideoView extends ImageView {
 				out.flush();
 				out.close();
 			}
-		} catch (FileNotFoundException e) {
-			Log.i(TAG, "++++++++++++抓拍失败!");
-			e.printStackTrace();
 		} catch (IOException e) {
-			Log.i(TAG, "++++++++++++抓拍失败!");
 			e.printStackTrace();
 		}
 		return temp;
@@ -147,7 +144,7 @@ public class MyVideoView extends ImageView {
 				scaleHeight = viewHeight;
 				scaleWidth = (int) (scaleHeight * ImgRation);
 			}
-		Log.i(TAG, "+++++++getScaleSize+++++++++scaleWidth:"+scaleWidth+"++++++++scaleHeight:"+scaleHeight);
+		LogUtils.i(TAG, "+++++++getScaleSize+++++++++scaleWidth:"+scaleWidth+"++++++++scaleHeight:"+scaleHeight);
 		displayWidth = scaleWidth;
 		displayHeight = scaleHeight;
 		
