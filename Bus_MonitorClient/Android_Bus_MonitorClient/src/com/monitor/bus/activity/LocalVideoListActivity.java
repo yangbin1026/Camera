@@ -19,7 +19,7 @@ import com.monitor.bus.database.DatabaseHelper;
  * 本地jav文件列表
  * 
  */
-public class LocalRecordActivity extends BaseActivity {
+public class LocalVideoListActivity extends BaseActivity {
 
 	private String start_time = null;
 	private String end_time = null;
@@ -47,7 +47,7 @@ public class LocalRecordActivity extends BaseActivity {
 						+ testLocalListView.get(position).get("file_name");
 				intent.putExtra("playFileName", path);
 				intent.putExtra("id", testLocalListView.get(position).get("id"));
-				intent.setClass(LocalRecordActivity.this, RecordActivity.class);
+				intent.setClass(LocalVideoListActivity.this, ReplayActivity.class);
 				startActivity(intent);
 
 			}

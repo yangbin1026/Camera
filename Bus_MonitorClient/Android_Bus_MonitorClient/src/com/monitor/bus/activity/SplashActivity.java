@@ -120,14 +120,10 @@ public class SplashActivity extends Activity {
 			StartIntent();
 		}
 	}
-
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
-		if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
-			System.exit(0);
-		}
-		return super.onKeyDown(keyCode, event);
+	public void onBackPressed() {
+		System.exit(0);
+		super.onBackPressed();
 	}
 
 	final Handler handler = new Handler() {

@@ -56,11 +56,7 @@ public class MyVideoView extends ImageView {
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		LogUtils.i(TAG, "++++++++++++w:"+w+"++++++++h:"+h+"+++++++++oldw:"+oldw+"++++++++++oldh:"+oldh);
-		if (2 == Constants.STREAM_PLAY_TYPE ||
-			Constants.SCREEN_CHANGE_STATUS || 
-			1 == Constants.STREAM_PLAY_TYPE ) {// 录像回放
 		getScaleSize(w,h);
-		}
 		super.onSizeChanged(w, h, oldw, oldh);
 	}
 	

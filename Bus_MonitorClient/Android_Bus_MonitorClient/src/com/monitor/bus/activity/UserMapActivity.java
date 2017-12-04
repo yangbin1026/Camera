@@ -290,7 +290,7 @@ public class UserMapActivity extends Activity {
 			@Override
 			public boolean onMarkerClick(Marker arg0) {
 				if (arg0 == mMarkerA) {
-					Intent intent = new Intent(mContext, VideoActivity.class);
+					Intent intent = new Intent(mContext, RealTimeVideoActivity.class);
 					curBusDeviceInfo.setCurrentChn(1);
 					intent.putExtra("videoData", curBusDeviceInfo);
 					startActivity(intent);

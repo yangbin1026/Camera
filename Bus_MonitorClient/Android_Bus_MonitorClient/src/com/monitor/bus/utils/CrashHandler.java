@@ -32,7 +32,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 	
 	 //限制文件数量
 	private static final int File_Count = 10;
-	private final String Save_Path = ""+Environment.getExternalStorageDirectory()+File.separator+"crashLog";
+	private final String Save_Path = ""+Environment.getExternalStorageDirectory()+File.separator+"ALog";
 	private SimpleDateFormat format = null;
 	private Context context;
 	private static CrashHandler mCrashHandler = null;

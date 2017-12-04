@@ -178,8 +178,6 @@ public class LoginEventControl{
 					File myFile = new File(Constants.DEVICELIST_PASTH);
 					try {
 						InputStream in = new FileInputStream(myFile);
-						// InputStream in =
-						// this.getClass().getClassLoader().getResourceAsStream("DevList.xml");
 						PullParseXML.getSortBusDevices(in);
 					} catch (FileNotFoundException e) {
 						Log.e(TAG, "xml文件不存在!!");

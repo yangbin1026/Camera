@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.monitor.bus.activity.FilterOptionActivity;
 import com.monitor.bus.activity.R;
-import com.monitor.bus.activity.VideoActivity;
+import com.monitor.bus.activity.RealTimeVideoActivity;
 import com.monitor.bus.adapter.AlarmListAdapter;
 import com.monitor.bus.adapter.AlarmSelectorAdapter;
 import com.monitor.bus.bean.AlarmManager;
@@ -109,7 +109,7 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 				}
 				Intent intent = new Intent();
 				intent.putExtra("videoData", currentDeviceInfo);
-				intent.setClass(getContext(), VideoActivity.class);
+				intent.setClass(getContext(), RealTimeVideoActivity.class);
 				startActivity(intent);
 			}
 		});

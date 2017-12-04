@@ -91,10 +91,10 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LocalRecordActivity"
+            android:name=".LocalVideoListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".VideoActivity"
+            android:name=".RealTimeVideoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
@@ -105,7 +105,7 @@
             android:name=".RecordQueryActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RecordActivity"
+            android:name=".ReplayActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

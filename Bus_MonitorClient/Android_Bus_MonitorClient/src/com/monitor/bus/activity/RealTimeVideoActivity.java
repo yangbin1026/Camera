@@ -47,64 +47,59 @@ import com.monitor.bus.view.MyVideoView;
  * 实时视频Activity
  * 
  */
-public class VideoActivity extends BaseActivity implements OnTouchListener {
+public class RealTimeVideoActivity extends BaseActivity implements OnTouchListener,View.OnClickListener {
 
 	private static String TAG = "VideoActivity";
 	
 	
-	
-	private MyVideoView myVideoView;
-	private Intent intent;
-	private DeviceInfo currentDevData;// 设备信息
-	private DatabaseHelper db;// 数据库操作对象
 	String recordFilePath = null;// 当前录像文件存储路径
 	String times = "";// 当前文件名称
-	public Timer recordTimer;// 计时器
-
 	boolean isCapturePicture = false;//是否有操作过抓拍
 	boolean record_state = false;// 当前录像状态标志 true 开始录像 false 停止录像
 	
+	private MyVideoView myVideoView;
 	private Button recordButton;// 录像按钮
-	//boolean monitor_state = false;// 当前监听状态标志 true 开始监听 false 停止监听
 	private Button monitorButton;// 监听按钮
-	//boolean talk_state = false;// 当前对讲状态标志 true 开始对讲 false 停止对讲
 	private Button talkButton;// 对讲按钮
-	public Button mirrorButton;// 镜像按钮
-	// 云台控制
+	private Button mirrorButton;// 镜像按钮
 	private ImageButton ptzUp;
 	private ImageButton ptzDown;
 	private ImageButton ptzLeft;
 	private ImageButton ptzRight;
 	private TextView text_tilte_name;// 标题名称
-
+	
+	private Intent intent;
 	GestureDetector mGestureDetector;//手势监测
 	private VideoPlayControl playControl;
+	private DeviceInfo currentDeviceInfo;// 设备信息
+	private DatabaseHelper db;// 数据库操作对象
+	public Timer recordTimer;// 计时器
 	
 	private float x,y;
 	private int mx,my;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
+		setContentView(R.layout.video_stream);
+		
 		Constants.STREAM_PLAY_TYPE=1;//设置播放类型为实时视频
 		db = new DatabaseHelper(this, Constants.DATABASE_NAME);//初始化数据操作对象
-		Constants.INSTANCE = this;
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
+		
 		intent = this.getIntent();
-		currentDevData = (DeviceInfo) intent.getSerializableExtra("videoData");
-		LogUtils.i(TAG, currentDevData+"");
+		currentDeviceInfo = (DeviceInfo) intent.getSerializableExtra("videoData");
 	}
 	
 	@Override
 	protected void onResume() {
-		setContentView(R.layout.video_stream);
 		text_tilte_name = (TextView) findViewById(R.id.tilte_name);
 		mirrorButton = (Button) findViewById(R.id.mirror_button);
-		
 		myVideoView = (MyVideoView) findViewById(R.id.myVideoView);
-		playControl = new VideoPlayControl(this, myVideoView);
 		myVideoView.setOnTouchListener(this);
-		if (currentDevData != null) {// 标题栏设置: 设备名称-当前通道号
-			text_tilte_name.setText(currentDevData.getDeviceName() + " - " + Constants.CHANNEL_PREFIX_NAME + currentDevData.getCurrentChn());
+		playControl = new VideoPlayControl(this, myVideoView);
+		
+		if (currentDeviceInfo != null) {// 标题栏设置: 设备名称-当前通道号
+			text_tilte_name.setText(currentDeviceInfo.getDeviceName() + " - " + Constants.CHANNEL_PREFIX_NAME + currentDeviceInfo.getCurrentChn());
 			mGestureDetector = new GestureDetector(new MySimpleGesture());
 			myVideoView.setLongClickable(true);
 		}
@@ -232,11 +227,11 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					ptzUp.setBackgroundDrawable(getResources().getDrawable(R.drawable.up_1));
-					upPTZCtrl();
+					yunCtrl(Constants.PTZ_DERECTION.PTZ_DOWN);
 
 				} else if (event.getAction() == MotionEvent.ACTION_UP) {
 					ptzUp.setBackgroundDrawable(getResources().getDrawable(R.drawable.up_2));
-					stopPtzCtrl();
+					yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
 				}
 				return false;
 			}
@@ -248,11 +243,11 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					ptzDown.setBackgroundDrawable(getResources().getDrawable(R.drawable.down_1));
-					downPTZCtrl();
+					yunCtrl(Constants.PTZ_DERECTION.PTZ_DOWN);
 
 				} else if (event.getAction() == MotionEvent.ACTION_UP) {
 					ptzDown.setBackgroundDrawable(getResources().getDrawable(R.drawable.down_2));
-					stopPtzCtrl();
+					yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
 				}
 				return false;
 			}
@@ -264,11 +259,11 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					ptzLeft.setBackgroundDrawable(getResources().getDrawable(R.drawable.left_1));
-					leftPTZCtrl();
+					yunCtrl(Constants.PTZ_DERECTION.PTZ_LEFT);
 
 				} else if (event.getAction() == MotionEvent.ACTION_UP) {
 					ptzLeft.setBackgroundDrawable(getResources().getDrawable(R.drawable.left_2));
-					stopPtzCtrl();
+					yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
 				}
 				return false;
 			}
@@ -280,11 +275,11 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					ptzRight.setBackgroundDrawable(getResources().getDrawable(R.drawable.right_1));
-					rightPTZCtrl();
+					yunCtrl(Constants.PTZ_DERECTION.PTZ_RIGHT);
 
 				} else if (event.getAction() == MotionEvent.ACTION_UP) {
 					ptzRight.setBackgroundDrawable(getResources().getDrawable(R.drawable.right_2));
-					stopPtzCtrl();
+					yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
 				}
 				return false;
 			}
@@ -336,7 +331,6 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 		if(isCapturePicture){
 			sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, 
 					Uri.parse("file://"+ Environment.getExternalStorageDirectory())));// 刷新相册环境
-			LogUtils.i(TAG, "++++++++++onDestroy！");
 		}
 		super.onDestroy();
 	}
@@ -351,29 +345,6 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 		}
 	}
 
-
-	/**
-	 * 实时视频播放--------暂时无用
-	 * 
-	 * @param view
-	 */
-	public void playVideo(View view) {
-		//playControl.startStream();
-	}
-
-	/**
-	 * 实时视频停止--------暂时无用
-	 * 
-	 * @param view
-	 */
-	public void stopVideo(View view) {
-		if (!isNormalPlay()) {
-			return;
-		}
-		playControl.stopStream();
-	}
-
-
 	/**
 	 * 录像
 	 * 
@@ -385,7 +356,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 			return;
 		}
 		recordFilePath = MyUtil.getCurrentFilePath(Constants.RECORD_FILE_PATH,
-				currentDevData);
+				currentDeviceInfo);
 		File file = new File(recordFilePath);
 		if (!file.exists()) {// 目录不存在
 			file.mkdirs();
@@ -435,61 +406,19 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 	}
 
 	/**
-	 * 云台控制-上
-	 * 
-	 * @param contentView
+	 * 云台控制
 	 */
-	public void upPTZCtrl() {
+	public void yunCtrl(int control) {
 		if (!isNormalPlay()) {
 			return;
 
 		}
-		playControl.PTZCtrl(Constants.PTZ_DERECTION.PTZ_UP);
+		playControl.PTZCtrl(control);
 
 	}
 
-	/**
-	 * 云台控制-下
-	 */
-	public void downPTZCtrl() {
-		if (!isNormalPlay()) {
-			return;
-		}
-		playControl.PTZCtrl(Constants.PTZ_DERECTION.PTZ_DOWN);
-	}
 
-	/**
-	 * 云台控制-左
-	 */
-	public void leftPTZCtrl() {
-		if (!isNormalPlay()) {
-			return;
-		}
 
-	playControl.PTZCtrl(Constants.PTZ_DERECTION.PTZ_LEFT);
-	}
-
-	/**
-	 * 云台控制-右
-	 */
-	public void rightPTZCtrl() {
-		if (!isNormalPlay()) {
-			return;
-		}
-		playControl.PTZCtrl(Constants.PTZ_DERECTION.PTZ_RIGHT);
-	}
-
-	/**
-	 * 云台控制-停止
-	 * 
-	 * @param contentView
-	 */
-	public void stopPtzCtrl() {
-		if (!isNormalPlay()) {
-			return;
-		}
-		playControl.PTZCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
-	}
 
 	/**
 	 * 抓拍
@@ -508,11 +437,6 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 	/**
 	 * 判断是否正常播放
 	 * 
-	 * @param currentDevData
-	 *            播放数据
-	 * @param stop
-	 *            停止实时视频返回的值
-	 * @return
 	 */
 	public boolean isNormalPlay() {
 		if (myVideoView.is_drawblack || -1 == myVideoView.flag) {
@@ -529,7 +453,7 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 			y = event.getY();
 			break;
 		case MotionEvent.ACTION_UP:
-			stopPtzCtrl();
+			yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
 			break;
 		case MotionEvent.ACTION_MOVE:
 			mx = (int) (event.getRawX() - x);
@@ -580,20 +504,16 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 				float distanceX, float distanceY) {
 
 				if (e1.getX() - e2.getX() > 50) {
-					leftPTZCtrl();
-					LogUtils.i(TAG, "+++++++++++++++++左");
+					yunCtrl(Constants.PTZ_DERECTION.PTZ_LEFT);
 					return true;
 				} else if (e1.getX() - e2.getX() < -50) {
-					rightPTZCtrl();
-					LogUtils.i(TAG, "+++++++++++++++++右");
+					yunCtrl(Constants.PTZ_DERECTION.PTZ_RIGHT);
 					return true;
 				} else if (e1.getY() - e2.getY() > 50) {
-					upPTZCtrl();
-					LogUtils.i(TAG, "+++++++++++++++++上");
+					yunCtrl(Constants.PTZ_DERECTION.PTZ_UP);
 					return true;
 				} else if (e1.getY() - e2.getY() < -50) {
-					downPTZCtrl();
-					LogUtils.i(TAG, "+++++++++++++++++下");
+					yunCtrl(Constants.PTZ_DERECTION.PTZ_DOWN);
 					return true;
 				}
 			return super.onScroll(e1, e2, distanceX, distanceY);
@@ -616,10 +536,14 @@ public class VideoActivity extends BaseActivity implements OnTouchListener {
 		myVideoView.displayWidth += 90;
 	}
 	
+
 	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		LogUtils.i(TAG, "+++++onConfigurationChanged++++++++newConfig:"+newConfig.orientation);
-		Constants.SCREEN_CHANGE_STATUS = true;
-		super.onConfigurationChanged(newConfig);
+	public void onClick(View arg0) {
+		switch (arg0.getId()) {
+
+		default:
+			break;
+		}
+		
 	}
 }

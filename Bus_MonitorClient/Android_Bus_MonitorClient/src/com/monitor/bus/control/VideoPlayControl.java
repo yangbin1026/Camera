@@ -212,7 +212,6 @@ public  class VideoPlayControl {
 	 *            速度
 	 */
 	public void PTZCtrl(int iDirection) {
-//		JNVPlayerUtil.JNV_N_PtzCtrl(currentDeviceInfo.getGuId(), currentDeviceInfo.getCurrentChn(), iDirection, 0, 0);
 		JNVPlayerUtil.JNV_N_PtzCtrl(currentDeviceInfo.getNewGuId(), currentDeviceInfo.getCurrentChn(), iDirection, 0, 0);
 	}
 

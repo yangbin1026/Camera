@@ -25,12 +25,11 @@ import com.monitor.bus.utils.LogUtils;
  * 解析XML文件
  */
 public class PullParseXML {
-
-	public static List<DeviceInfo> getBusDevices(InputStream in)
+	public static void getBusDevices(InputStream in)
 			throws XmlPullParserException, IOException {
 		boolean isCheck = false; 
-		DeviceInfo busInfo = null;
-		List<DeviceInfo> devices = null;
+		DeviceInfo deviceInfo = null;
+		DeviceManager manager= DeviceManager.getInstance();
 		XmlPullParser parser = Xml.newPullParser();
 		InputStreamReader streamReader = new InputStreamReader(in,"gb2312"); 
 		parser.setInput(streamReader);
@@ -39,55 +38,57 @@ public class PullParseXML {
 		while (event != XmlPullParser.END_DOCUMENT) {
 			switch (event) {
 			case XmlPullParser.START_DOCUMENT:// 判断当前事件是否是文档开始事件
-				devices = new ArrayList<DeviceInfo>();
 				//Constants.BUSDEVICEDATA.clear();
 				break;
 			case XmlPullParser.START_TAG:// 判断当前事件是否是标签元素开始事件
-				if ("device".equals(parser.getName())) {// 判断开始标签元素是否是name
-					busInfo = new DeviceInfo();
-					busInfo.setGroupId(parser.getAttributeValue(null,"GroupID"));
-					busInfo.setParentId(parser.getAttributeValue(null,"ParentID"));
-					busInfo.setIsDeviceGroup(parser.getAttributeValue(null,"IsDeviceGroup"));
-					busInfo.setGroupName(parser.getAttributeValue(null,"GroupName"));
+				if (!"device".equals(parser.getName())) {
+					// 判断开始标签元素是否是name
+					break;
+				}
+					deviceInfo = new DeviceInfo();
+					deviceInfo.setGroupId(parser.getAttributeValue(null,"GroupID"));
+					deviceInfo.setParentId(parser.getAttributeValue(null,"ParentID"));
+					deviceInfo.setGroupName(parser.getAttributeValue(null,"GroupName"));
+					deviceInfo.setIsDeviceGroup(parser.getAttributeValue(null,"IsDeviceGroup"));
 
 					if ("0".equals(parser.getAttributeValue(null,"IsDeviceGroup"))) {// 具有子节点时不需要加载设备信息
-						busInfo.setDeviceId(parser.getAttributeValue(null,"DeviceID"));
-						busInfo.setDeviceName(parser.getAttributeValue(null,"DeviceName"));
-						busInfo.setGuId(parser.getAttributeValue(null,"GUID"));
-						busInfo.setSn(parser.getAttributeValue(null,"SN"));
+						deviceInfo.setDeviceId(parser.getAttributeValue(null,"DeviceID"));
+						deviceInfo.setDeviceName(parser.getAttributeValue(null,"DeviceName"));
+						deviceInfo.setGuId(parser.getAttributeValue(null,"GUID"));
+						deviceInfo.setSn(parser.getAttributeValue(null,"SN"));
 						String onLine = parser.getAttributeValue(null,"Online");
 						if("".equals(onLine)){
-							busInfo.setOnLine(0);
+							deviceInfo.setOnLine(0);
 						}else{
-							busInfo.setOnLine(Integer.parseInt(onLine));
+							deviceInfo.setOnLine(Integer.parseInt(onLine));
 						}
-						busInfo.setMaxSpeed(parser.getAttributeValue(null,"MaxSpeed"));
-						busInfo.setMinSpeed(parser.getAttributeValue(null,"MinSpeed"));
+						deviceInfo.setMaxSpeed(parser.getAttributeValue(null,"MaxSpeed"));
+						deviceInfo.setMinSpeed(parser.getAttributeValue(null,"MinSpeed"));
 						String longitude = parser.getAttributeValue(null,"Longitude");
 						if(!"".equals(longitude)){
-							busInfo.setLongitude(Double.parseDouble(longitude));
+							deviceInfo.setLongitude(Double.parseDouble(longitude));
 						}else{
-							busInfo.setLongitude(0d);
+							deviceInfo.setLongitude(0d);
 						}
 						String latitude = parser.getAttributeValue(null,"Latitude");
 						if(!"".equals(latitude)){
-							busInfo.setLatitude(Double.parseDouble(latitude));
+							deviceInfo.setLatitude(Double.parseDouble(latitude));
 						}else{
-							busInfo.setLatitude(0d);
+							deviceInfo.setLatitude(0d);
 						}
 						String temp = parser.getAttributeValue(null,"EncoderNumber");
 						if(!"".equals(temp)){
-							busInfo.setEncoderNumber(Integer.parseInt(temp));
+							deviceInfo.setEncoderNumber(Integer.parseInt(temp));
 						}else{
-							busInfo.setEncoderNumber(0);
+							deviceInfo.setEncoderNumber(0);
 						}
 						try {
 							
-							busInfo.setDeviceType(parser.getAttributeValue(null,"DeviceType"));
-							busInfo.setMaxSpeedNation(parser.getAttributeValue(null,"MaxSpeedNation"));
-							busInfo.setMinSpeedNation(parser.getAttributeValue(null,"MinSpeedNation"));
-							busInfo.setMaxSpeedRapid(parser.getAttributeValue(null,"MaxSpeedRapid"));
-							busInfo.setMinSpeedRapid(parser.getAttributeValue(null,"MinSpeedRapid"));
+							deviceInfo.setDeviceType(parser.getAttributeValue(null,"DeviceType"));
+							deviceInfo.setMaxSpeedNation(parser.getAttributeValue(null,"MaxSpeedNation"));
+							deviceInfo.setMinSpeedNation(parser.getAttributeValue(null,"MinSpeedNation"));
+							deviceInfo.setMaxSpeedRapid(parser.getAttributeValue(null,"MaxSpeedRapid"));
+							deviceInfo.setMinSpeedRapid(parser.getAttributeValue(null,"MinSpeedRapid"));
 						} 
 						catch (Exception e) {
 							e.printStackTrace();
@@ -125,33 +126,24 @@ public class PullParseXML {
 						}
 						//级联模式才需要读取
 						if(Constants.IS_CASCADE_SERVER){
-							busInfo.setCenterServerID(parser.getAttributeValue(null,"CenterServerID"));
-							busInfo.setCmdServerID(parser.getAttributeValue(null,"CmdServerID"));
-							busInfo.setMediaServerID(parser.getAttributeValue(null,"MediaServerID"));
+							deviceInfo.setCenterServerID(parser.getAttributeValue(null,"CenterServerID"));
+							deviceInfo.setCmdServerID(parser.getAttributeValue(null,"CmdServerID"));
+							deviceInfo.setMediaServerID(parser.getAttributeValue(null,"MediaServerID"));
 						}
 					}
-				}
-				else if ("channel".equals(parser.getName())){
-					int jjjj = 0;
-				}
 				break;
 			case XmlPullParser.END_TAG: // 结束元素事件
 				if ("device".equals(parser.getName())) {// 判断结束标签元素是否是device
-					if(Constants.IS_CASCADE_SERVER){//级联模式才需要验证
-						if( isDeviceValid(busInfo) ) 
-							devices.add(busInfo);
-						else{
-							Log.i("PullParseXML", "无效信息："+busInfo);
-						}
+					if(Constants.IS_CASCADE_SERVER&& !isDeviceValid(deviceInfo)){//级联模式才需要验证
+						LogUtils.getInstance().localLog("PullParseXML", "this Device is Useless");
 					}else{
-						devices.add(busInfo);
+						manager.addDeviceInfo(deviceInfo);
 					}
 				}
 				break;
 			}
 			event = parser.next();
 		}
-		return devices;
 	}
 
 	private static boolean isDeviceValid(DeviceInfo busInfo) {
@@ -169,9 +161,7 @@ public class PullParseXML {
 	 * @throws IOException
 	 */
 	public static  void getSortBusDevices(InputStream in) throws XmlPullParserException, IOException{
-		DeviceManager manager= DeviceManager.getInstance();
-		manager.setDeviceList(getBusDevices(in));
-		manager.sort();
+		getBusDevices(in);
 	}
 
 

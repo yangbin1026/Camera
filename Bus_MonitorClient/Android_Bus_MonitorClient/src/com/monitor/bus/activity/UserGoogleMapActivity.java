@@ -368,7 +368,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 			Intent intent = new Intent();
 			curCtlDevInfo.setCurrentChn(1);
 			intent.putExtra("videoData", curCtlDevInfo);
-			intent.setClass(this, VideoActivity.class);
+			intent.setClass(this, RealTimeVideoActivity.class);
 			startActivity(intent);
 			break;
 		case 1:

@@ -18,7 +18,7 @@ import android.util.Log;
  */
 public class LogUtils {
 	public static boolean Debug = true;
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HH-mm-ss");
+	SimpleDateFormat sdf;
 	private static final long maxLen = 5 * 1024 * 1024; // 5M
 	private static final int maxCount = 5;
 	private static final String LOG_NAME = "myLog";
@@ -26,8 +26,8 @@ public class LogUtils {
 	
 	final static String TAG = "LogUtils";
 	private static LogUtils mUtils;
-	File logDir = new File(Environment.getExternalStorageDirectory(), "log");
-	File currentLogFile = new File(logDir, LOG_NAME + ".log");
+	File logDir = new File(Environment.getExternalStorageDirectory(), "ALog");
+	File currentLogFile ;
 	PrintWriter out = null;
 	int curentIndex = 0;
 
@@ -63,18 +63,22 @@ public class LogUtils {
 
 	public void localLog(String tag, String log) {
 		if (log == null) {
-			Log.d(TAG, "log is null");
+			log="LOG IS NULL!!!";
 			return;
 		}
+		currentLogFile= new File(logDir, LOG_NAME + ".log");
+		Log.i("myyangbin", "currentLogFile=="+currentLogFile.getAbsolutePath());
 		if (out == null) {
 			try {
+				Log.i("myyangbin", "outpath"+currentLogFile.getAbsolutePath());
 				this.out = new PrintWriter(new FileOutputStream(currentLogFile, true));
-			} catch (FileNotFoundException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
-				Log.e(TAG, "out is NULL!!!");
 			}
 		}
+		Log.i("myyangbin", "out=="+out);
 		if (currentLogFile.length() > maxLen) {
+			Log.i("myyangbin", "out>MaxLen");
 			out.close();
 			if (curentIndex > maxCount) {
 				curentIndex = 0;
@@ -82,14 +86,19 @@ public class LogUtils {
 				curentIndex++;
 			}
 			try {
+				Log.i("myyangbin", "new out"+curentIndex+"：："+logDir.getAbsolutePath());
 				this.currentLogFile = new File(logDir, LOG_NAME + curentIndex + ".log");
 				this.out = new PrintWriter(this.currentLogFile);
-			} catch (IOException e) {
-				Log.d(TAG, "File not found: " + currentLogFile.getAbsolutePath());
+			} catch (Exception e) {
+				e.printStackTrace();
 				return;
 			}
 		}
+			
 		tag += ":";
+		if(sdf==null){
+			 sdf= new SimpleDateFormat("yyyyMMdd-HH-mm-ss");
+		}
 		out.println(sdf.format(new Date(System.currentTimeMillis())) + ": " + tag + "___" + log);
 		out.flush();
 	}

@@ -242,7 +242,7 @@ public class RecordQueryActivity extends BaseActivity {
 		}else{
 			if(record_native.isChecked()){//本地
 				Intent intent = new Intent();
-				intent.setClass(this, LocalRecordActivity.class);
+				intent.setClass(this, LocalVideoListActivity.class);
 				intent.putExtra("start_time", queryStartTime);
 				intent.putExtra("end_time", queryEndTime);
 				startActivity(intent);

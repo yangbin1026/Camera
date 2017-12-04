@@ -98,21 +98,8 @@ public class Constants {
 		public static final int JNET_EET_EVENT_SERVER_LIST = 305; // 获取服务器列表,iDataType=eJNVFileType
 	}
 	
-	/**
-	typedef enum e_NV_UserLogin_Return
-	{
-		E_NV_uSerLogin_Login_Success		= 0,	// 登录成功
-		E_NV_UserLogin_Analysis				= 1,	// 解析错误
-		E_NV_UserLogin_Information_Error	= 2,	// 用户名或用户密码错误
-		E_NV_UserLogin_ReLogin_Error		= 3,	// 重复登录
-		E_NV_UserLogin_Blacklist_Error		= 4,	// 黑名单
-		E_NV_UserLogin_Version_Error		= 5,	// 版本太老
-		E_NV_UserLogin_OverMaxUserNumber	= 6,	// 超过最大用户数
-	}e_NV_UserLogin_Return;
-	 */
-	//登陆回调
+	//登陆失败错误码
 	public static final class LGOINFLAG {
-		public static final int LOGIN_SUCCESS			= 0;
 		public static final int ANALYSIS_ERROR			= 1;
 		public static final int INFOMATION_ERROR		= 2;
 		public static final int RELOGIN_ERROR			= 3;
@@ -137,7 +124,6 @@ public class Constants {
 	public static boolean SCREEN_CHANGE_STATUS = false;//是否切已换屏幕方向		false：否	 true是
 	public static boolean IS_ACTIVE = true;//该应用程序是否处于前台运行状态 true：前台 false 后台
 	
-	public static Activity INSTANCE; 
 	
 	
 	public static List<ArrayList<ServerInfo>> SERVICE_LIST = new ArrayList<ArrayList<ServerInfo>>();//服务器信息

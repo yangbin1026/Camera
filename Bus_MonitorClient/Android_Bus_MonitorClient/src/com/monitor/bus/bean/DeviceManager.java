@@ -3,7 +3,9 @@ package com.monitor.bus.bean;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.utils.LogUtils;
@@ -12,6 +14,8 @@ import com.monitor.bus.utils.LogUtils;
 public class DeviceManager {
 	private static final String TAG= DeviceManager.class.getSimpleName();
 	private List<DeviceInfo> mDeviceList = new ArrayList<DeviceInfo>();//设备列表
+	//key:parentId
+	private Map<String,ArrayList<DeviceInfo>> mDeviceMap=new HashMap<String, ArrayList<DeviceInfo>>();
 	static DeviceManager manager;
 	private DeviceManager(){
 		
@@ -29,20 +33,19 @@ public class DeviceManager {
 			return;
 		}
 		mDeviceList.add(info);
-		LogUtils.getInstance().localLog(TAG, ""+info.toString());
+		if(mDeviceMap.containsKey(info.getParentId())){
+			mDeviceMap.get(info.getParentId()).add(info);
+			LogUtils.getInstance().localLog(TAG, "addDevcieInfo"+info.toString());
+		}else{
+			ArrayList<DeviceInfo> list=new ArrayList<DeviceInfo>();
+			list.add(info);
+			mDeviceMap.put(info.getParentId(), list);
+			LogUtils.getInstance().localLog(TAG, "addDevcieList"+info.toString());
+		}
 	}
 	public void setDeviceList(List<DeviceInfo> list){
 		mDeviceList=list;
-	}
-	public void sort(){
-		Collections.sort(mDeviceList, new Comparator<DeviceInfo>() {
-
-			@Override
-			public int compare(DeviceInfo lhs, DeviceInfo rhs) {
-
-				return rhs.getOnLine() - lhs.getOnLine();
-			}
-		});
+		LogUtils.getInstance().localLog(TAG, "setDeviceList"+list.size());
 	}
 	public boolean removeFirst(){
 		if(mDeviceList.size()>0){
@@ -72,14 +75,11 @@ public class DeviceManager {
 		}
 		return list;
 	}
-	public ArrayList<DeviceInfo> getDeviceInfoByParentId(String parentId){
-		ArrayList<DeviceInfo> deviceList = new ArrayList<DeviceInfo>();
-		for (DeviceInfo info :mDeviceList) {
-			if (parentId.equals(info.getParentId())) {
-				deviceList.add(info);
-			}
+	public ArrayList<DeviceInfo> getListByPId(String parentId){
+		if(!mDeviceMap.containsKey(parentId)){
+			return new ArrayList<DeviceInfo>();
 		}
-		return deviceList;
+		return mDeviceMap.get(parentId);
 	}
 	
 

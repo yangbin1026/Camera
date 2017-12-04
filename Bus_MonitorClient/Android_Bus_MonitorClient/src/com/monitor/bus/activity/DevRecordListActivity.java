@@ -48,7 +48,7 @@ public class DevRecordListActivity extends BaseActivity {
 				devRecordInfo.setGuId(guId);
 				Intent intent = new Intent();
 				intent.putExtra("devRecordInfo", devRecordInfo);
-				intent.setClass(DevRecordListActivity.this, RecordActivity.class);
+				intent.setClass(DevRecordListActivity.this, ReplayActivity.class);
 				startActivity(intent);
 			}
 		});

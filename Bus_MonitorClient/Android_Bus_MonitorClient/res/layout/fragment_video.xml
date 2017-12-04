@@ -33,7 +33,7 @@
             android:layout_width="50dp"
             android:layout_height="20dp"
             android:layout_toRightOf="@id/tv_all_device"
-            android:background="@drawable/bg_select_left"
+            android:background="@drawable/bg_select_right"
             android:gravity="center"
             android:text="online"
             android:textColor="@color/white"

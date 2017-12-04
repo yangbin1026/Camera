@@ -26,7 +26,7 @@ import com.monitor.bus.view.MyVideoView;
  * 录像回放Activity
  *
  */
-public class RecordActivity extends BaseActivity implements OnTouchListener{
+public class ReplayActivity extends BaseActivity implements OnTouchListener{
 	private static String TAG = "RecordActivity";
 	private MyVideoView myVideoView;
 	private Button pauseButton;//暂停按钮
@@ -194,9 +194,4 @@ public class RecordActivity extends BaseActivity implements OnTouchListener{
 		 
 	 }
 	
-		@Override
-		public void onConfigurationChanged(Configuration newConfig) {
-			Constants.SCREEN_CHANGE_STATUS = true;
-			super.onConfigurationChanged(newConfig);
-		}
 }
