@@ -79,18 +79,6 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".DeviceListActiviy"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".MainListActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="SettingActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".LocalVideoListActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -99,21 +87,11 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".FilelistActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".RecordQueryActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ReplayActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".BaseActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".AlarmListActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
@@ -127,19 +105,9 @@
             android:name=".UserGoogleMapActivity"
             android:alwaysRetainTaskState="true"
             android:screenOrientation="sensorPortrait" />
-        <activity
-            android:name=".FilterOptionActivity"
-            android:alwaysRetainTaskState="true"
-            android:screenOrientation="sensorPortrait" >
-        </activity>
-        <activity
-            android:name=".CheckBoxPreferActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
-        </activity>
 
         <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote"/>
-        <service android:name="com.monitor.bus.service.MonitorAppStatus" />
+        <service android:name="com.monitor.bus.service.CpuService" />
     </application>
 
 </manifest>

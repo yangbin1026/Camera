@@ -24,11 +24,11 @@ import android.widget.Toast;
 import com.jniUtil.JNVPlayerUtil;
 import com.jniUtil.MyUtil;
 import com.monitor.bus.activity.R;
+import com.monitor.bus.bean.DevRecordInfo;
+import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.database.DatabaseHelper;
-import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.utils.LogUtils;
-import com.monitor.bus.model.DevRecordInfo;
 import com.monitor.bus.view.MyVideoView;
 
 /**
@@ -495,7 +495,7 @@ public  class VideoPlayControl {
 			}
 			String times = MyUtil.getCurrentDateTime(Constants.YMD_HMSS_FORMAT);// 当前时间 yyyyMMddHHmmssSSS格式
 
-			File f = new File(imageFilePath + times + Constants.IMAGE_FILE_FORMAT);// 文件路径
+			File f = new File(imageFilePath + times +".jpg");// 文件路径
 			if(videoView.saveBitmap(f)){//抓拍成功
 				if(myToast == null){
 					myToast = Toast.makeText(currentContext, R.string.capture_success, Toast.LENGTH_SHORT);

@@ -12,12 +12,11 @@ import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.UserMapActivity;
 import com.monitor.bus.activity.RealTimeVideoActivity;
 import com.monitor.bus.adapter.DeviceListAdapter;
-import com.monitor.bus.adapter.MyExpandableListAdapter;
+import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.control.LoginEventControl;
-import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 
@@ -95,7 +94,7 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 				DeviceInfo info= mDeviceListAdapter.getDataByPosition(position);
 				if(info.getIsDeviceGroup().equals("1")){
 					//组
-					updataByPid((String)arg1.getTag());
+					updataByPid(info.getGroupId());
 				}else{
 					Intent intent=new Intent(getActivity(),RealTimeVideoActivity.class);
 					info.setCurrentChn(1);
@@ -165,7 +164,7 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			if (action.equals("ACTION_NAME")) {
-				int eventType = intent.getIntExtra("eventType", 0);//
+				int eventType = intent.getIntExtra(Constants.WHAT_LOGIN_EVENT_TYPE, 0);//
 				if (!Constants.IS_CASCADE_SERVER && eventType == CALLBACKFLAG.GET_EVENT_DEVLIST
 						|| Constants.IS_CASCADE_SERVER && eventType == CALLBACKFLAG.JNET_EET_EVENT_SERVER_LIST) {
 					//获取成功

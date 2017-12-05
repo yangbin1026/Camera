@@ -16,9 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.jniUtil.MyUtil;
+import com.monitor.bus.bean.DevRecordInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.control.VideoPlayControl;
-import com.monitor.bus.model.DevRecordInfo;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.view.MyVideoView;
 
@@ -38,7 +38,6 @@ public class ReplayActivity extends BaseActivity implements OnTouchListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		LogUtils.i(TAG, "+++++++++++++++++回放Activity onCreate");
 		super.onCreate(savedInstanceState);
-		MyUtil.initTitleName(this,R.layout.record_stream,R.string.record_stream);
 		Constants.STREAM_PLAY_TYPE = 2;//设置播放类型为录像回放
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
 		Intent intent=this.getIntent();

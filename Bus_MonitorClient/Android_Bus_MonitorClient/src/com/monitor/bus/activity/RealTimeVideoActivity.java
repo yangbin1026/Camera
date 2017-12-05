@@ -36,10 +36,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jniUtil.MyUtil;
+import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.control.VideoPlayControl;
 import com.monitor.bus.database.DatabaseHelper;
-import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.view.MyVideoView;
 
@@ -99,191 +99,16 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 		playControl = new VideoPlayControl(this, myVideoView);
 		
 		if (currentDeviceInfo != null) {// 标题栏设置: 设备名称-当前通道号
-			text_tilte_name.setText(currentDeviceInfo.getDeviceName() + " - " + Constants.CHANNEL_PREFIX_NAME + currentDeviceInfo.getCurrentChn());
+			text_tilte_name.setText(currentDeviceInfo.getDeviceName() + " - " + "channel_" + currentDeviceInfo.getCurrentChn());
 			mGestureDetector = new GestureDetector(new MySimpleGesture());
 			myVideoView.setLongClickable(true);
 		}
-		/*-----------录像-------------*/
-		recordButton = (Button) findViewById(R.id.record_button);
-		recordButton.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (isNormalPlay()) {// 正常播放
-					if (event.getAction() == MotionEvent.ACTION_UP) {// 手指抬起
-						if (record_state) {// 录像已开启
-							recordButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.close));
-							record_state = false;
-							try {
-								// 停止录像
-								stopRecordVideo();
-							} catch (ParseException e) {
-								e.printStackTrace();
-								Log.e(TAG, "++++++++++录像失败！");
-							}
-						} else {// 录像已关闭
-
-							// 重新设置按下时的背景图片
-							recordButton.setBackgroundDrawable(getResources()
-									.getDrawable(R.drawable.open));
-							record_state = true;
-							// 开始录像
-							startRecordVideo();
-						}
-					}
-				}
-				return false;
-			}
-		});
-
-		/*-----------监听------------ */
-		monitorButton = (Button) findViewById(R.id.monitor_button);
-
-		monitorButton.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (isNormalPlay()) {// 正常播放
-					if (event.getAction() == MotionEvent.ACTION_UP) {// 手指抬起
-						if (Constants.ISOPEN_AUDIO) {// 监听已开启
-							monitorButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.close));
-							Constants.ISOPEN_AUDIO = false;
-							// 停止监听
-							playControl.track.stop();// 停止音频
-						} else {// 监听已关闭
-							// 重新设置按下时的背景图片
-							monitorButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.open));
-							Constants.ISOPEN_AUDIO = true;
-							// 开始监听
-							playControl.track.play();// 启动本地音频读取
-						}
-					}
-				}
-				return false;
-			}
-		});
-		/*-----------对讲------------*/
-		talkButton = (Button) findViewById(R.id.talk_button);
-		talkButton.setOnTouchListener(new OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (isNormalPlay()) {// 正常播放
-					if (event.getAction() == MotionEvent.ACTION_UP) {// 手指抬起
-						if (Constants.ISOPEN_TALK) {// 对讲已开启
-							talkButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.close));
-							Constants.ISOPEN_TALK = false;
-							// 停止对讲
-							playControl.closeTalk();
-							playControl.audioRecord.stop();
-						} else {// 对讲已关闭
-
-							// 重新设置按下时的背景图片
-							talkButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.open));
-							Constants.ISOPEN_TALK = true;
-							// 打开对讲
-							playControl.audioRecord.startRecording();// 开启录音
-							playControl.openTalk();// 打开对讲
-						}
-					}
-				}
-				return false;
-			}
-		});
-
-		/*-----------镜像------------*/
-		
-		mirrorButton.setOnTouchListener(new OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (isNormalPlay()) {// 正常播放
-					if (event.getAction() == MotionEvent.ACTION_UP) {// 手指抬起
-						if (Constants.DERECTION_STATE) {// 正
-
-							mirrorButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.close));
-							// 重新设置按下时的背景图片
-							Constants.DERECTION_STATE = false;
-							playControl.AVP_SetMirror(Constants.MIRROE_REVERSE);
-						} else {// 反
-								// 重新设置按下时的背景图片
-							Constants.DERECTION_STATE = true;
-							mirrorButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.open));
-							playControl.AVP_SetMirror(Constants.MIRROE_NORMAL);
-						}
-					}
-				}
-				return false;
-			}
-		});
-		
-		/*--------------云台管理-------------------------*/
 		ptzUp = (ImageButton) findViewById(R.id.ptzUp);
 		ptzDown = (ImageButton) findViewById(R.id.ptzDown);
 		ptzLeft = (ImageButton) findViewById(R.id.ptzLeft);
 		ptzRight = (ImageButton) findViewById(R.id.ptzRight);
 
-		ptzUp.setOnTouchListener(new OnTouchListener() {// 云台-上
 
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					ptzUp.setBackgroundDrawable(getResources().getDrawable(R.drawable.up_1));
-					yunCtrl(Constants.PTZ_DERECTION.PTZ_DOWN);
-
-				} else if (event.getAction() == MotionEvent.ACTION_UP) {
-					ptzUp.setBackgroundDrawable(getResources().getDrawable(R.drawable.up_2));
-					yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
-				}
-				return false;
-			}
-		});
-
-		ptzDown.setOnTouchListener(new OnTouchListener() {// 云台-下
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					ptzDown.setBackgroundDrawable(getResources().getDrawable(R.drawable.down_1));
-					yunCtrl(Constants.PTZ_DERECTION.PTZ_DOWN);
-
-				} else if (event.getAction() == MotionEvent.ACTION_UP) {
-					ptzDown.setBackgroundDrawable(getResources().getDrawable(R.drawable.down_2));
-					yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
-				}
-				return false;
-			}
-		});
-
-		ptzLeft.setOnTouchListener(new OnTouchListener() {// 云台-左
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					ptzLeft.setBackgroundDrawable(getResources().getDrawable(R.drawable.left_1));
-					yunCtrl(Constants.PTZ_DERECTION.PTZ_LEFT);
-
-				} else if (event.getAction() == MotionEvent.ACTION_UP) {
-					ptzLeft.setBackgroundDrawable(getResources().getDrawable(R.drawable.left_2));
-					yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
-				}
-				return false;
-			}
-		});
-
-		ptzRight.setOnTouchListener(new OnTouchListener() {// 云台-右
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					ptzRight.setBackgroundDrawable(getResources().getDrawable(R.drawable.right_1));
-					yunCtrl(Constants.PTZ_DERECTION.PTZ_RIGHT);
-
-				} else if (event.getAction() == MotionEvent.ACTION_UP) {
-					ptzRight.setBackgroundDrawable(getResources().getDrawable(R.drawable.right_2));
-					yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
-				}
-				return false;
-			}
-		});
 		playControl.initVideoPlay(intent);//初始化界面
 		super.onResume();
 	}
@@ -324,6 +149,193 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 		myVideoView.videoWidth = 0;
 		myVideoView.videoHeight = 0;
 		super.onStop();
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		switch (arg0.getId()) {
+		case R.id.aboutLayoutId:
+//录像
+			if (isNormalPlay()) {// 正常播放
+				if (event.getAction() == MotionEvent.ACTION_UP) {// 手指抬起
+					if (record_state) {// 录像已开启
+						recordButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.close));
+						record_state = false;
+						try {
+							// 停止录像
+							stopRecordVideo();
+						} catch (ParseException e) {
+							e.printStackTrace();
+							Log.e(TAG, "++++++++++录像失败！");
+						}
+					} else {// 录像已关闭
+
+						// 重新设置按下时的背景图片
+						recordButton.setBackgroundDrawable(getResources()
+								.getDrawable(R.drawable.open));
+						record_state = true;
+						// 开始录像
+						startRecordVideo();
+					}
+				}
+			}
+			return false;
+		
+			break;
+		case R.id.aboutLayoutId:
+//监听
+			if (isNormalPlay()) {// 正常播放
+				if (event.getAction() == MotionEvent.ACTION_UP) {// 手指抬起
+					if (Constants.ISOPEN_AUDIO) {// 监听已开启
+						monitorButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.close));
+						Constants.ISOPEN_AUDIO = false;
+						// 停止监听
+						playControl.track.stop();// 停止音频
+					} else {// 监听已关闭
+						// 重新设置按下时的背景图片
+						monitorButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.open));
+						Constants.ISOPEN_AUDIO = true;
+						// 开始监听
+						playControl.track.play();// 启动本地音频读取
+					}
+				}
+			}
+			return false;
+		
+			break;
+		case R.id.aboutLayoutId:
+//对讲
+			if (isNormalPlay()) {// 正常播放
+				if (event.getAction() == MotionEvent.ACTION_UP) {// 手指抬起
+					if (Constants.ISOPEN_TALK) {// 对讲已开启
+						talkButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.close));
+						Constants.ISOPEN_TALK = false;
+						// 停止对讲
+						playControl.closeTalk();
+						playControl.audioRecord.stop();
+					} else {// 对讲已关闭
+
+						// 重新设置按下时的背景图片
+						talkButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.open));
+						Constants.ISOPEN_TALK = true;
+						// 打开对讲
+						playControl.audioRecord.startRecording();// 开启录音
+						playControl.openTalk();// 打开对讲
+					}
+				}
+			}
+			return false;
+		
+			break;
+		case R.id.aboutLayoutId:
+//镜像
+			if (isNormalPlay()) {// 正常播放
+				if (event.getAction() == MotionEvent.ACTION_UP) {// 手指抬起
+					if (Constants.DERECTION_STATE) {// 正
+
+						mirrorButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.close));
+						// 重新设置按下时的背景图片
+						Constants.DERECTION_STATE = false;
+						playControl.AVP_SetMirror(Constants.MIRROE_REVERSE);
+					} else {// 反
+							// 重新设置按下时的背景图片
+						Constants.DERECTION_STATE = true;
+						mirrorButton.setBackgroundDrawable(getResources().getDrawable(R.drawable.open));
+						playControl.AVP_SetMirror(Constants.MIRROE_NORMAL);
+					}
+				}
+			}
+			return false;
+		
+			break;
+		case R.id.aboutLayoutId:
+			break;
+	
+		default:
+			break;
+		}
+		
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		switch (v.getId()) {
+		case R.id.aboutLayoutId:
+//上
+			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				ptzUp.setBackgroundDrawable(getResources().getDrawable(R.drawable.up_1));
+				yunCtrl(Constants.PTZ_DERECTION.PTZ_DOWN);
+
+			} else if (event.getAction() == MotionEvent.ACTION_UP) {
+				ptzUp.setBackgroundDrawable(getResources().getDrawable(R.drawable.up_2));
+				yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
+			}
+			return false;
+		
+			break;
+		case R.id.aboutLayoutId:
+//xia
+			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				ptzDown.setBackgroundDrawable(getResources().getDrawable(R.drawable.down_1));
+				yunCtrl(Constants.PTZ_DERECTION.PTZ_DOWN);
+
+			} else if (event.getAction() == MotionEvent.ACTION_UP) {
+				ptzDown.setBackgroundDrawable(getResources().getDrawable(R.drawable.down_2));
+				yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
+			}
+			return false;
+		
+			
+			break;
+		case R.id.aboutLayoutId:
+//zuo
+			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				ptzLeft.setBackgroundDrawable(getResources().getDrawable(R.drawable.left_1));
+				yunCtrl(Constants.PTZ_DERECTION.PTZ_LEFT);
+
+			} else if (event.getAction() == MotionEvent.ACTION_UP) {
+				ptzLeft.setBackgroundDrawable(getResources().getDrawable(R.drawable.left_2));
+				yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
+			}
+			return false;
+		
+			break;
+		case R.id.aboutLayoutId:
+//you
+			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				ptzRight.setBackgroundDrawable(getResources().getDrawable(R.drawable.right_1));
+				yunCtrl(Constants.PTZ_DERECTION.PTZ_RIGHT);
+
+			} else if (event.getAction() == MotionEvent.ACTION_UP) {
+				ptzRight.setBackgroundDrawable(getResources().getDrawable(R.drawable.right_2));
+				yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
+			}
+			return false;
+		
+			break;
+		case R.id.aboutLayoutId:
+			
+			break;
+
+		default:
+			break;
+		}
+		switch(event.getAction()){
+		case MotionEvent.ACTION_DOWN:
+			x = event.getX();
+			y = event.getY();
+			break;
+		case MotionEvent.ACTION_UP:
+			yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
+			break;
+		case MotionEvent.ACTION_MOVE:
+			mx = (int) (event.getRawX() - x);
+			my = (int) (event.getRawY() - y);
+			//v.layout(mx, my, mx + v.getWidth(), my + v.getHeight());
+			break;
+		}
+		return mGestureDetector.onTouchEvent(event);
+	
 	}
 
 	@Override
@@ -445,25 +457,6 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 		return true;
 	}
 
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		switch(event.getAction()){
-		case MotionEvent.ACTION_DOWN:
-			x = event.getX();
-			y = event.getY();
-			break;
-		case MotionEvent.ACTION_UP:
-			yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
-			break;
-		case MotionEvent.ACTION_MOVE:
-			mx = (int) (event.getRawX() - x);
-			my = (int) (event.getRawY() - y);
-			//v.layout(mx, my, mx + v.getWidth(), my + v.getHeight());
-			break;
-		}
-		return mGestureDetector.onTouchEvent(event);
-
-	}
 	/**
 	 * 切换横竖屏方式
 	 */
@@ -534,16 +527,5 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 	public void videoFang(View view){
 		myVideoView.displayHeight += 90;
 		myVideoView.displayWidth += 90;
-	}
-	
-
-	@Override
-	public void onClick(View arg0) {
-		switch (arg0.getId()) {
-
-		default:
-			break;
-		}
-		
 	}
 }

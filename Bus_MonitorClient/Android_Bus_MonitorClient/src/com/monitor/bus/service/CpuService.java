@@ -15,7 +15,7 @@ import com.monitor.bus.utils.LogUtils;
  * @author mzp
  * 
  */
-public class MonitorAppStatus extends Service {
+public class CpuService extends Service {
 	private static final String TAG = "MonitorAppStatus";
 	//定义Handler对象
 	Handler mhandler = null;

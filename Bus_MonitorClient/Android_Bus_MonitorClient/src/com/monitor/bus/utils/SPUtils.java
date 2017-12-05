@@ -1,6 +1,6 @@
 package com.monitor.bus.utils;
 
-import com.monitor.bus.model.LoginInfo;
+import com.monitor.bus.bean.LoginInfo;
 
 import android.content.Context;
 import android.content.SharedPreferences;

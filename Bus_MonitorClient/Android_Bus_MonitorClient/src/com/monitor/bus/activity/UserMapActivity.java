@@ -20,9 +20,9 @@ import com.baidu.mapapi.model.LatLng;
 import com.jniUtil.MyUtil;
 import com.monitor.bus.adapter.SpinnerBusAdapter;
 import com.monitor.bus.bdmap.ErrorCodeReceiver;
+import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
-import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 
@@ -99,7 +99,6 @@ public class UserMapActivity extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		mapView.onDestroy();
-		// unregisterReceiver(mBroadcastReceiver);
 		unregisterReceiver(errorCodeReceiver);
 		IsExit = true;
 		guid = "";

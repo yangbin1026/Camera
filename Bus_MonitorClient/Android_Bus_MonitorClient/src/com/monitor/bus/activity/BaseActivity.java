@@ -9,7 +9,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.monitor.bus.adapter.MyNotification;
+import com.monitor.bus.adapter.NotifycationManager;
 import com.monitor.bus.consts.Constants;
 
 /**
@@ -19,12 +19,12 @@ import com.monitor.bus.consts.Constants;
 public class BaseActivity extends Activity {
 	private static String TAG = "BaseActivity";
 	
-	private MyNotification myNotification;//引用通知
+	private NotifycationManager myNotification;//引用通知
 	public boolean isCompleteExit = false;//是否完全退出程序
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
-		myNotification = new MyNotification(this);
+		myNotification = new NotifycationManager(this);
 		
 		super.onCreate(savedInstanceState);
 	}
@@ -34,11 +34,9 @@ public class BaseActivity extends Activity {
 		super.onStop();
 		if (!isAppOnForeground()) {
 			// app 进入后台
-			  //Constants.INSTANCE = this;
 			if(!isCompleteExit){//
 				if(Constants.IS_ACTIVE){
 					myNotification.showNotification(null);
-					// 全局变量
 					Constants.IS_ACTIVE = false; // 记录当前已经进入后台
 				}
 			}
@@ -61,9 +59,6 @@ public class BaseActivity extends Activity {
 	 * @return
 	 */
 	public boolean isAppOnForeground() {
-		// Returns a list of application processes that are running on the
-		// device
-
 		ActivityManager activityManager = (ActivityManager) getApplicationContext()
 				.getSystemService(Context.ACTIVITY_SERVICE);
 		String packageName = getApplicationContext().getPackageName();

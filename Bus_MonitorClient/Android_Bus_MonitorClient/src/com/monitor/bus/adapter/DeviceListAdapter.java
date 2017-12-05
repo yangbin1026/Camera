@@ -13,14 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.monitor.bus.activity.R;
-import com.monitor.bus.model.AlarmInfo;
-import com.monitor.bus.model.DeviceInfo;
+import com.monitor.bus.bean.AlarmInfo;
+import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.utils.MUtils;
 
 /**
  * 显示报警信息的列表适配器
  */
-/* 自定义的Adapter，继承android.widget.BaseAdapter */
 public class DeviceListAdapter extends BaseAdapter{
 	private LayoutInflater mInflater;
 	private ArrayList<DeviceInfo> mList =new ArrayList<DeviceInfo>();

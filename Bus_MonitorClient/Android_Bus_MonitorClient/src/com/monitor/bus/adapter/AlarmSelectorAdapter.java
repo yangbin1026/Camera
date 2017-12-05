@@ -11,7 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.monitor.bus.activity.R;
-import com.monitor.bus.model.AlarmInfo;
+import com.monitor.bus.bean.AlarmInfo;
 import com.monitor.bus.utils.MUtils;
 
 /**

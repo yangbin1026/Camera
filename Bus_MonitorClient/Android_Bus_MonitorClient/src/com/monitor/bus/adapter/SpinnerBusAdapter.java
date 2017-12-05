@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.monitor.bus.activity.R;
-import com.monitor.bus.model.DeviceInfo;
+import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.utils.LogUtils;
 
 /**

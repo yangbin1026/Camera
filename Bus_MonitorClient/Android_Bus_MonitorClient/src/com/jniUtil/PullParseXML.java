@@ -14,11 +14,11 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.util.Log;
 import android.util.Xml;
 
+import com.monitor.bus.bean.DevRecordInfo;
+import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.DeviceManager;
+import com.monitor.bus.bean.ServerInfo;
 import com.monitor.bus.consts.Constants;
-import com.monitor.bus.model.DeviceInfo;
-import com.monitor.bus.model.DevRecordInfo;
-import com.monitor.bus.model.ServerInfo;
 import com.monitor.bus.utils.LogUtils;
 
 /**
@@ -39,6 +39,7 @@ public class PullParseXML {
 			switch (event) {
 			case XmlPullParser.START_DOCUMENT:// 判断当前事件是否是文档开始事件
 				//Constants.BUSDEVICEDATA.clear();
+				LogUtils.getInstance().localLog("PullParseXML", "START_DOCUMENT");
 				break;
 			case XmlPullParser.START_TAG:// 判断当前事件是否是标签元素开始事件
 				if (!"device".equals(parser.getName())) {
@@ -146,9 +147,9 @@ public class PullParseXML {
 		}
 	}
 
-	private static boolean isDeviceValid(DeviceInfo busInfo) {
-		if( "".equals(busInfo.getCmdServerID()) 
-				|| "".equals(busInfo.getMediaServerID())){
+	private static boolean isDeviceValid(DeviceInfo deviceInfo) {
+		if( "".equals(deviceInfo.getCmdServerID()) 
+				|| "".equals(deviceInfo.getMediaServerID())){
 			return false;
 		}
 		return true;

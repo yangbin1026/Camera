@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.utils.LogUtils;
 
 
@@ -27,7 +26,10 @@ public class DeviceManager {
 		}
 		return manager;
 	}
-	
+	public void init(){
+		mDeviceList = new ArrayList<DeviceInfo>();
+		mDeviceMap=new HashMap<String, ArrayList<DeviceInfo>>();
+	}
 	public void addDeviceInfo(DeviceInfo info){
 		if(info==null){
 			return;
@@ -35,12 +37,12 @@ public class DeviceManager {
 		mDeviceList.add(info);
 		if(mDeviceMap.containsKey(info.getParentId())){
 			mDeviceMap.get(info.getParentId()).add(info);
-			LogUtils.getInstance().localLog(TAG, "addDevcieInfo"+info.toString());
+			LogUtils.getInstance().localLog(TAG, "addAsDevcieInfo  "+info.toString());
 		}else{
 			ArrayList<DeviceInfo> list=new ArrayList<DeviceInfo>();
 			list.add(info);
 			mDeviceMap.put(info.getParentId(), list);
-			LogUtils.getInstance().localLog(TAG, "addDevcieList"+info.toString());
+			LogUtils.getInstance().localLog(TAG, "addAsDir  "+info.toString());
 		}
 	}
 	public void setDeviceList(List<DeviceInfo> list){
@@ -56,6 +58,14 @@ public class DeviceManager {
 	}
 	public List<DeviceInfo> getDeviceList(){
 		return mDeviceList;
+	}
+	public DeviceInfo getDeviceInfoById(String id){
+		for(DeviceInfo info: mDeviceList){
+			if (id.equals(info.getGuId())) {
+				return info;
+			}
+		}
+		return null;
 	}
 	public int getSize(){
 		return mDeviceList.size();

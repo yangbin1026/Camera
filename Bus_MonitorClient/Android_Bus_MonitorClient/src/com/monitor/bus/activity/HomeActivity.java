@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.monitor.bus.activity.fragment.SettingFragment;
 import com.monitor.bus.adapter.MyFragmentPageAdapter;
+import com.monitor.bus.bean.DeviceManager;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.activity.fragment.AlarmFragment;
 import com.monitor.bus.activity.fragment.BaseFragment;
 import com.monitor.bus.activity.fragment.PhotoFragment;
@@ -38,11 +40,14 @@ public class HomeActivity extends FragmentActivity implements OnClickListener{
 	private ImageButton ib_2;
 	private ImageButton ib_3;
 	private ImageButton ib_4;
+	
+	long lastBackPress;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
+		DeviceManager.getInstance().init();
 		initData();
 		initView();
 
@@ -106,6 +111,11 @@ public class HomeActivity extends FragmentActivity implements OnClickListener{
 	@Override
 	public void onBackPressed() {
 		if (currentFragment.onBackPress()) {
+			return;
+		}
+		if(System.currentTimeMillis()-lastBackPress>=2000){
+			MUtils.toast(this, "再点一次退出应用！");
+			lastBackPress=System.currentTimeMillis();
 			return;
 		}
 		super.onBackPressed();

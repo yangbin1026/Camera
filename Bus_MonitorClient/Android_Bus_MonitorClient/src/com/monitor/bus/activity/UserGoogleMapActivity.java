@@ -51,12 +51,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.jniUtil.GpsCorrection;
 import com.jniUtil.JNVPlayerUtil;
 import com.jniUtil.MyUtil;
-import com.jniUtil.SaveUtil;
 import com.monitor.bus.adapter.SpinnerBusAdapter;
+import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
-import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 
@@ -138,7 +137,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 		//			e.printStackTrace();
 		//		} 
 		
-		String f = SaveUtil.saveIfNeed(this, g_GpsFixFileName, R.raw.commondata);
+		String f = MUtils.saveIfNeed(this, g_GpsFixFileName, R.raw.commondata);
 		File targetFile = new File(f);
 		if(targetFile.exists())
 		{
@@ -146,7 +145,6 @@ public class UserGoogleMapActivity extends FragmentActivity{
 			boolean IsGpsCorrection = spf.getBoolean(Constants.GOOGLE_GPS_CORRRECTION, Constants.IS_GOOGLE_GPS_CORRRECTION);
 			if(IsGpsCorrection){
 				if(!GpsCorrection.getInstance().IsInitialize()){
-					//GpsCorrection.getInstance().initialize(targetFile.getPath());
 					IsAsyncLoadGpsCorrectionFile = true;
 					new AsyncLoadGpsCorrection(this,handler,targetFile.getPath()).execute();
 				}
@@ -555,7 +553,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 		public void onReceive(Context context, Intent intent) { 
 			String action = intent.getAction(); 
 			if(action.equals("ACTION_NAME")){ 
-				int eventType = intent.getIntExtra("eventType", 0);// 
+				int eventType = intent.getIntExtra(Constants.WHAT_LOGIN_EVENT_TYPE, 0);// 
 				if(isBroadcastRegister && eventType == CALLBACKFLAG.DEVICE_EVENT_GPS_INFO){//GPS基本
 
 					String gpsDevID = intent.getStringExtra("gpsDevID");

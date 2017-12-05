@@ -4,16 +4,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.monitor.bus.activity.FilterOptionActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.RealTimeVideoActivity;
 import com.monitor.bus.adapter.AlarmListAdapter;
 import com.monitor.bus.adapter.AlarmSelectorAdapter;
+import com.monitor.bus.bean.AlarmInfo;
 import com.monitor.bus.bean.AlarmManager;
+import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
-import com.monitor.bus.model.AlarmInfo;
-import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 
@@ -34,6 +33,7 @@ import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 
 /**
  * 警报页面
@@ -51,7 +51,7 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 	View popContentView;
 	PopupWindow mPopWindow;
 	
-	AlarmManager alarmManger = AlarmManager.getInstance();
+	AlarmManager alarmManger = AlarmManager.getInstance(getContext());
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,13 +65,15 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 	private void setTitle() {
 		TextView title = (TextView) contentView.findViewById(R.id.tilte_name);
 		title.setText(getContext().getString(R.string.alarm_list));
-		ImageButton ib_setting = (ImageButton) contentView.findViewById(R.id.ib_setting);
-		ib_setting.setVisibility(View.VISIBLE);
-		ib_setting.setOnClickListener(this);
+		Button bt_setting = (Button) contentView.findViewById(R.id.bt_setting);
+		bt_setting.setBackgroundDrawable(null);
+		bt_setting.setText("类型");
+		bt_setting.setVisibility(View.VISIBLE);
+		bt_setting.setOnClickListener(this);
 	}
 
 	private void initData() {
-		MUtils.toast(getContext(), "addSize:" + alarmManger.getSize());
+		MUtils.toast(getContext(), "addSize:" + alarmManger.getAlarmList().size());
 		alarmList.addAll(alarmManger.getAlarmList());
 		for (int i = 0; i < alarmList.size(); i++) {
 			// 报警类型是移动，震动提示用户
@@ -134,31 +136,9 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case 0:
-			onResume();
-			break;
-		case 1:
-			startFilterActivity();
-			break;
-		case 2:
-
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	/* 过滤报警信息 */
-	private void startFilterActivity() {
-		Intent intent = new Intent(getContext(), FilterOptionActivity.class);
-		startActivity(intent);
-	}
-
-	@Override
 	public void onClick(View arg0) {
 		switch (arg0.getId()) {
-		case R.id.ib_setting:
+		case R.id.bt_setting:
 			showPopWindow();
 			break;
 

@@ -13,11 +13,11 @@ import com.monitor.bus.activity.R;
  * @Description: Notification扩展类
  *
  */
-public class MyNotification {
+public class NotifycationManager {
 	private Intent notificationIntent;
 	private NotificationManager notificationManager;
 	private Activity currentContext;
-	public MyNotification(Activity context) {
+	public NotifycationManager(Activity context) {
 		currentContext = context;
 		  // 创建一个NotificationManager的引用
         notificationManager = (NotificationManager)context.getSystemService(android.content.Context.NOTIFICATION_SERVICE);

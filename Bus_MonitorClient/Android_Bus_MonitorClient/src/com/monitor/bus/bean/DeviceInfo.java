@@ -1,4 +1,4 @@
-package com.monitor.bus.model;
+package com.monitor.bus.bean;
 
 import java.io.Serializable;
 

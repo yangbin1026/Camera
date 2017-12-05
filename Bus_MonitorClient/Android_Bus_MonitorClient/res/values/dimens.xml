@@ -5,7 +5,7 @@
     <dimen name="padding_large">16dp</dimen>
     <dimen name="video_title_size">42dp</dimen>
  <!-- 实时流标题 -->
-    <dimen name="title_size">39dp</dimen>
+    <dimen name="title_size">43dp</dimen>
  <!-- 标题 -->
     <!-- 登陆 -->
     <dimen name="login_text_width">63dp</dimen>

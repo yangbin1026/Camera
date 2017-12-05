@@ -30,7 +30,6 @@ public class LocalVideoListActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		MyUtil.initTitleName(this, R.layout.local_listview, R.string.localFile);
 		localListView = (ListView) findViewById(R.id.localListView);
 		Intent intent = getIntent();
 		start_time = intent.getStringExtra("start_time");

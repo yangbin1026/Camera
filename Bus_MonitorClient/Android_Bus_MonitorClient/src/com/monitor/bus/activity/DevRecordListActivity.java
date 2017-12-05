@@ -15,10 +15,10 @@ import android.widget.ListView;
 
 import com.jniUtil.MyUtil;
 import com.monitor.bus.adapter.DevRecordListAdapter;
+import com.monitor.bus.bean.DevRecordInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.control.LoginEventControl;
-import com.monitor.bus.model.DevRecordInfo;
 import com.monitor.bus.utils.LogUtils;
 
 /**
@@ -33,7 +33,6 @@ public class DevRecordListActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		MyUtil.initTitleName(this,R.layout.local_listview,R.string.remote_record);
 		Intent intent = getIntent();
 		guId = intent.getStringExtra("guid");
 		recordListView = (ListView) findViewById(R.id.localListView);  
@@ -92,7 +91,7 @@ public class DevRecordListActivity extends BaseActivity {
         public void onReceive(Context context, Intent intent) { 
             String action = intent.getAction(); 
             if(action.equals("ACTION_NAME")){ 
-            	int eventType = intent.getIntExtra("eventType", 0);// 
+            	int eventType = intent.getIntExtra(Constants.WHAT_LOGIN_EVENT_TYPE, 0);// 
             	LogUtils.i(TAG, "========广播接收器=======当前登陆状态:"+eventType);
             	if(eventType == CALLBACKFLAG.GET_EVENT_RECLIST){
             		LoginEventControl.myProgress.dismiss();

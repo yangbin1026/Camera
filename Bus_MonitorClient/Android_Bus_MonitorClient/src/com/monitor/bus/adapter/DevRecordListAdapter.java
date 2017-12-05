@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.monitor.bus.activity.R;
-import com.monitor.bus.model.DevRecordInfo;
+import com.monitor.bus.bean.DevRecordInfo;
 /**
  * 显示设备端录像列表的适配器
  */

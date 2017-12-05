@@ -99,7 +99,7 @@ public class LogUtils {
 		if(sdf==null){
 			 sdf= new SimpleDateFormat("yyyyMMdd-HH-mm-ss");
 		}
-		out.println(sdf.format(new Date(System.currentTimeMillis())) + ": " + tag + "___" + log);
+		out.println(sdf.format(new Date(System.currentTimeMillis())) + ": " + tag + " " + log);
 		out.flush();
 	}
 

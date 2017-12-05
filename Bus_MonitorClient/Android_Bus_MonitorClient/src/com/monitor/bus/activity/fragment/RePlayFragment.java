@@ -4,49 +4,27 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.jniUtil.JNVPlayerUtil;
 import com.jniUtil.MyUtil;
-import com.monitor.bus.activity.DevRecordListActivity;
-import com.monitor.bus.activity.LocalVideoListActivity;
 import com.monitor.bus.activity.R;
-import com.monitor.bus.activity.RecordQueryActivity;
-import com.monitor.bus.adapter.SpinnerBusAdapter;
+import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.DeviceManager;
-import com.monitor.bus.consts.Constants;
-import com.monitor.bus.model.DeviceInfo;
 import com.monitor.bus.view.dialog.DateUtil;
 import com.monitor.bus.view.dialog.MyDataPickerDialog;
 import com.monitor.bus.view.dialog.MyDatePickerDialog;
 import com.monitor.bus.view.dialog.MyTimePickerDialog;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.DatePicker;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class RePlayFragment extends BaseFragment implements View.OnClickListener{
 	

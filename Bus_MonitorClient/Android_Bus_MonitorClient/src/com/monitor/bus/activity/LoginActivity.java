@@ -5,11 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,44 +22,26 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Process;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jniUtil.JNVPlayerUtil;
 import com.jniUtil.MyUtil;
+import com.monitor.bus.bean.LoginInfo;
 import com.monitor.bus.consts.Constants;
-import com.monitor.bus.consts.DBUser.User;
 import com.monitor.bus.control.LoginEventControl;
-import com.monitor.bus.database.DBHelper;
-import com.monitor.bus.model.LoginInfo;
-import com.monitor.bus.service.CurrentVersionInfo;
-import com.monitor.bus.service.GetUpdateJsonInfo;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.utils.SPUtils;
@@ -105,6 +83,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
+		
 		loginControl = new LoginEventControl(this);
 		JNVPlayerUtil.JNV_Init(Constants.SCREEN_COUNT);// 初始化so
 		initView();
@@ -215,9 +194,8 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		if (getServerVersion()) {
 
 			try {
-				currentCode = CurrentVersionInfo.getVerCode(this);
+				currentCode = MUtils.getVerCode(this);
 				if (newVerCode > currentCode) {
-					// 弹出更新提示对话框
 					showUpdateDialog();
 				}
 			} catch (Exception e) {
@@ -233,9 +211,9 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	private void showUpdateDialog() throws Exception {
 		StringBuffer sb = new StringBuffer();
 		sb.append("当前版本：");
-		sb.append(CurrentVersionInfo.getVerName(this));
+		sb.append(MUtils.getVerName(this));
 		sb.append("VerCode:");
-		sb.append(CurrentVersionInfo.getVerCode(this));
+		sb.append(MUtils.getVerCode(this));
 		sb.append("\n");
 		sb.append("发现新版本：");
 		sb.append(newVerName);
@@ -371,7 +349,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	private boolean getServerVersion() {
 		try {
 			LogUtils.i("--------------", "ip:" + Constants.SERVER_IP);
-			String newVerJSON = GetUpdateJsonInfo.getUpdateVerJSON(Constants.SERVER_IP + "version_jilian.json");
+			String newVerJSON = MUtils.getUpdateVerJSON(Constants.SERVER_IP + "version_jilian.json");
 			LogUtils.i("--------------", "newVerJSON:" + newVerJSON);
 			JSONArray jsonArray = new JSONArray(newVerJSON);
 			if (jsonArray.length() > 0) {
@@ -407,7 +385,6 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 			MUtils.toast(this, getString(R.string.network_error));
 			return;
 		}
-		if (isValidity()) {
 			try {
 				// 解析域名的IP地址
 				iAdd = InetAddress.getByName(ip);
@@ -427,37 +404,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 			}
 			int port = Integer.parseInt(portStr.equals("") ? "0" : portStr);
 			// 登录
-			LogUtils.getInstance().localLog(TAG, "doJNI_login" + u + p + ip + port);
+			LogUtils.getInstance().localLog(TAG, "JNI_login:" + u + p + ip + port);
 			JNVPlayerUtil.JNV_N_Login(ip, port, u, p, 30, loginControl, "callbackLonginEvent", 0);
-		} else {
-			AlertDialog.Builder builder = new Builder(this);
-			builder.setMessage(R.string.lose_efficacy);
-			builder.setTitle(R.string.prompt);
-			builder.setPositiveButton(R.string.confirm, new OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-					LoginActivity.this.finish();
-				}
-			});
-			builder.create().show();
-
-		}
 	}
-
-	/**
-	 * 验证有效性
-	 */
-	private boolean isValidity() {
-		if (Constants.IS_TEST_VERSION) {
-			long cur = System.currentTimeMillis();
-			Date date = MyUtil.stringToDate(Constants.EFFECTIVE_DATE, Constants.DATE_FORMAT);
-			long flag = date.getTime();
-			if (cur > flag) {
-				return false;
-			}
-		}
-		return true;
-	}
-
 }

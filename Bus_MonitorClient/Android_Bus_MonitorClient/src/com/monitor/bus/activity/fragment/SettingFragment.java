@@ -2,9 +2,9 @@ package com.monitor.bus.activity.fragment;
 
 import com.monitor.bus.activity.LoginActivity;
 import com.monitor.bus.activity.R;
+import com.monitor.bus.bean.LoginInfo;
 import com.monitor.bus.consts.Constants;
-import com.monitor.bus.model.LoginInfo;
-import com.monitor.bus.service.CurrentVersionInfo;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.utils.SPUtils;
 import com.monitor.bus.view.SwitchButton;
 
@@ -48,7 +48,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 	}
 	private void initData() {
 		try {
-			String version=CurrentVersionInfo.getVerName(getContext());
+			String version=MUtils.getVerName(getContext());
 			tv_version.setText(version);
 		} catch (Exception e) {
 			e.printStackTrace();
