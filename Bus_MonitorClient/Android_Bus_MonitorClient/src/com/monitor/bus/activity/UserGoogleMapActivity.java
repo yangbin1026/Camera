@@ -52,6 +52,7 @@ import com.jniUtil.GpsCorrection;
 import com.jniUtil.JNVPlayerUtil;
 import com.jniUtil.MyUtil;
 import com.monitor.bus.adapter.SpinnerBusAdapter;
+import com.monitor.bus.bdmap.GoogleCheckGPSAsyncTask;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
@@ -62,46 +63,48 @@ import com.monitor.bus.utils.MUtils;
 
 public class UserGoogleMapActivity extends FragmentActivity{ 
 
-	private static final String TAG = "MainActivity";
+	private static final String TAG = "UserGoogleMapActivity";
+	static final String Apptag = "Google";
+	final String g_GpsFixFileName = "commondata.gft";
+	public static final int MSG_WHAT_GET_GPS_START=1;
+	public static final int MSG_WHAT_NEW_LOCATION=2;
+	
+	private boolean IsAsynCheckGPS = false;//异步加载gps校验数据
+	private boolean busListEntrance = false;
+	private boolean isToOtherMap = false;
+	private boolean isBroadcastRegister = false;
+	private boolean isAnimationEnd = false;
+	
 
-	private GoogleMap mMap;
+	private GoogleMap mGoogleMap;
 	private Marker mMarker;
 	private LatLng prePoint;
 	private LatLng curPoint;
 	private Polyline mPolyline;
+	private LinearLayout myLayout;
+	
 	private LinkedList<LatLng> mLatLngs = new LinkedList<LatLng>();
-	private boolean isAnimationEnd = false;
-
 	private LocationManager locationManager;
 	private Location location;
 	private MyLocationSource mLocationSource;
 
-	static final String Apptag = "Google";
-	final String g_GpsFixFileName = "commondata.gft";
-
-	private List<DeviceInfo> listBus;
 	private DeviceInfo curCtlDevInfo = null; // 当前可操作的设备
 	private String guid = null;
 
-	private LinearLayout myLayout;
-	private Spinner queryDevList;
 	
-	protected boolean IsAsyncLoadGpsCorrectionFile = false;//异步加载gps校验数据
-
-	private boolean busListEntrance = false;
-	private boolean isToOtherMap = false;
-	private boolean isBroadcastRegister = false;
+	
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			switch(msg.what){
-			case 1:
+			case MSG_WHAT_GET_GPS_START:
 				LogUtils.i(TAG, "请求GPS信息参数："+guid); 
 				JNVPlayerUtil.JNV_N_GetGPSStart(guid);//请求下发GPS数据
 				break;
-			case 2:
+			case MSG_WHAT_NEW_LOCATION:
+				IsAsynCheckGPS = (Boolean) msg.obj;
 				//刷新位置
 				setUpMapIfNeeded();
-				mMap.setOnMapLongClickListener(new OnMapLongClickListener() {
+				mGoogleMap.setOnMapLongClickListener(new OnMapLongClickListener() {
 					public void onMapLongClick(LatLng arg0) {
 						openOptionsMenu();
 					}
@@ -145,15 +148,15 @@ public class UserGoogleMapActivity extends FragmentActivity{
 			boolean IsGpsCorrection = spf.getBoolean(Constants.GOOGLE_GPS_CORRRECTION, Constants.IS_GOOGLE_GPS_CORRRECTION);
 			if(IsGpsCorrection){
 				if(!GpsCorrection.getInstance().IsInitialize()){
-					IsAsyncLoadGpsCorrectionFile = true;
-					new AsyncLoadGpsCorrection(this,handler,targetFile.getPath()).execute();
+					IsAsynCheckGPS = true;
+					new GoogleCheckGPSAsyncTask(this,handler,targetFile.getPath()).execute();
 				}
 			}
 		}
 
-		if(!IsAsyncLoadGpsCorrectionFile){
+		if(!IsAsynCheckGPS){
 			setUpMapIfNeeded();
-			mMap.setOnMapLongClickListener(new OnMapLongClickListener() {
+			mGoogleMap.setOnMapLongClickListener(new OnMapLongClickListener() {
 				public void onMapLongClick(LatLng arg0) {
 					openOptionsMenu();
 				}
@@ -164,7 +167,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if(!IsAsyncLoadGpsCorrectionFile){
+		if(!IsAsynCheckGPS){
 			setUpMapIfNeeded();
 			registerBoradcastReceiver();//注册广播接收器
 			mLocationSource.onResume();
@@ -198,10 +201,10 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	 * 如果需要的话，设置地图
 	 */
 	public void setUpMapIfNeeded() {
-		if (mMap == null) {
-			mMap = ((SupportMapFragment) getSupportFragmentManager()
+		if (mGoogleMap == null) {
+			mGoogleMap = ((SupportMapFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
-			if (mMap != null) {
+			if (mGoogleMap != null) {
 				setUpMap();
 			}
 		}
@@ -212,10 +215,10 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	 */
 	private void setUpMap() {
 
-		mMap.getUiSettings().setRotateGesturesEnabled(false);//禁用旋转手势
-		mMap.setMyLocationEnabled(true);//开启本机位置图层
-		mMap.getUiSettings().setMyLocationButtonEnabled(false);
-		mMap.setLocationSource(mLocationSource);
+		mGoogleMap.getUiSettings().setRotateGesturesEnabled(false);//禁用旋转手势
+		mGoogleMap.setMyLocationEnabled(true);//开启本机位置图层
+		mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
+		mGoogleMap.setLocationSource(mLocationSource);
 		isAnimationEnd = false;
 		
 		setMarkerListener();
@@ -228,26 +231,11 @@ public class UserGoogleMapActivity extends FragmentActivity{
 
 		}else{//主菜单电子地图入口
 			busListEntrance = false;
-			getBusDevices();//获取数据
-			if(0 == listBus.size()){
-				myLayout = (LinearLayout) findViewById(R.id.devSelect);//设备下拉列表布局隐藏
-				myLayout.setVisibility(View.GONE);
-				//initDevLocationGPS();
-				getCurrentLocation();//当前位置
-			}else{
-				queryDevList = (Spinner)findViewById(R.id.queryDevList);
-				SpinnerBusAdapter queryDevListAdapter = new SpinnerBusAdapter(this, R.layout.spinner_item, listBus);
-				queryDevListAdapter.setDropDownViewResource(R.layout.spinner_checkview);
-				queryDevList.setAdapter(queryDevListAdapter);
-				queryDevList.setOnItemSelectedListener(new DevListItemSelectListener());
-				//getCurrentLocation();
-				//				queryDevList.setSelection(0);
-			}
 		}
 	}
 
 	private void setMarkerListener() {
-		mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+		mGoogleMap.setOnMarkerClickListener(new OnMarkerClickListener() {
 			
 			@Override
 			public boolean onMarkerClick(Marker marker) {
@@ -268,9 +256,9 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	private void moveCamera(LatLng latLng,int zoom) {
 		//		LogUtils.i(TAG, "移动摄像头："+latLng);
 		if(zoom==0){
-			if(isAnimationEnd) mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng)); 
+			if(isAnimationEnd) mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng)); 
 		}else{
-			mMap.animateCamera( CameraUpdateFactory.newLatLngZoom(latLng, zoom), callback);  
+			mGoogleMap.animateCamera( CameraUpdateFactory.newLatLngZoom(latLng, zoom), callback);  
 			isAnimationEnd = false;
 		}
 	}
@@ -292,18 +280,6 @@ public class UserGoogleMapActivity extends FragmentActivity{
 		}
 	};
 
-	/**
-	 * 获取所有的bus设备
-	 * @return
-	 */
-	public void getBusDevices(){
-		listBus = new ArrayList<DeviceInfo>();
-		for (DeviceInfo busInfo : DeviceManager.getInstance().getDeviceList()) {
-			if ("0".equals( busInfo.getIsDeviceGroup())) {
-				listBus.add(busInfo);
-			}
-		}
-	}
 
 	/**
 	 * 初始化对应设备的GPS信息
@@ -320,16 +296,16 @@ public class UserGoogleMapActivity extends FragmentActivity{
 			//			LatLng myPoint = new LatLng(latitude, longitude);
 			LatLng myPoint =MyUtil.fromWgs84ToGoogle(latitude, longitude);
 
-			mMap.clear();
+			mGoogleMap.clear();
 			mLatLngs.clear();
 
-			mMarker = mMap.addMarker(new MarkerOptions()
+			mMarker = mGoogleMap.addMarker(new MarkerOptions()
 			.anchor(0.5f, 0.5f)
 			.position(myPoint)
 			.title("设备名称："+curCtlDevInfo.getDeviceName())
 			.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_image_map)));
 
-			mPolyline = mMap.addPolyline(new PolylineOptions()
+			mPolyline = mGoogleMap.addPolyline(new PolylineOptions()
 			.color(Color.GREEN)
 			.width(4));
 
@@ -342,7 +318,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 		//		LogUtils.i(TAG, "请求GPS信息参数："+guid); 
 		//		JNVPlayerUtil.JNV_N_GetGPSStart(guid);//请求下发GPS数据
 //		handler.sendEmptyMessageDelayed(1, 1000);//延迟1秒执行获取GPS，防止前面界面的停止获取延迟
-		handler.sendEmptyMessage(1);
+		handler.sendEmptyMessage(MSG_WHAT_GET_GPS_START);
 	}
 
 
@@ -376,6 +352,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 			isToOtherMap = true;
 			JNVPlayerUtil.JNV_N_GetGPSStop(guid);
 			guid = "";
+			
 			Intent intent2 = new Intent();
 			if(busListEntrance){
 				intent2.putExtra(UserMapActivity.KEY_DEVICE_INFO, curCtlDevInfo);
@@ -388,38 +365,9 @@ public class UserGoogleMapActivity extends FragmentActivity{
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, 0, 0, R.string.video_stream);
-		menu.add(0, 1, 1, R.string.cancel);
-		int versionLevel = android.os.Build.VERSION.SDK_INT;
-		menu.add(0, 2, 2, R.string.baiduMap);
-		return super.onCreateOptionsMenu(menu);
-	}
 
 
 
-	/**
-	 * 设备列表选择监听器
-	 */
-	public class DevListItemSelectListener implements OnItemSelectedListener{
-		@Override 
-		public void onItemSelected(AdapterView<?> arg0, View arg1,
-				int location, long arg3) {
-			LogUtils.i(TAG, "选择了"+location);
-			if(guid != null){
-				JNVPlayerUtil.JNV_N_GetGPSStop(guid);
-				guid = "";
-			}
-			changeFocusBus(location);
-		}
-
-		@Override
-		public void onNothingSelected(AdapterView<?> arg0) {
-			//getCurrentLocation();
-		}
-
-	} 
 
 	/**
 	 * 注册广播接收器
@@ -437,7 +385,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	 * @param location
 	 */
 	public void changeFocusBus(int location) {
-		curCtlDevInfo = listBus.get(location);
+//		curCtlDevInfo = listBus.get(location);
 		initDevLocationGPS();
 	}
 
@@ -587,62 +535,4 @@ public class UserGoogleMapActivity extends FragmentActivity{
 		} 
 
 	};
-
-	//触摸打开菜单按钮
-	 @Override
-	public boolean onTouchEvent(MotionEvent event) {
-		 this.openOptionsMenu();
-		return super.onTouchEvent(event);
-	}
-	
-	 //异步加载gps校正文件
-	 class AsyncLoadGpsCorrection extends AsyncTask<Void,Integer,Integer>{
-		protected Context context = null;
-		protected String  gpsCorrectionFileName = "";
-		protected ProgressDialog  dialog = null;
-		protected Handler mHandler = null;
-		
-		public AsyncLoadGpsCorrection(Context context,Handler h,String strFileName){
-			this.context = context;
-			mHandler = h;
-			gpsCorrectionFileName = strFileName;
-			dialog = new ProgressDialog(this.context);
-			dialog.setMessage(context.getResources().getString(R.string.googleGpsCorrectionFileLoad));
-		}
-		
-		@Override
-		protected Integer doInBackground(Void... params) {
-			// TODO Auto-generated method stub
-			return GpsCorrection.getInstance().initialize(gpsCorrectionFileName);
-		}
-
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			super.onPreExecute();
-			
-			if(dialog != null){
-				dialog.show();
-			}
-		}
-
-		@Override
-		protected void onPostExecute(Integer result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-			
-			if(dialog != null){
-				dialog.dismiss();
-			}
-			
-			if(mHandler != null){
-				Message msg = new Message();
-				msg.what = 2;
-				mHandler.sendMessage(msg);
-			}
-			
-			IsAsyncLoadGpsCorrectionFile = false;
-		}
-		 
-	 };
 }

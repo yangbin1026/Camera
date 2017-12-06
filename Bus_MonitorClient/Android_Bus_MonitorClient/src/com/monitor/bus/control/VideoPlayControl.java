@@ -80,7 +80,7 @@ public  class VideoPlayControl {
 				videoView.buffer = ByteBuffer.wrap(lpBuf);
 				videoView.VideoBit = Bitmap.createBitmap(videoView.videoWidth, videoView.videoHeight, Config.RGB_565);
 				videoView.getScaleSize(videoView.getMeasuredWidth(),videoView.getMeasuredHeight());
-				videoView.flag = 0;
+				videoView.isPlaying = true;
 			}
 			videoView.postInvalidate();
 		}else if(lType==1){//音频 
@@ -167,7 +167,6 @@ public  class VideoPlayControl {
 				return;
 			}
 			Constants.DERECTION_STATE = AVP_GetMirror();// 获取当前设备的镜像状态
-//			startStream(currentDeviceInfo.getGuId(), currentDeviceInfo.getCurrentChn());// 打开实时流
 			Log.e(TAG, "打开流参数："+currentDeviceInfo.getNewGuId()
 					+","+currentDeviceInfo.getCurrentChn());
 			startStream(currentDeviceInfo.getNewGuId(), currentDeviceInfo.getCurrentChn());// 打开实时流

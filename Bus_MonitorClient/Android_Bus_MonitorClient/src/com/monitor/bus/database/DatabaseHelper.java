@@ -78,10 +78,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	  public void insertRecordInfo(String currentDate,String fileName,String filePath) throws ParseException{
 	    SQLiteDatabase db = this.getWritableDatabase();
 	    ContentValues cv = new ContentValues();
-	    SimpleDateFormat from = new SimpleDateFormat(Constants.YMD_HMS_FORMAT);
-	    Date datetime = from.parse(currentDate);
-	    SimpleDateFormat f = new SimpleDateFormat(Constants.FORMAT);
-	    String date =f.format(datetime);
+	    SimpleDateFormat formater = new SimpleDateFormat(Constants.YMD_HMS_FORMAT);
+	    Date datetime = formater.parse(currentDate);
+	    SimpleDateFormat formater2 = new SimpleDateFormat(Constants.FORMAT);
+	    String date =formater2.format(datetime);
 	    cv.put("REC_DATE",date);
 	    cv.put("REC_PATH",filePath);
 	    cv.put("REC_FILENAME",fileName);
