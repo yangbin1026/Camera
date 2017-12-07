@@ -1,11 +1,8 @@
 package com.monitor.bus.activity;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,21 +15,14 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -50,31 +40,27 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.jniUtil.GpsCorrection;
 import com.jniUtil.JNVPlayerUtil;
-import com.jniUtil.MyUtil;
-import com.monitor.bus.adapter.SpinnerBusAdapter;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.bdmap.GoogleCheckGPSAsyncTask;
 import com.monitor.bus.bean.DeviceInfo;
-import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 
-
-public class UserGoogleMapActivity extends FragmentActivity{ 
+public class UserGoogleMapActivity extends FragmentActivity {
 
 	private static final String TAG = "UserGoogleMapActivity";
 	static final String Apptag = "Google";
 	final String g_GpsFixFileName = "commondata.gft";
-	public static final int MSG_WHAT_GET_GPS_START=1;
-	public static final int MSG_WHAT_NEW_LOCATION=2;
-	
-	private boolean IsAsynCheckGPS = false;//异步加载gps校验数据
+	public static final int MSG_WHAT_GET_GPS_START = 1;
+	public static final int MSG_WHAT_NEW_LOCATION = 2;
+
+	private boolean IsAsynCheckGPS = false;// 异步加载gps校验数据
 	private boolean busListEntrance = false;
 	private boolean isToOtherMap = false;
 	private boolean isBroadcastRegister = false;
 	private boolean isAnimationEnd = false;
-	
 
 	private GoogleMap mGoogleMap;
 	private Marker mMarker;
@@ -82,7 +68,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	private LatLng curPoint;
 	private Polyline mPolyline;
 	private LinearLayout myLayout;
-	
+
 	private LinkedList<LatLng> mLatLngs = new LinkedList<LatLng>();
 	private LocationManager locationManager;
 	private Location location;
@@ -91,29 +77,27 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	private DeviceInfo curCtlDevInfo = null; // 当前可操作的设备
 	private String guid = null;
 
-	
-	
-	private Handler handler = new Handler(){
+	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
-			switch(msg.what){
+			switch (msg.what) {
 			case MSG_WHAT_GET_GPS_START:
-				LogUtils.i(TAG, "请求GPS信息参数："+guid); 
-				JNVPlayerUtil.JNV_N_GetGPSStart(guid);//请求下发GPS数据
+				LogUtils.i(TAG, "请求GPS信息参数：" + guid);
+				JNVPlayerUtil.JNV_N_GetGPSStart(guid);// 请求下发GPS数据
 				break;
 			case MSG_WHAT_NEW_LOCATION:
 				IsAsynCheckGPS = (Boolean) msg.obj;
-				//刷新位置
+				// 刷新位置
 				setUpMapIfNeeded();
 				mGoogleMap.setOnMapLongClickListener(new OnMapLongClickListener() {
 					public void onMapLongClick(LatLng arg0) {
 						openOptionsMenu();
 					}
 				});
-				
-				registerBoradcastReceiver();//注册广播接收器
+
+				registerBoradcastReceiver();// 注册广播接收器
 				mLocationSource.onResume();
 				break;
-				
+
 			default:
 				break;
 			}
@@ -127,34 +111,26 @@ public class UserGoogleMapActivity extends FragmentActivity{
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
 
 		Intent intent = getIntent();
-		curCtlDevInfo = (DeviceInfo) intent.getSerializableExtra(UserMapActivity.KEY_DEVICE_INFO);// 获取当前设备坐标
+		curCtlDevInfo = (DeviceInfo) intent.getSerializableExtra(RealTimeVideoActivity.KEY_DEVICE_INFO);// 获取当前设备坐标
 
 		mLocationSource = new MyLocationSource();
 
-		//		SD卡中		
-		//		File targetFile = null;
-		//		try {
-		//			targetFile = new File(Environment.getExternalStorageDirectory()
-		//					.getCanonicalPath() +"/"+ g_GpsFixFileName);
-		//		} catch (IOException e) {
-		//			e.printStackTrace();
-		//		} 
-		
+
 		String f = MUtils.saveIfNeed(this, g_GpsFixFileName, R.raw.commondata);
 		File targetFile = new File(f);
-		if(targetFile.exists())
-		{
+		if (targetFile.exists()) {
 			SharedPreferences spf = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-			boolean IsGpsCorrection = spf.getBoolean(Constants.GOOGLE_GPS_CORRRECTION, Constants.IS_GOOGLE_GPS_CORRRECTION);
-			if(IsGpsCorrection){
-				if(!GpsCorrection.getInstance().IsInitialize()){
+			boolean IsGpsCorrection = spf.getBoolean(Constants.GOOGLE_GPS_CORRRECTION,
+					Constants.IS_GOOGLE_GPS_CORRRECTION);
+			if (IsGpsCorrection) {
+				if (!GpsCorrection.getInstance().IsInitialize()) {
 					IsAsynCheckGPS = true;
-					new GoogleCheckGPSAsyncTask(this,handler,targetFile.getPath()).execute();
+					new GoogleCheckGPSAsyncTask(this, handler, targetFile.getPath()).execute();
 				}
 			}
 		}
 
-		if(!IsAsynCheckGPS){
+		if (!IsAsynCheckGPS) {
 			setUpMapIfNeeded();
 			mGoogleMap.setOnMapLongClickListener(new OnMapLongClickListener() {
 				public void onMapLongClick(LatLng arg0) {
@@ -167,15 +143,15 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if(!IsAsynCheckGPS){
+		if (!IsAsynCheckGPS) {
 			setUpMapIfNeeded();
-			registerBoradcastReceiver();//注册广播接收器
+			registerBoradcastReceiver();// 注册广播接收器
 			mLocationSource.onResume();
 		}
 	}
 
 	@Override
-	protected void onPause(){
+	protected void onPause() {
 		super.onPause();
 		mLocationSource.onPause();
 	}
@@ -189,12 +165,11 @@ public class UserGoogleMapActivity extends FragmentActivity{
 
 	@Override
 	protected void onDestroy() {
-		if(!isToOtherMap){
+		if (!isToOtherMap) {
 			JNVPlayerUtil.JNV_N_GetGPSStop(guid);
 			guid = "";
-			}
+		}
 		super.onDestroy();
-		//CommonJni.JNV_GPSFix_UnInit();
 	}
 
 	/**
@@ -202,8 +177,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	 */
 	public void setUpMapIfNeeded() {
 		if (mGoogleMap == null) {
-			mGoogleMap = ((SupportMapFragment) getSupportFragmentManager()
-					.findFragmentById(R.id.map)).getMap();
+			mGoogleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 			if (mGoogleMap != null) {
 				setUpMap();
 			}
@@ -215,33 +189,33 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	 */
 	private void setUpMap() {
 
-		mGoogleMap.getUiSettings().setRotateGesturesEnabled(false);//禁用旋转手势
-		mGoogleMap.setMyLocationEnabled(true);//开启本机位置图层
+		mGoogleMap.getUiSettings().setRotateGesturesEnabled(false);// 禁用旋转手势
+		mGoogleMap.setMyLocationEnabled(true);// 开启本机位置图层
 		mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
 		mGoogleMap.setLocationSource(mLocationSource);
 		isAnimationEnd = false;
-		
+
 		setMarkerListener();
 
-		if(curCtlDevInfo != null){//设备列表入口
+		if (curCtlDevInfo != null) {// 设备列表入口
 			busListEntrance = true;
-			myLayout = (LinearLayout) findViewById(R.id.devSelect);//设备下拉列表布局隐藏
+			myLayout = (LinearLayout) findViewById(R.id.devSelect);// 设备下拉列表布局隐藏
 			myLayout.setVisibility(View.GONE);
 			initDevLocationGPS();
 
-		}else{//主菜单电子地图入口
+		} else {// 主菜单电子地图入口
 			busListEntrance = false;
 		}
 	}
 
 	private void setMarkerListener() {
 		mGoogleMap.setOnMarkerClickListener(new OnMarkerClickListener() {
-			
+
 			@Override
 			public boolean onMarkerClick(Marker marker) {
-				if(marker.equals(mMarker)){
-					Toast.makeText(UserGoogleMapActivity.this,
-							"设备名称："+curCtlDevInfo.getDeviceName(), Toast.LENGTH_SHORT).show();
+				if (marker.equals(mMarker)) {
+					Toast.makeText(UserGoogleMapActivity.this, "设备名称：" + curCtlDevInfo.getDeviceName(),
+							Toast.LENGTH_SHORT).show();
 					return true;
 				}
 				return false;
@@ -251,14 +225,16 @@ public class UserGoogleMapActivity extends FragmentActivity{
 
 	/**
 	 * 移动摄像头
-	 * @param zoom   不进行缩放时，指定为0
+	 * 
+	 * @param zoom
+	 *            不进行缩放时，指定为0
 	 */
-	private void moveCamera(LatLng latLng,int zoom) {
-		//		LogUtils.i(TAG, "移动摄像头："+latLng);
-		if(zoom==0){
-			if(isAnimationEnd) mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng)); 
-		}else{
-			mGoogleMap.animateCamera( CameraUpdateFactory.newLatLngZoom(latLng, zoom), callback);  
+	private void moveCamera(LatLng latLng, int zoom) {
+		if (zoom == 0) {
+			if (isAnimationEnd)
+				mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+		} else {
+			mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom), callback);
 			isAnimationEnd = false;
 		}
 	}
@@ -280,57 +256,43 @@ public class UserGoogleMapActivity extends FragmentActivity{
 		}
 	};
 
-
 	/**
 	 * 初始化对应设备的GPS信息
 	 */
-	public void initDevLocationGPS(){
+	public void initDevLocationGPS() {
 		LogUtils.i(TAG, "运行到initDevLocationGPS");
-		if( validateGps()){
-			//			double longitude = MyUtil.convertDoubleType6(curCtlDevInfo.getLongitude());
-			//			double latitude = MyUtil.convertDoubleType6(curCtlDevInfo.getLatitude());
+		if (validateGps()) {
 			double longitude = curCtlDevInfo.getLongitude();
 			double latitude = curCtlDevInfo.getLatitude();
-			LogUtils.i(TAG, "表中获得：lon="+longitude+",lat="+latitude);
-			//			GeoPoint myPoint =CoordinateConvert.bundleDecode(CoordinateConvert.fromWgs84ToBaidu(new GeoPoint((int)(latitude*1e6), (int)(longitude*1e6))));//GPS转换为百度地图坐标 
-			//			LatLng myPoint = new LatLng(latitude, longitude);
-			LatLng myPoint =MyUtil.fromWgs84ToGoogle(latitude, longitude);
+			LogUtils.i(TAG, "表中获得：lon=" + longitude + ",lat=" + latitude);
+			LatLng myPoint = MUtils.fromWgs84ToGoogle(latitude, longitude);
 
 			mGoogleMap.clear();
 			mLatLngs.clear();
 
-			mMarker = mGoogleMap.addMarker(new MarkerOptions()
-			.anchor(0.5f, 0.5f)
-			.position(myPoint)
-			.title("设备名称："+curCtlDevInfo.getDeviceName())
-			.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_image_map)));
+			mMarker = mGoogleMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f).position(myPoint)
+					.title("设备名称：" + curCtlDevInfo.getDeviceName())
+					.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_image_map)));
 
-			mPolyline = mGoogleMap.addPolyline(new PolylineOptions()
-			.color(Color.GREEN)
-			.width(4));
+			mPolyline = mGoogleMap.addPolyline(new PolylineOptions().color(Color.GREEN).width(4));
 
 			moveCamera(myPoint, 16);
-		}else{
+		} else {
 			getCurrentLocation();
 		}
-		//		guid = curCtlDevInfo.getGuId();
-		guid = curCtlDevInfo.getNewGuId();  
-		//		LogUtils.i(TAG, "请求GPS信息参数："+guid); 
-		//		JNVPlayerUtil.JNV_N_GetGPSStart(guid);//请求下发GPS数据
-//		handler.sendEmptyMessageDelayed(1, 1000);//延迟1秒执行获取GPS，防止前面界面的停止获取延迟
+		guid = curCtlDevInfo.getNewGuId();
 		handler.sendEmptyMessage(MSG_WHAT_GET_GPS_START);
 	}
 
-
-
 	/**
 	 * 验证是否具有有效的GPS数据
+	 * 
 	 * @return
 	 */
-	public boolean validateGps(){
-		if(curCtlDevInfo!=null && 0d != curCtlDevInfo.getLatitude() && 0d != curCtlDevInfo.getLongitude()){
+	public boolean validateGps() {
+		if (curCtlDevInfo != null && 0d != curCtlDevInfo.getLatitude() && 0d != curCtlDevInfo.getLongitude()) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -352,10 +314,10 @@ public class UserGoogleMapActivity extends FragmentActivity{
 			isToOtherMap = true;
 			JNVPlayerUtil.JNV_N_GetGPSStop(guid);
 			guid = "";
-			
+
 			Intent intent2 = new Intent();
-			if(busListEntrance){
-				intent2.putExtra(UserMapActivity.KEY_DEVICE_INFO, curCtlDevInfo);
+			if (busListEntrance) {
+				intent2.putExtra(RealTimeVideoActivity.KEY_DEVICE_INFO, curCtlDevInfo);
 			}
 			intent2.setClass(this, UserMapActivity.class);
 			startActivity(intent2);
@@ -365,27 +327,22 @@ public class UserGoogleMapActivity extends FragmentActivity{
 		return super.onOptionsItemSelected(item);
 	}
 
-
-
-
-
 	/**
 	 * 注册广播接收器
 	 */
-	public void registerBoradcastReceiver(){ 
-		IntentFilter myIntentFilter = new IntentFilter(); 
-		myIntentFilter.addAction("ACTION_NAME"); 
-		//注册广播       
-		registerReceiver(mBroadcastReceiver, myIntentFilter); 
+	public void registerBoradcastReceiver() {
+		IntentFilter myIntentFilter = new IntentFilter();
+		myIntentFilter.addAction("ACTION_NAME");
+		registerReceiver(mBroadcastReceiver, myIntentFilter);
 		isBroadcastRegister = true;
-	} 
+	}
 
 	/**
 	 * 修改焦点车辆
+	 * 
 	 * @param location
 	 */
 	public void changeFocusBus(int location) {
-//		curCtlDevInfo = listBus.get(location);
 		initDevLocationGPS();
 	}
 
@@ -406,15 +363,13 @@ public class UserGoogleMapActivity extends FragmentActivity{
 
 		String provider = locationManager.getBestProvider(criteria, true);
 
-		LogUtils.i(TAG,"位置提供者"+provider);
+		LogUtils.i(TAG, "位置提供者" + provider);
 
-		location = locationManager
-				.getLastKnownLocation(provider);//locationManager.GPS_PROVIDER
-		if(location!=null) updateLocation(location);
+		location = locationManager.getLastKnownLocation(provider);// locationManager.GPS_PROVIDER
+		if (location != null)
+			updateLocation(location);
 
-
-		locationManager.requestLocationUpdates(provider, 3000, (float) 10.0,
-				new LocationListener() {
+		locationManager.requestLocationUpdates(provider, 3000, (float) 10.0, new LocationListener() {
 			@Override
 			public void onLocationChanged(Location location) {
 				updateLocation(location);
@@ -431,34 +386,31 @@ public class UserGoogleMapActivity extends FragmentActivity{
 			}
 
 			@Override
-			public void onStatusChanged(String provider, int status,
-					Bundle extras) {
+			public void onStatusChanged(String provider, int status, Bundle extras) {
 			}
 		});
 	}
 
 	/**
 	 * 更新位置
+	 * 
 	 * @param location
 	 */
 	private void updateLocation(Location location) {
-		LogUtils.i(TAG, "更新位置："+location);
+		LogUtils.i(TAG, "更新位置：" + location);
 
-		LatLng tmp = MyUtil.fromWgs84ToGoogle(
-				location.getLatitude(), location.getLongitude());
+		LatLng tmp = MUtils.fromWgs84ToGoogle(location.getLatitude(), location.getLongitude());
 		location.setLatitude(tmp.latitude);
 		location.setLongitude(tmp.longitude);
 
 		mLocationSource.updataMyLocation(location);
-		moveCamera(new LatLng(location.getLatitude(), 
-				location.getLongitude()), 16);
+		moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), 16);
 	}
-
 
 	/**
 	 * 我的位置源
 	 */
-	private static class MyLocationSource implements LocationSource{
+	private static class MyLocationSource implements LocationSource {
 		private OnLocationChangedListener mListener;
 
 		private boolean mPaused;
@@ -473,7 +425,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 			mListener = null;
 		}
 
-		public void updataMyLocation(Location point){
+		public void updataMyLocation(Location point) {
 			if (mListener != null && !mPaused) {
 				Location location = new Location("LongPressLocationProvider");
 				location.setLatitude(point.getLatitude());
@@ -496,34 +448,29 @@ public class UserGoogleMapActivity extends FragmentActivity{
 	/**
 	 * 广播接收器
 	 */
-	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){ 
-		@Override 
-		public void onReceive(Context context, Intent intent) { 
-			String action = intent.getAction(); 
-			if(action.equals("ACTION_NAME")){ 
-				int eventType = intent.getIntExtra(Constants.WHAT_LOGIN_EVENT_TYPE, 0);// 
-				if(isBroadcastRegister && eventType == CALLBACKFLAG.DEVICE_EVENT_GPS_INFO){//GPS基本
+	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if (action.equals("ACTION_NAME")) {
+				int eventType = intent.getIntExtra(Constants.WHAT_LOGIN_EVENT_TYPE, 0);//
+				if (isBroadcastRegister && eventType == CALLBACKFLAG.DEVICE_EVENT_GPS_INFO) {// GPS基本
 
 					String gpsDevID = intent.getStringExtra("gpsDevID");
-//					LogUtils.i(TAG, "当前设备："+curCtlDevInfo);
-					if(curCtlDevInfo!=null && curCtlDevInfo.getGuId().equals(gpsDevID)){
-						//						Log.e(TAG, "====有木有接收到广播");
+					if (curCtlDevInfo != null && curCtlDevInfo.getGuId().equals(gpsDevID)) {
 						double longitude = intent.getDoubleExtra("gpsBaseLongitude", 0);
 						double latitude = intent.getDoubleExtra("gpsBaseLatitude", 0);
 						int baseDirect = intent.getIntExtra("gpsBaseDirect", 0);
-						//						Log.e(TAG, "======gpsBaseDirect的度数"+baseDirect );
-						//						curPoint = new LatLng(latitude, longitude);
-						curPoint = MyUtil.fromWgs84ToGoogle(latitude, longitude);
-						if(!curPoint.equals(prePoint)){
-							Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-									R.drawable.bus_image_map);
+						curPoint =MUtils.fromWgs84ToGoogle(latitude, longitude);
+						if (!curPoint.equals(prePoint)) {
+							Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.bus_image_map);
 							Bitmap dstBitmap = MUtils.getRotatedBmp(bmp, baseDirect);
 							mMarker.setIcon(BitmapDescriptorFactory.fromBitmap(dstBitmap));
 
 							mLatLngs.add(curPoint);
 							mPolyline.setPoints(mLatLngs);
 
-							if(isAnimationEnd){
+							if (isAnimationEnd) {
 								mMarker.setPosition(curPoint);
 								moveCamera(curPoint, 0);
 							}
@@ -532,7 +479,7 @@ public class UserGoogleMapActivity extends FragmentActivity{
 					}
 				}
 			}
-		} 
+		}
 
 	};
 }

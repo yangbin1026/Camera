@@ -13,13 +13,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.jniUtil.MyUtil;
 import com.monitor.bus.adapter.DevRecordListAdapter;
 import com.monitor.bus.bean.DevRecordInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.control.LoginEventControl;
 import com.monitor.bus.utils.LogUtils;
+import com.monitor.bus.utils.MUtils;
 
 /**
  * 设备端录像文件列表
@@ -98,7 +98,7 @@ public class DevRecordListActivity extends BaseActivity {
             		DevRecordListAdapter devRecordAdapter = new DevRecordListAdapter(DevRecordListActivity.this,Constants.RECORD_LIST);
             		recordListView.setAdapter(devRecordAdapter);
             		if(Constants.RECORD_LIST.size() == 0){
-            			MyUtil.commonToast(DevRecordListActivity.this, R.string.not_dev_recordfile);
+            			MUtils.commonToast(DevRecordListActivity.this, R.string.not_dev_recordfile);
             		}
             	}
             }

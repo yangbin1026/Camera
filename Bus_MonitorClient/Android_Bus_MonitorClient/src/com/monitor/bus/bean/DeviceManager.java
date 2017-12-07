@@ -15,7 +15,7 @@ public class DeviceManager {
 	private List<DeviceInfo> mDeviceList = new ArrayList<DeviceInfo>();//设备列表
 	//key:parentId
 	private Map<String,ArrayList<DeviceInfo>> mDeviceMap=new HashMap<String, ArrayList<DeviceInfo>>();
-	static DeviceManager manager;
+	private static DeviceManager manager;
 	private DeviceManager(){
 		
 	}

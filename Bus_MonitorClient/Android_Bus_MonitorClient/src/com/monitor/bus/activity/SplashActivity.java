@@ -21,7 +21,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.jniUtil.MyUtil;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.consts.Constants;
 
 //SplashActivity
@@ -102,7 +102,7 @@ public class SplashActivity extends Activity {
 		if (Constants.HAS_LOGO) {
 			imageView = (ImageView) findViewById(R.id.logo);
 			// 语言环境不是中国
-			/*if (!MyUtil.isChina(this.getBaseContext())) {
+			/*if (!MUtils.isChina(this.getBaseContext())) {
 				imageView.setImageDrawable(getResources().getDrawable(
 						R.drawable.logo4e));
 			}*/

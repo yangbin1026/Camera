@@ -38,7 +38,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.jniUtil.JNVPlayerUtil;
-import com.jniUtil.MyUtil;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.bean.LoginInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.control.LoginEventControl;
@@ -381,7 +381,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 			MUtils.toast(this, "请填写完整信息！");
 			return;
 		}
-		if (!MyUtil.isConnect(this)) {
+		if (!MUtils.isConnect(this)) {
 			MUtils.toast(this, getString(R.string.network_error));
 			return;
 		}
@@ -399,12 +399,12 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 					"^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$");
 			Matcher matcher = pattern.matcher(ip);
 			if (!matcher.matches()) {
-				MyUtil.commonToast(this, R.string.ipFailed);
+				MUtils.commonToast(this, R.string.ipFailed);
 				return;
 			}
 			int port = Integer.parseInt(portStr.equals("") ? "0" : portStr);
 			// 登录
-			LogUtils.getInstance().localLog(TAG, "JNI_login:" + u + p + ip + port);
-			JNVPlayerUtil.JNV_N_Login(ip, port, u, p, 30, loginControl, "callbackLonginEvent", 0);
+		LogUtils.getInstance().localLog(TAG, "JNI_login:" + u + p + ip + port);
+		JNVPlayerUtil.JNV_N_Login(ip, port, u, p, 30, loginControl, "callbackLoginEvent", 0);
 	}
 }

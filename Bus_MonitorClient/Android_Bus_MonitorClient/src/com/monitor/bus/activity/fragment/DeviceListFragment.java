@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.jniUtil.MyUtil;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.activity.HomeActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.UserMapActivity;
@@ -98,7 +98,7 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 				}else{
 					Intent intent=new Intent(getActivity(),RealTimeVideoActivity.class);
 					info.setCurrentChn(1);
-					intent.putExtra("videoData", info);
+					intent.putExtra(RealTimeVideoActivity.KEY_DEVICE_INFO, info);
 					startActivity(intent);
 				}
 			}

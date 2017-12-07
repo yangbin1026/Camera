@@ -110,7 +110,7 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 					currentDeviceInfo.setDeviceName(alarmInfo.getdeviceId());
 				}
 				Intent intent = new Intent();
-				intent.putExtra("videoData", currentDeviceInfo);
+				intent.putExtra(RealTimeVideoActivity.KEY_DEVICE_INFO, currentDeviceInfo);
 				intent.setClass(getContext(), RealTimeVideoActivity.class);
 				startActivity(intent);
 			}

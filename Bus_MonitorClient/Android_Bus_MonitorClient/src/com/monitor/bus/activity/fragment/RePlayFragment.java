@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.jniUtil.MyUtil;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.DeviceManager;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.view.dialog.DateUtil;
 import com.monitor.bus.view.dialog.MyDataPickerDialog;
 import com.monitor.bus.view.dialog.MyDatePickerDialog;
@@ -99,7 +100,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 		String queryStartTime = tv_start_time.getText() + " " + tv_start_time.getText();// 获取选择的开始时间
 		String queryEndTime = tv_end_time.getText() + " " + tv_end_time.getText();// 获取选择的结束时间
 		if (!compareTime(queryStartTime, queryEndTime)) {
-			MyUtil.commonToast(getContext(), R.string.time_validate);
+			MUtils.commonToast(getContext(), R.string.time_validate);
 			return;
 		} 
 		

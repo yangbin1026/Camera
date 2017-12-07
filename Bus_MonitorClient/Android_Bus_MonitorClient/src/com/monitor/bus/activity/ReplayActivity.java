@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.jniUtil.MyUtil;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.bean.DevRecordInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.control.VideoPlayControl;
@@ -106,7 +106,7 @@ public class ReplayActivity extends BaseActivity implements OnTouchListener{
 	 */
 	public void pauseVideo(View view){
 		if(myVideoView.is_drawblack){//播放已停止
-			MyUtil.commonToast(this, R.string.video_stop);
+			MUtils.commonToast(this, R.string.video_stop);
 			return;
 		}
 		if( null != devRecordInfo ){//设备端播放

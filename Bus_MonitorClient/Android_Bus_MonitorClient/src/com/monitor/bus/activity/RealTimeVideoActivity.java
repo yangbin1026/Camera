@@ -1,46 +1,32 @@
 package com.monitor.bus.activity;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.text.ParseException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.PointF;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.FloatMath;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.jniUtil.MyUtil;
+import com.monitor.bus.utils.MUtils;
+import com.monitor.bus.bean.BaiduMapManager;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.control.VideoPlayControl;
 import com.monitor.bus.database.DatabaseHelper;
 import com.monitor.bus.utils.LogUtils;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.view.MyVideoView;
 
 /**
@@ -50,26 +36,26 @@ import com.monitor.bus.view.MyVideoView;
 public class RealTimeVideoActivity extends BaseActivity implements OnTouchListener, View.OnClickListener {
 
 	private static String TAG = "VideoActivity";
-
+	public static final String KEY_DEVICE_INFO = "key_device_info";
 	String recordFilePath = null;// 当前录像文件存储路径
 	String times = "";// 当前文件名称
-
 	boolean isCapturePicture = false;// 是否有操作过抓拍
 	boolean isRecording = false;// 当前录像状态标志 true 开始录像 false 停止录像
 
 	private MyVideoView myVideoView;
-	private Button mirrorButton;// 镜像按钮
 	private TextView text_tilte_name;// 标题名称
 
 	private Intent intent;
-	GestureDetector mGestureDetector;// 手势监测
 	private VideoPlayControl playControl;
-	private DeviceInfo currentDeviceInfo;// 设备信息
 	private DatabaseHelper db;// 数据库操作对象
 	public Timer recordTimer;// 计时器
 
 	private float x, y;
 	private int mx, my;
+
+	private DeviceInfo deviceInfo;// 设备信息
+	private String titleString;
+	BaiduMapManager mapManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,29 +63,22 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
 		setContentView(R.layout.activity_realtime);
 		Constants.STREAM_PLAY_TYPE = 1;// 设置播放类型为实时视频
-		
+
 		initData();
 		initView();
 	}
 
-	private void initData() {
-		intent = this.getIntent();
-		currentDeviceInfo = (DeviceInfo) intent.getSerializableExtra("videoData");
-		mGestureDetector = new GestureDetector(new MySimpleGesture());
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mapManager.Resume();
 	}
 
-	private void initView() {
-		text_tilte_name = (TextView) findViewById(R.id.tilte_name);
-		myVideoView = (MyVideoView) findViewById(R.id.myVideoView);
-		myVideoView.setOnTouchListener(this);
-		playControl = new VideoPlayControl(this, myVideoView);
-		playControl.initVideoPlay(intent);// 初始化界面
-		if (currentDeviceInfo != null) {// 标题栏设置: 设备名称-当前通道号
-			text_tilte_name.setText(
-					currentDeviceInfo.getDeviceName() + " - " + "channel_" + currentDeviceInfo.getCurrentChn());
-		}
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mapManager.Pauser();
 	}
-
 
 	@Override
 	protected void onStop() {
@@ -143,6 +122,7 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 					Uri.parse("file://" + Environment.getExternalStorageDirectory())));// 刷新相册环境
 		}
 		super.onDestroy();
+		mapManager.Destory();
 	}
 
 	@Override
@@ -155,21 +135,42 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 		}
 	}
 
+	private void initData() {
+		intent = this.getIntent();
+		deviceInfo = (DeviceInfo) intent.getSerializableExtra(KEY_DEVICE_INFO);
+		if (deviceInfo == null) {
+			MUtils.toast(this, "设备为空");
+			return;
+		}
+		titleString = deviceInfo.getDeviceName() + " - " + "channel_" + deviceInfo.getCurrentChn();
+		mapManager = BaiduMapManager.getInstance(this);
+		mapManager.setDeviceInfo(deviceInfo);
+	}
+
+	private void initView() {
+		text_tilte_name = (TextView) findViewById(R.id.tilte_name);
+		myVideoView = (MyVideoView) findViewById(R.id.myVideoView);
+		myVideoView.setOnTouchListener(this);
+		playControl = new VideoPlayControl(this, myVideoView);
+		playControl.initVideoPlay(intent);// 初始化界面
+		text_tilte_name.setText(titleString);
+	}
+
 	private void startRecord() {
 		if (!myVideoView.isNormalPlay()) {
 			return;
 		}
-		recordFilePath = MyUtil.getCurrentFilePath(Constants.RECORD_FILE_PATH, currentDeviceInfo);
+		recordFilePath = MUtils.getCurrentFilePath(Constants.RECORD_FILE_PATH, deviceInfo);
 		File file = new File(recordFilePath);
 		if (!file.exists()) {// 目录不存在
 			file.mkdirs();
 		}
-		times = MyUtil.getCurrentDateTime(Constants.YMD_HMS_FORMAT);
+		times = MUtils.getCurrentDateTime(Constants.YMD_HMS_FORMAT);
 		String path = recordFilePath + times + Constants.RECORD_FILE_FORMAT;
 		LogUtils.i(TAG, "-------------开始录像！");
 		int i = playControl.RecordStart(path);
 		if (i == 0) {
-			MyUtil.commonToast(this, R.string.record_fail);
+			MUtils.commonToast(this, R.string.record_fail);
 			LogUtils.i(TAG, "-------------开始录像失败！");
 			return;
 		}
@@ -190,7 +191,7 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 	}
 
 	private void stopRecord() throws ParseException {
-		if(db==null){
+		if (db == null) {
 			db = new DatabaseHelper(this, Constants.DATABASE_NAME);// 初始化数据操作对象
 		}
 		LogUtils.i(TAG, "-------------停止录像！");
@@ -199,13 +200,13 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 			db.insertRecordInfo(times, times + Constants.RECORD_FILE_FORMAT, recordFilePath);
 		} else {
 			Log.e(TAG, "-------------停止录像失败！");
-			MyUtil.commonToast(this, R.string.stop_recordfail);
+			MUtils.commonToast(this, R.string.stop_recordfail);
 			return;
 		}
 		myVideoView.is_draw_circle = false;
 		recordTimer.cancel();
 	}
-	
+
 	private void takePhoto() {
 		if (!myVideoView.isNormalPlay()) {
 			return;
@@ -213,7 +214,6 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 		playControl.CapturePicture();
 		isCapturePicture = true;
 	}
-
 
 	/**
 	 * 云台控制
@@ -407,21 +407,21 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 		default:
 			break;
 		}
-		switch (event.getAction()) {
-		case MotionEvent.ACTION_DOWN:
-			x = event.getX();
-			y = event.getY();
-			break;
-		case MotionEvent.ACTION_UP:
-			yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
-			break;
-		case MotionEvent.ACTION_MOVE:
-			mx = (int) (event.getRawX() - x);
-			my = (int) (event.getRawY() - y);
-			// v.layout(mx, my, mx + v.getWidth(), my + v.getHeight());
-			break;
-		}
-		return mGestureDetector.onTouchEvent(event);
+		// switch (event.getAction()) {
+		// case MotionEvent.ACTION_DOWN:
+		// x = event.getX();
+		// y = event.getY();
+		// break;
+		// case MotionEvent.ACTION_UP:
+		// yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
+		// break;
+		// case MotionEvent.ACTION_MOVE:
+		// mx = (int) (event.getRawX() - x);
+		// my = (int) (event.getRawY() - y);
+		// // v.layout(mx, my, mx + v.getWidth(), my + v.getHeight());
+		// break;
+		// }
+		return super.onTouchEvent(event);
 
 	}
 }

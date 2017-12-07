@@ -128,9 +128,9 @@ public class GpsCorrection {
 		return mIsInitialize;
 	}
 	
-	class LongitudeLatitude{
-		protected float mLongitude = 0;
-		protected float mLatitude = 0;
+	public class LongitudeLatitude{
+		public float mLongitude = 0;
+		public float mLatitude = 0;
 		
 		public float getLongitude() {
 			return mLongitude;

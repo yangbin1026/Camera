@@ -4,10 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jniUtil.MyUtil;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.adapter.FileListAdapter;
 import com.monitor.bus.consts.Constants;
+import com.monitor.bus.utils.MUtils;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -168,14 +169,14 @@ public class PhotoFragment extends BaseFragment{
 					if (files[i].isFile()) {
 						items.add(files[i].getName());
 						paths.add(files[i].getPath());
-						sizes.add(MyUtil.fileSizeMsg(files[i]));
+						sizes.add(MUtils.fileSizeMsg(files[i]));
 					}
 				}
 			} else {
-				MyUtil.commonToast(getContext(), R.string.not_imagefile);
+				MUtils.commonToast(getContext(), R.string.not_imagefile);
 			}
 		} else {
-			MyUtil.commonToast(getContext(), R.string.not_imagefile);
+			MUtils.commonToast(getContext(), R.string.not_imagefile);
 		}
 		/* 使用自定义的MyAdapter来将数据传入ListActivity */
 		fileList.setAdapter(new FileListAdapter(getContext(), items, paths, sizes));
@@ -198,20 +199,20 @@ public class PhotoFragment extends BaseFragment{
 						/* 删除文件或者文件夹 */
 						if (f_del.isDirectory()) {
 							if (delDir(f_del)) {
-								MyUtil.commonToast(getContext(),
+								MUtils.commonToast(getContext(),
 										R.string.already_del);
 								getFilePathList(f_del.getParent());
 							} else {
-								MyUtil.commonToast(getContext(),
+								MUtils.commonToast(getContext(),
 										R.string.wrong);
 							}
 						} else {
 							if (delFile(f_del)) {
-								MyUtil.commonToast(getContext(),
+								MUtils.commonToast(getContext(),
 										R.string.already_del);
 								getFilePathList(f_del.getParent());
 							} else {
-								MyUtil.commonToast(getContext(),
+								MUtils.commonToast(getContext(),
 										R.string.wrong);
 							}
 						}
@@ -298,7 +299,7 @@ public class PhotoFragment extends BaseFragment{
 		// 跳出列表供选择
 		String type = "*/*";
 		if (isOpen == 0) {
-			type = MyUtil.getMIMEType(f, true);
+			type = MUtils.getMIMEType(f, true);
 		}
 		// 设置intent的file与MimeType
 		intent.setDataAndType(Uri.fromFile(f), type);

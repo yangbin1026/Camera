@@ -13,7 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.jniUtil.MyUtil;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.activity.R;
 /**
  * 抓拍文件列表的适配器
@@ -77,14 +77,14 @@ public class FileListAdapter extends BaseAdapter {
 		File f = new File(paths.get(position).toString());
 		/* 设置文件或文件夹的文字与icon */
 		holder.f_title.setText(f.getName());
-		String f_type = MyUtil.getMIMEType(f, false);
+		String f_type = MUtils.getMIMEType(f, false);
 		if (f.isDirectory()) {
 			holder.f_icon.setImageBitmap(mIcon_folder);
 			holder.f_text.setText("");
 		} else {
 			holder.f_text.setText(sizes.get(position));
 			if ("image".equals(f_type)) {
-				bitMap = MyUtil.fitSizePic(f);
+				bitMap = MUtils.fitSizePic(f);
 				if (bitMap != null) {
 					holder.f_icon.setImageBitmap(bitMap);
 				} else {

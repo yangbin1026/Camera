@@ -24,7 +24,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.jniUtil.JNVPlayerUtil;
-import com.jniUtil.MyUtil;
+import com.monitor.bus.utils.MUtils;
 import com.jniUtil.PullParseXML;
 import com.monitor.bus.activity.HomeActivity;
 import com.monitor.bus.activity.R;
@@ -399,7 +399,7 @@ public class LoginEventControl {
 			break;
 
 		default:
-			if (MyUtil.isConnect(mContext)) {
+			if (MUtils.isConnect(mContext)) {
 				ret = mContext.getString(R.string.other_error);
 			} else {
 				ret = mContext.getString(R.string.network_error);

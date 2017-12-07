@@ -17,7 +17,7 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.BaiduMap.OnMarkerClickListener;
 import com.baidu.mapapi.map.MarkerOptions.MarkerAnimateType;
 import com.baidu.mapapi.model.LatLng;
-import com.jniUtil.MyUtil;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.adapter.SpinnerBusAdapter;
 import com.monitor.bus.bdmap.ErrorCodeReceiver;
 import com.monitor.bus.bean.DeviceInfo;
@@ -46,7 +46,6 @@ import android.widget.Toast;
  */
 public class UserMapActivity extends Activity {
 	public static final String TAG = "TAGUserMapAct";
-	public static final String KEY_DEVICE_INFO = "DevObj";
 	float zoom = 11.0f; // 地图放大等级默认 11级
 
 	Context mContext;
@@ -57,13 +56,12 @@ public class UserMapActivity extends Activity {
 	private boolean busListEntrance = false;// 设备列表入口
 	protected boolean IsExit = false;
 	private List<DeviceInfo> listBus;
-	private DeviceInfo curBusDeviceInfo;// 当前可操作的设备
+	private DeviceInfo deviceInfo;// 当前可操作的设备
 
 	private RelativeLayout rl_Layout;
 	private Spinner queryDevList;
 	private MapView mapView;
 	private BaiduMap mBaiduMap;
-	private TextView tv_googleMap;
 	private Marker mMarkerA;	// 覆盖图标
 	BitmapDescriptor bdA = BitmapDescriptorFactory.fromResource(R.drawable.bus_image_map);
 
@@ -107,32 +105,11 @@ public class UserMapActivity extends Activity {
 	private void initView() {
 		mapView = (MapView) findViewById(R.id.bmapView);
 		mBaiduMap = mapView.getMap();
-		tv_googleMap = (TextView) findViewById(R.id.tv_googlemap);
-		tv_googleMap.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				if (MyUtil.checkGoogleMapModule((Activity) mContext)) {
-					IsExit = true;
-					guid = "";
-					// 刷新地图
-					// mapView.getOverlays().clear();
-					Intent intent2 = new Intent();
-					if (busListEntrance) {
-						intent2.putExtra(UserMapActivity.KEY_DEVICE_INFO, curBusDeviceInfo);
-					}
-					intent2.setClass(mContext, UserGoogleMapActivity.class);
-					startActivity(intent2);
-					finish();
-				}
-			}
-		});
 	}
 
 	private void initDeviceInfo(Intent intent) {
-		curBusDeviceInfo = (DeviceInfo) intent.getSerializableExtra(KEY_DEVICE_INFO);
-		if (curBusDeviceInfo != null) {// 设备列表入口
-			LogUtils.i(TAG, "deviceinfo: " + curBusDeviceInfo.toString());
+		if (deviceInfo != null) {// 设备列表入口
+			LogUtils.i(TAG, "deviceinfo: " + deviceInfo.toString());
 			busListEntrance = true;
 			rl_Layout = (RelativeLayout) findViewById(R.id.devSelect);// 设备下拉列表布局隐藏
 			rl_Layout.setVisibility(View.GONE);
@@ -144,8 +121,8 @@ public class UserMapActivity extends Activity {
 				rl_Layout.setVisibility(View.GONE);
 				// getCurrentLocation();// 定位手机的位置
 			} else {
-				curBusDeviceInfo = listBus.get(0);
-				LogUtils.i(TAG, "deviceinfo: " + curBusDeviceInfo.toString());
+				deviceInfo = listBus.get(0);
+				LogUtils.i(TAG, "deviceinfo: " + deviceInfo.toString());
 
 				queryDevList = (Spinner) findViewById(R.id.spinner_queryDevList);
 				SpinnerBusAdapter queryDevListAdapter = new SpinnerBusAdapter(this, R.layout.spinner_item, listBus);
@@ -158,7 +135,7 @@ public class UserMapActivity extends Activity {
 						if (guid != null) {
 							guid = "";
 						}
-						curBusDeviceInfo = listBus.get(location);
+						deviceInfo = listBus.get(location);
 						resetOverLay();
 					}
 
@@ -264,10 +241,10 @@ public class UserMapActivity extends Activity {
 	 * 初始化图层
 	 */
 	private void initOverlay() {
-		if(null==curBusDeviceInfo){
+		if(null==deviceInfo){
 			MUtils.toast(mContext, "未监测到设备");
 		}
-		center = new LatLng(curBusDeviceInfo.getLatitude(), curBusDeviceInfo.getLongitude());
+		center = new LatLng(deviceInfo.getLatitude(), deviceInfo.getLongitude());
 		// 定义地图状态
 		MapStatus mMapStatus = new MapStatus.Builder().target(center).zoom(zoom).build();
 		// 定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
@@ -277,8 +254,8 @@ public class UserMapActivity extends Activity {
 		
 		
 		// 坐标
-		MUtils.debugToast(mContext, "Lai:" + curBusDeviceInfo.getLatitude() + "：" + curBusDeviceInfo.getLongitude());
-		LatLng llA = new LatLng(curBusDeviceInfo.getLatitude(), curBusDeviceInfo.getLongitude());
+		MUtils.debugToast(mContext, "Lai:" + deviceInfo.getLatitude() + "：" + deviceInfo.getLongitude());
+		LatLng llA = new LatLng(deviceInfo.getLatitude(), deviceInfo.getLongitude());
 		MarkerOptions ooA = new MarkerOptions().position(llA).icon(bdA).zIndex(9).draggable(true);
 		// 掉下动画
 		ooA.animateType(MarkerAnimateType.drop);
@@ -290,8 +267,8 @@ public class UserMapActivity extends Activity {
 			public boolean onMarkerClick(Marker arg0) {
 				if (arg0 == mMarkerA) {
 					Intent intent = new Intent(mContext, RealTimeVideoActivity.class);
-					curBusDeviceInfo.setCurrentChn(1);
-					intent.putExtra("videoData", curBusDeviceInfo);
+					deviceInfo.setCurrentChn(1);
+					intent.putExtra("videoData", deviceInfo);
 					startActivity(intent);
 				}
 				return false;

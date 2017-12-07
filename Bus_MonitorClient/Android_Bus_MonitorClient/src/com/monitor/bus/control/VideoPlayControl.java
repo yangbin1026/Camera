@@ -22,7 +22,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.jniUtil.JNVPlayerUtil;
-import com.jniUtil.MyUtil;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.bean.DevRecordInfo;
 import com.monitor.bus.bean.DeviceInfo;
@@ -154,7 +154,7 @@ public  class VideoPlayControl {
 					Log.e(TAG, "++++++本地回放+++++文件路径:"+ filePath+"++++++++录像ID:"+record_id);
 					File mFile = new File(filePath);
 					if (!mFile.exists()) {// 文件不存在，删除数据库的信息
-						MyUtil.commonToast(currentContext, R.string.not_findfile);
+						MUtils.commonToast(currentContext, R.string.not_findfile);
 						db.deleteRecordInfo(record_id);
 					}
 					recStreamId = JNVPlayerUtil.JNV_RecOpenFile(filePath, this, "callbackSetStreamInfo", "callbackPlayInfo", 0);
@@ -163,7 +163,7 @@ public  class VideoPlayControl {
 			currentDeviceInfo = (DeviceInfo) intent.getSerializableExtra("videoData");
 			initSendTalk();// 初始化对讲
 			if (currentDeviceInfo == null) {
-				MyUtil.commonToast(currentContext, R.string.not_playdata);
+				MUtils.commonToast(currentContext, R.string.not_playdata);
 				return;
 			}
 			Constants.DERECTION_STATE = AVP_GetMirror();// 获取当前设备的镜像状态
@@ -487,12 +487,12 @@ public  class VideoPlayControl {
 		 * @throws IOException
 		 */
 		public void CapturePicture() {
-			String imageFilePath = MyUtil.getCurrentFilePath(Constants.IMAGE_PATH + "/", currentDeviceInfo);// 文件目录
+			String imageFilePath = MUtils.getCurrentFilePath(Constants.IMAGE_PATH + "/", currentDeviceInfo);// 文件目录
 			File devFile = new File(imageFilePath);
 			if (!devFile.exists()) {// 目录不存在
 				devFile.mkdirs();// 创建相应的文件夹
 			}
-			String times = MyUtil.getCurrentDateTime(Constants.YMD_HMSS_FORMAT);// 当前时间 yyyyMMddHHmmssSSS格式
+			String times = MUtils.getCurrentDateTime(Constants.YMD_HMSS_FORMAT);// 当前时间 yyyyMMddHHmmssSSS格式
 
 			File f = new File(imageFilePath + times +".jpg");// 文件路径
 			if(videoView.saveBitmap(f)){//抓拍成功

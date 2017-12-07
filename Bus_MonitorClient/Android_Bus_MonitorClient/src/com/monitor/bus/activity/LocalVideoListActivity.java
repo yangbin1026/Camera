@@ -11,7 +11,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import com.jniUtil.MyUtil;
+import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.database.DatabaseHelper;
 
@@ -58,7 +58,7 @@ public class LocalVideoListActivity extends BaseActivity {
 				new String[] { "file_name" }, new int[] { R.id.localTest });
 		localListView.setAdapter(simpleAdapter);
 		if (testLocalListView.size() == 0) {
-			MyUtil.commonToast(this, R.string.not_recordfile);
+			MUtils.commonToast(this, R.string.not_recordfile);
 		}
 	}
 
