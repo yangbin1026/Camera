@@ -143,7 +143,6 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 
 	private void showWaittingDialog() {
 		if (0 == DeviceManager.getInstance().getDeviceList().size()) {
-			progressDialog = LoginEventControl.myProgress;
 			progressDialog = new ProgressDialog(getContext());
 			progressDialog.setTitle(R.string.loading_data_title);
 			progressDialog.setMessage(this.getString(R.string.waiting));

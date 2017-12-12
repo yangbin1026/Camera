@@ -93,6 +93,7 @@ public class Constants {
 		public static final int LOGIN_SUCCESS = 1; // 登录成功
 		public static final int LONGIN_FAILD = 2; // 登录失败
 		public static final int LOGIN_OUT = 3; // 退出登录
+		
 		public static final int GET_EVENT_DEVLIST = 301;// 获取设备列表
 		public static final int GET_EVENT_RECLIST = 302;// 获取录像列表
 		public static final int DEVICE_ALARM_EVENT = 201;// 报警事件

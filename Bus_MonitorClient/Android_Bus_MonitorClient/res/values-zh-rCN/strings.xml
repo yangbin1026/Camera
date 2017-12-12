@@ -171,6 +171,8 @@
  	<string name="alert_massage">已有设备报警信息，请查看</string>
  	<string name="online">在线</string>
  	<string name="alarm">报警</string>
+ 	<string name="logining">正在登陆...</string>
+ 	
  	
  	<!-- 版本 -->
  	<string name="product_version">当前版本: </string>

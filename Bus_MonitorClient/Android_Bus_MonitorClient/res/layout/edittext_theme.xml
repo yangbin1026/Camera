@@ -37,7 +37,7 @@
             android:background="@xml/edit_bg_repeat"
             android:ems="10"
             android:gravity="left|center"
-            android:inputType="text"
+            android:inputType="number"
             android:lines="1"
             android:maxLength="16"
             android:paddingLeft="5dp"

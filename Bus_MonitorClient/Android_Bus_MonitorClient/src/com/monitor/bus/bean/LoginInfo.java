@@ -2,24 +2,24 @@ package com.monitor.bus.bean;
 
 public class LoginInfo {
 	String userName;
-	String port;
+	int port;
 	String passWord;
 	String ip;
 	
 	public LoginInfo(){
 		
 	}
-	public LoginInfo(String userName, String port, String passWord, String ip) {
+	public LoginInfo(String userName, int port, String passWord, String ip) {
 		super();
 		this.userName = userName;
-		this.port = port;
+		port = port;
 		this.passWord = passWord;
 		this.ip = ip;
 	}
 	public String getUserName() {
 		return userName;
 	}
-	public String getPort() {
+	public int getPort() {
 		return port;
 	}
 	public String getPassWord() {
@@ -31,7 +31,7 @@ public class LoginInfo {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public void setPort(String port) {
+	public void setPort(int port) {
 		this.port = port;
 	}
 	public void setPassWord(String passWord) {

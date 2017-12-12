@@ -21,13 +21,13 @@ public class LogUtils {
 	SimpleDateFormat sdf;
 	private static final long maxLen = 5 * 1024 * 1024; // 5M
 	private static final int maxCount = 5;
-	private static final String LOG_NAME = "myLog";
+	public static final String LOG_NAME = "myLog";
+	public static final String LOG_NAME_DEVICE = "myDeviceLog";
 
-	
 	final static String TAG = "LogUtils";
 	private static LogUtils mUtils;
 	File logDir = new File(Environment.getExternalStorageDirectory(), "ALog");
-	File currentLogFile ;
+	File currentLogFile;
 	PrintWriter out = null;
 	int curentIndex = 0;
 
@@ -36,12 +36,14 @@ public class LogUtils {
 
 	private LogUtils() {
 	}
-	public  static LogUtils getInstance(){
-		if(mUtils==null){
-			mUtils=new LogUtils();
+
+	public static LogUtils getInstance() {
+		if (mUtils == null) {
+			mUtils = new LogUtils();
 		}
 		return mUtils;
 	}
+
 	public static void d(String tag, String msg) {
 		if (Debug)
 			Log.d(tag, msg);
@@ -56,29 +58,28 @@ public class LogUtils {
 		if (Debug)
 			Log.v(tag, msg);
 	}
+
 	public static void i(String tag, String msg) {
 		if (Debug)
 			Log.i(tag, msg);
 	}
 
-	public void localLog(String tag, String log) {
+	public void localLog(String tag, String log, String fileName) {
 		if (log == null) {
-			log="LOG IS NULL!!!";
+			log = "LOG IS NULL!!!";
 			return;
 		}
-		currentLogFile= new File(logDir, LOG_NAME + ".log");
-		Log.i("myyangbin", "currentLogFile=="+currentLogFile.getAbsolutePath());
-		if (out == null) {
-			try {
-				Log.i("myyangbin", "outpath"+currentLogFile.getAbsolutePath());
-				this.out = new PrintWriter(new FileOutputStream(currentLogFile, true));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		currentLogFile = new File(logDir, fileName + ".log");
+		Log.i(TAG, "currentLogFile==" + currentLogFile.getAbsolutePath());
+
+		try {
+			Log.i(TAG, "outpath" + currentLogFile.getAbsolutePath());
+			this.out = new PrintWriter(new FileOutputStream(currentLogFile, true));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		Log.i("myyangbin", "out=="+out);
 		if (currentLogFile.length() > maxLen) {
-			Log.i("myyangbin", "out>MaxLen");
+			Log.i(TAG, "out>MaxLen");
 			out.close();
 			if (curentIndex > maxCount) {
 				curentIndex = 0;
@@ -86,18 +87,18 @@ public class LogUtils {
 				curentIndex++;
 			}
 			try {
-				Log.i("myyangbin", "new out"+curentIndex+"：："+logDir.getAbsolutePath());
-				this.currentLogFile = new File(logDir, LOG_NAME + curentIndex + ".log");
+				Log.i(TAG, "new out" + curentIndex + "：：" + logDir.getAbsolutePath());
+				this.currentLogFile = new File(logDir, fileName + curentIndex + ".log");
 				this.out = new PrintWriter(this.currentLogFile);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return;
 			}
 		}
-			
+
 		tag += ":";
-		if(sdf==null){
-			 sdf= new SimpleDateFormat("yyyyMMdd-HH-mm-ss");
+		if (sdf == null) {
+			sdf = new SimpleDateFormat("yyyyMMdd-HH-mm-ss");
 		}
 		out.println(sdf.format(new Date(System.currentTimeMillis())) + ": " + tag + " " + log);
 		out.flush();

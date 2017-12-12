@@ -38,7 +38,7 @@ public class PullParseXML {
 			switch (event) {
 			case XmlPullParser.START_DOCUMENT:// 判断当前事件是否是文档开始事件
 				// Constants.BUSDEVICEDATA.clear();
-				LogUtils.getInstance().localLog("PullParseXML", "START_DOCUMENT");
+				LogUtils.getInstance().localLog("PullParseXML", "START_DOCUMENT",LogUtils.LOG_NAME_DEVICE);
 				break;
 			case XmlPullParser.START_TAG:// 判断当前事件是否是标签元素开始事件
 				if (!"device".equals(parser.getName())) {
@@ -133,7 +133,7 @@ public class PullParseXML {
 			case XmlPullParser.END_TAG: // 结束元素事件
 				if ("device".equals(parser.getName())) {// 判断结束标签元素是否是device
 					if (Constants.IS_CASCADE_SERVER && !isDeviceValid(deviceInfo)) {// 级联模式才需要验证
-						LogUtils.getInstance().localLog("PullParseXML", "this Device is Useless");
+						LogUtils.getInstance().localLog("PullParseXML", "this Device is Useless",LogUtils.LOG_NAME_DEVICE);
 					} else {
 						manager.addDeviceInfo(deviceInfo);
 					}

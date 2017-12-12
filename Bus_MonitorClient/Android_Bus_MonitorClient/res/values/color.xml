@@ -7,6 +7,13 @@
 	
 	<color name="home_tab_bg">#4f0000ff</color><!-- 蓝色 -->
 	
+    <color name="triangle">#aa72d572</color>
+    <color name="circle">#aa738ffe</color>
+    <color name="rect">#aae84e40</color>
+    <color name="view_bg">#00000000</color>
+    <color name="shadow">#25808080</color>
+    <color name="dialog_bg">#f5f5f5</color>
+	
 	<!--        mycolor     -->
 	<color name="title_color">#000000</color><!-- 标题字体颜色 -->
 	<!--<color name="close_color">#6d6d6d</color> 录像、监听、对讲、方向的关闭 的字体颜色 -->

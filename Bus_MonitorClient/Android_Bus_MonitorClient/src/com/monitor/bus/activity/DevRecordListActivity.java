@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -17,7 +16,6 @@ import com.monitor.bus.adapter.DevRecordListAdapter;
 import com.monitor.bus.bean.DevRecordInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
-import com.monitor.bus.control.LoginEventControl;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 
@@ -29,6 +27,7 @@ public class DevRecordListActivity extends BaseActivity {
 	private ListView recordListView;
 	private static String TAG = "DevRecordListActivity";
 	private String guId;
+	ProgressDialog myProgressDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,7 +36,7 @@ public class DevRecordListActivity extends BaseActivity {
 		guId = intent.getStringExtra("guid");
 		recordListView = (ListView) findViewById(R.id.localListView);  
 		if( 0 == Constants.RECORD_LIST.size()){
-			LoginEventControl.myProgress = ProgressDialog.show(this, getString(R.string.loading_data_title), getString(R.string.waiting),true,true);
+			myProgressDialog = ProgressDialog.show(this, getString(R.string.loading_data_title), getString(R.string.waiting),true,true);
 		}
 		recordListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -94,7 +93,7 @@ public class DevRecordListActivity extends BaseActivity {
             	int eventType = intent.getIntExtra(Constants.WHAT_LOGIN_EVENT_TYPE, 0);// 
             	LogUtils.i(TAG, "========广播接收器=======当前登陆状态:"+eventType);
             	if(eventType == CALLBACKFLAG.GET_EVENT_RECLIST){
-            		LoginEventControl.myProgress.dismiss();
+            		myProgressDialog.dismiss();
             		DevRecordListAdapter devRecordAdapter = new DevRecordListAdapter(DevRecordListActivity.this,Constants.RECORD_LIST);
             		recordListView.setAdapter(devRecordAdapter);
             		if(Constants.RECORD_LIST.size() == 0){

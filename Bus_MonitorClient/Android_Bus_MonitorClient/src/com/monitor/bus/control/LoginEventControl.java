@@ -17,7 +17,9 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable.Callback;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Handler;
@@ -46,27 +48,35 @@ import com.monitor.bus.bean.ServerInfo;
  */
 @SuppressLint("HandlerLeak")
 public class LoginEventControl {
-	private Activity mContext;
+	private Context mContext;
 	private static String TAG = "LoginEventControl";
 	private boolean is_alarm_flag = false;// 记录是否有报警
 	private boolean alarm_times = false;// 记录是否已报警过一次
 	private Message msg;
 	private NotifycationManager myNotification;// 引用通知
-	public static ProgressDialog myProgress;
-	public static Timer alarmTimer;// 计时器
+	private static Timer alarmTimer;// 计时器
 	private SoundPool soundPool;
 	private int nGetServerIndex = 0; // 获取服务器列表次数
+	private LoginStatusCallBack mStatusCallback;
 
-	public LoginEventControl(Activity currentActivity) {
-		this.mContext = currentActivity;
-		myNotification = new NotifycationManager(currentActivity);
-		myProgress = new ProgressDialog(currentActivity);
+	public interface LoginStatusCallBack{
+		void onStatus(int statu);
+	}
+	public LoginEventControl(Context context) {
+		if(context==null){
+			LogUtils.getInstance().localLog(TAG, "ERROR: LoginEventControl Context is NULL!!!",LogUtils.LOG_NAME);
+		}
+		this.mContext = context;
+		myNotification = new NotifycationManager(context);
 		// 创建声音播放
 		soundPool = new SoundPool(5, AudioManager.STREAM_SYSTEM, 5);// 一个参数为同时播放数据流的最大个数，二数据流类型，三为声音质量
 		soundPool.load(mContext, R.raw.alarm_sound, 1);// 把你的声音素材放到res/raw里，2个参数即为资源文件，3个为音乐的优先级
 
 		// 创建定时器
 		alarmTimer = new Timer();
+	}
+	public void setLoginStatusListener(LoginStatusCallBack callback){
+		mStatusCallback=callback;
 	}
 
 	/***
@@ -93,11 +103,11 @@ public class LoginEventControl {
 	 *            0:正在登录 1:登录成功 2: 登录失败 3:退出登录 4: 流正在打开 5:流打开成功 6:流打开失败 7:流关闭
 	 * 
 	 */
-	public synchronized int callbackLoginEvent(long iUserParam, String strEvent) throws JSONException {
+	public synchronized int callbackLogin(long iUserParam, String strEvent) throws JSONException {
 
 		strEvent = strEvent.replace("NaN", "1");
 		LogUtils.getInstance().localLog(TAG,"-callbackLoginEvent-"+
-				"iUserParam:" + iUserParam + "  strEvent:" + strEvent);
+				"iUserParam:" + iUserParam + "  strEvent:" + strEvent,LogUtils.LOG_NAME);
 		JSONObject jo = new JSONObject(strEvent);
 		int eventType = jo.getInt("eventType");
 		msg = myHandler.obtainMessage();
@@ -122,29 +132,24 @@ public class LoginEventControl {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case CALLBACKFLAG.LOGIN_ING:// 登陆中
-				/* myProgress = new ProgressDialog(currentContext); */
-				myProgress.setTitle(R.string.login_loading_title);
-				myProgress.setMessage(mContext.getString(R.string.waiting));
-				myProgress.setCanceledOnTouchOutside(false);
-				myProgress.show();
+				if(mStatusCallback!=null){
+					mStatusCallback.onStatus(CALLBACKFLAG.LOGIN_ING);
+				}
 				break;
-
 			case CALLBACKFLAG.LOGIN_SUCCESS:// 登陆成功
 				LogUtils.i(TAG, "登陆成功！！");
 				JNVPlayerUtil.JNV_N_GetDevList(Constants.DEVICELIST_PASTH);// 获取设备列表
-				myProgress.dismiss();
-				Intent intent = new Intent();
-				intent.setClass(mContext, HomeActivity.class);
-				mContext.startActivity(intent);
-				mContext.finish();
+				if(mStatusCallback!=null){
+					mStatusCallback.onStatus(CALLBACKFLAG.LOGIN_SUCCESS);
+				}
 				break;
-
 			case CALLBACKFLAG.LONGIN_FAILD:// 登陆失败
-				myProgress.dismiss();
 				String str = switchFlag(msg.arg1);
 				LogUtils.i(TAG, "登陆失败!" + str);
 				JNVPlayerUtil.JNV_N_Logout();
-				MUtils.toast(mContext, mContext.getString(R.string.loginFailed));
+				if(mStatusCallback!=null){
+					mStatusCallback.onStatus(CALLBACKFLAG.LONGIN_FAILD);
+				}
 				break;
 			case CALLBACKFLAG.GET_EVENT_DEVLIST:// 获取设备列表
 				LogUtils.i(TAG, "获取设备列表，回调数据为：" + msg.arg1);
@@ -155,11 +160,11 @@ public class LoginEventControl {
 						InputStream in = new FileInputStream(myFile);
 						PullParseXML.getSortBusDevices(in);
 					} catch (FileNotFoundException e) {
-						LogUtils.getInstance().localLog(TAG, "xml文件不存在!!");
+						LogUtils.getInstance().localLog(TAG, "xml文件不存在!!",LogUtils.LOG_NAME);
 					} catch (XmlPullParserException e) {
-						LogUtils.getInstance().localLog(TAG, "xml文件解析异常!!");
+						LogUtils.getInstance().localLog(TAG, "xml文件解析异常!!",LogUtils.LOG_NAME);
 					} catch (IOException e) {
-						LogUtils.getInstance().localLog(TAG, "xml文件读取异常!!");
+						LogUtils.getInstance().localLog(TAG, "xml文件读取异常!!",LogUtils.LOG_NAME);
 					}
 					// 设备列表解析后，申请其他信息
 					if (Constants.IS_CASCADE_SERVER) {
@@ -191,11 +196,11 @@ public class LoginEventControl {
 						InputStream in = new FileInputStream(myFile);
 						addServerTable(PullParseXML.getServerList(in));
 					} catch (FileNotFoundException e) {
-						LogUtils.getInstance().localLog(TAG, "servicexml文件不存在!!");
+						LogUtils.getInstance().localLog(TAG, "servicexml文件不存在!!",LogUtils.LOG_NAME);
 					} catch (XmlPullParserException e) {
-						LogUtils.getInstance().localLog(TAG, "servicexml文件解析异常!!" + e.getMessage());
+						LogUtils.getInstance().localLog(TAG, "servicexml文件解析异常!!" + e.getMessage(),LogUtils.LOG_NAME);
 					} catch (IOException e) {
-						LogUtils.getInstance().localLog(TAG, "servicexml文件读取异常!!");
+						LogUtils.getInstance().localLog(TAG, "servicexml文件读取异常!!",LogUtils.LOG_NAME);
 					}
 
 					if (nGetServerIndex < 2) {
@@ -231,11 +236,11 @@ public class LoginEventControl {
 						Constants.RECORD_LIST = PullParseXML.getDevRecords(in);
 						in.close();
 					} catch (FileNotFoundException e) {
-						LogUtils.getInstance().localLog(TAG, "xml文件不存在!!");
+						LogUtils.getInstance().localLog(TAG, "xml文件不存在!!",LogUtils.LOG_NAME);
 					} catch (IOException e) {
-						LogUtils.getInstance().localLog(TAG, "xml文件读取异常!!");
+						LogUtils.getInstance().localLog(TAG, "xml文件读取异常!!",LogUtils.LOG_NAME);
 					} catch (XmlPullParserException e) {
-						LogUtils.getInstance().localLog(TAG, "xml文件解析异常!!");
+						LogUtils.getInstance().localLog(TAG, "xml文件解析异常!!",LogUtils.LOG_NAME);
 					}
 				}
 				mIntent.putExtra("eventType", msg.what);
@@ -350,14 +355,14 @@ public class LoginEventControl {
 		List<ArrayList<ServerInfo>> tmpll = Constants.SERVICE_LIST;
 		if (Constants.IS_CASCADE_SERVER) {
 			if (tmpll.size() != Constants.SERVER_TYPES)
-				LogUtils.getInstance().localLog(TAG, "服务器列表出错！！");
+				LogUtils.getInstance().localLog(TAG, "服务器列表出错！！",LogUtils.LOG_NAME);
 			else {
 				for (i = 0; i < tmpll.size(); i++) {
 					ArrayList<ServerInfo> tmpl = tmpll.get(i);
 					for (j = 0; j < tmpl.size(); j++) {
 						ServerInfo tmp = tmpl.get(j);
 						LogUtils.getInstance().localLog(TAG, "服务器表：" + tmp.getServerID() + "," + tmp.getServerIp() + ","
-								+ tmp.getServerPort() + "," + i);
+								+ tmp.getServerPort() + "," + i,LogUtils.LOG_NAME);
 						int ret = JNVPlayerUtil.JNV_N_AddServerInfo(tmp.getServerID(), tmp.getServerIp(),
 								tmp.getServerPort(), i);
 						LogUtils.i(TAG, "加入服务器信息，返回：" + ret);
@@ -406,14 +411,14 @@ public class LoginEventControl {
 			}
 			break;
 		}
-		LogUtils.getInstance().localLog(TAG, "错误标志信息：" + ret);
+		LogUtils.getInstance().localLog(TAG, "错误标志信息：" + ret,LogUtils.LOG_NAME);
 		return ret;
 	}
 
 	private void addServerTable(ArrayList<ServerInfo> list) {
 		for (int i = 0; i < Constants.SERVICE_LIST.size(); i++) {
 			if (Constants.SERVICE_LIST.get(i).equals(list)) {
-				LogUtils.getInstance().localLog(TAG, "出现重复服务器列表！！");
+				LogUtils.getInstance().localLog(TAG, "出现重复服务器列表！！",LogUtils.LOG_NAME);
 				return;
 			}
 		}
@@ -442,8 +447,9 @@ public class LoginEventControl {
 			nGetServerIndex++;
 			JNVPlayerUtil.JNV_N_GetServerList(Constants.SERVERLIST_PASTH[nGetServerIndex], nGetServerIndex);// 获取服务器列表（0
 		} else {
-			LogUtils.getInstance().localLog(TAG, "只有3张服务器列表，申请参数错误!!");
+			LogUtils.getInstance().localLog(TAG, "只有3张服务器列表，申请参数错误!!",LogUtils.LOG_NAME);
 		}
 	}
-
+	
 }
+

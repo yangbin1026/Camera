@@ -70,6 +70,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 		tv_version=(TextView) view.findViewById(R.id.tv_version);
 		tv_username=(TextView) view.findViewById(R.id.tv_username);
 		tv_showmode=(TextView) view.findViewById(R.id.tv_showmode);
+		
 		sb_autologin=(SwitchButton) view.findViewById(R.id.sb_autologin);
 		sb_gps=(SwitchButton) view.findViewById(R.id.sb_gps);
 		sb_local=(SwitchButton) view.findViewById(R.id.sb_localpaser);

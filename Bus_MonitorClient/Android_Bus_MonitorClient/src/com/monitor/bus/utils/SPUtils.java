@@ -79,7 +79,7 @@ public class SPUtils {
 		e.putString(KEY_INFO_NAME, info.getUserName());
 		e.putString(KEY_INFO_PW, info.getPassWord());
 		e.putString(KEY_INFO_IP, info.getIp());
-		e.putString(KEY_INFO_PORT, info.getPort());
+		e.putInt(KEY_INFO_PORT, info.getPort());
 		e.commit();
 	}
 	public static LoginInfo getLoginInfo(Context context){
@@ -90,7 +90,7 @@ public class SPUtils {
 		info.setUserName(sp_login.getString(KEY_INFO_NAME, ""));
 		info.setPassWord(sp_login.getString(KEY_INFO_PW, ""));
 		info.setIp(sp_login.getString(KEY_INFO_IP, ""));
-		info.setPort(sp_login.getString(KEY_INFO_PORT, ""));
+		info.setPort(sp_login.getInt(KEY_INFO_PORT, 0));
 		return info;
 	}
 

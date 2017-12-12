@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 
@@ -16,8 +17,8 @@ import com.monitor.bus.activity.R;
 public class NotifycationManager {
 	private Intent notificationIntent;
 	private NotificationManager notificationManager;
-	private Activity currentContext;
-	public NotifycationManager(Activity context) {
+	private Context currentContext;
+	public NotifycationManager(Context context) {
 		currentContext = context;
 		  // 创建一个NotificationManager的引用
         notificationManager = (NotificationManager)context.getSystemService(android.content.Context.NOTIFICATION_SERVICE);

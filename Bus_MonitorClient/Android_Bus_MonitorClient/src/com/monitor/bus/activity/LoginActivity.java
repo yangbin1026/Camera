@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,17 +19,14 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Process;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -41,11 +37,13 @@ import com.jniUtil.JNVPlayerUtil;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.bean.LoginInfo;
 import com.monitor.bus.consts.Constants;
+import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.control.LoginEventControl;
+import com.monitor.bus.control.LoginEventControl.LoginStatusCallBack;
 import com.monitor.bus.utils.LogUtils;
-import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.utils.SPUtils;
 import com.monitor.bus.view.MyEditText;
+import com.monitor.bus.view.dialog.ShapeLoadingDialog.ShapeLoadingDialog;
 
 /**
  * 用户登陆
@@ -68,6 +66,8 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	private InetAddress iAdd;
 	private Handler handler = new Handler();
 	private LoginEventControl loginControl;// 登陆回调类
+	private Context mContext;
+	private ShapeLoadingDialog dialog;
 
 	static {
 		try {
@@ -75,7 +75,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 			System.loadLibrary("JNVCommon_jni");
 			System.loadLibrary("JNVPlayer_jni");
 		} catch (UnsatisfiedLinkError e) {
-			Log.e(TAG, "load库文件异常:" + e.getMessage());
+			LogUtils.getInstance().localLog(TAG, "load库文件异常:" + e.getMessage(), LogUtils.LOG_NAME);
 		}
 	}
 
@@ -83,8 +83,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
-		
-		loginControl = new LoginEventControl(this);
+		mContext = this;
 		JNVPlayerUtil.JNV_Init(Constants.SCREEN_COUNT);// 初始化so
 		initView();
 		initData();
@@ -95,12 +94,15 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		et_password = (MyEditText) findViewById(R.id.login_password);
 		et_login_port = (MyEditText) findViewById(R.id.login_port);
 		et_login_address = (MyEditText) findViewById(R.id.login_address);
+
 		et_userName.setImage(R.drawable.account);
 		et_password.setImage(R.drawable.password);
 		et_login_port.setImage(R.drawable.port);
 		et_login_address.setImage(R.drawable.ip);
+
 		cb_remenber = (CheckBox) findViewById(R.id.remember);
 		cb_autoLogin = (CheckBox) findViewById(R.id.cb_auto_login);
+
 		cb_remenber.setOnCheckedChangeListener(this);
 		cb_autoLogin.setOnCheckedChangeListener(this);
 		btn_login = (Button) findViewById(R.id.login);
@@ -108,6 +110,30 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	}
 
 	private void initData() {
+		loginControl = new LoginEventControl(getApplicationContext());
+		loginControl.setLoginStatusListener(new LoginStatusCallBack() {
+			@Override
+			public void onStatus(int statu) {
+				switch (statu) {
+				case CALLBACKFLAG.LOGIN_SUCCESS:
+					Intent intent = new Intent();
+					intent.setClass(mContext, HomeActivity.class);
+					mContext.startActivity(intent);
+					
+					((Activity) mContext).finish();
+					break;
+				case CALLBACKFLAG.LOGIN_ING:
+					showLoginDialog();
+					break;
+				case CALLBACKFLAG.LONGIN_FAILD:
+					MUtils.toast(mContext, mContext.getString(R.string.loginFailed));
+					break;
+
+				default:
+					break;
+				}
+			}
+		});
 		boolean savePwd = SPUtils.getBoolean(this, SPUtils.KEY_REMEMBER_USERINFO, true);
 		boolean autoLogin = SPUtils.getBoolean(this, SPUtils.KEY_AUTO_LOGIN, false);
 		if (savePwd) {
@@ -120,36 +146,59 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		String u = info.getUserName();
 		String p = info.getPassWord();
 		String ip = info.getIp();
-		String port = info.getPort();
+		int port = info.getPort();
+		et_userName.setEditText(u);
 
 		et_password.setEditText(p);
+
 		et_login_address.setEditText(ip);
-		et_login_port.setEditText(port + "");
-		et_userName.setEditText(u);
+
+		et_login_port.setEditText("" + port);
+
+		et_userName.setEditFocus();
 		et_password.setEditPasswordType();
 		et_login_port.setEditNumberType();
 		et_login_address.setIpConfigType();
-		et_userName.setEditFocus();
 
 		if (LogUtils.Debug) {
 			et_userName.setEditText("123");
 			et_password.setEditText("123");
-			et_login_address.setEditText("183.61.171.28");
 			et_login_port.setEditText("6008");
+			et_login_address.setEditText("183.61.171.28");
 		}
 		if (autoLogin) {
 			login(u, p, ip, port);
 		}
 	}
 
+	private void showLoginDialog() {
+		if (dialog != null) {
+			dialog.show();
+			return;
+		}
+		if (dialog == null) {
+			dialog = new ShapeLoadingDialog.Builder(this).cancelable(false).canceledOnTouchOutside(false)
+					.loadText(R.string.logining).build();
+		}
+		dialog.setCancelable(true);
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.getBuilder().loadText("登陆中");
+		dialog.show();
+	}
+
+	private void dissmissDialog() {
+		if (dialog != null) {
+			dialog.dismiss();
+		}
+	}
+
 	@Override
 	public void onBackPressed() {
-		if (LoginEventControl.myProgress.isShowing()) {
-			super.onBackPressed();
-		} else {
-			JNVPlayerUtil.JNV_UnInit();
-			Process.killProcess(Process.myPid());
-		}
+		/*
+		 * if (LoginEventControl.myProgress.isShowing()) {
+		 * super.onBackPressed(); } else { JNVPlayerUtil.JNV_UnInit();
+		 * Process.killProcess(Process.myPid()); }
+		 */
 	}
 
 	/* 登陆按钮 */
@@ -160,7 +209,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 			String userName = et_userName.getEditText();
 			String password = et_password.getEditText();
 			String ip = et_login_address.getEditText();
-			String port = et_login_port.getEditText();
+			int port = Integer.parseInt(et_login_port.getEditText());
 			LoginInfo info = new LoginInfo(userName, port, password, ip);
 			if (cb_remenber.isChecked()) {
 				SPUtils.saveLoginInfo(this, info);
@@ -304,14 +353,14 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	/**
 	 * 下载完成时要将进度条对话框取消并进行是否安装新应用的提示
 	 */
-	protected void haveDownLoad() {
+	private void haveDownLoad() {
 
 		handler.post(new Runnable() {
 
 			@Override
 			public void run() {
 				pbar.cancel();
-				AlertDialog.Builder dialog = new AlertDialog.Builder(LoginActivity.this);
+				AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 				dialog.setCancelable(false);
 				dialog.setTitle("下载完成").setMessage("是否安装新的应用")
 						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -376,8 +425,8 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	/**
 	 * 登录
 	 */
-	public void login(String u, String p, String ip, String portStr) {
-		if (MUtils.hasUselessString(u, p, ip, portStr)) {
+	private void login(String u, String p, String ip, int port) {
+		if (MUtils.hasUselessString(u, p, ip) || port == 0) {
 			MUtils.toast(this, "请填写完整信息！");
 			return;
 		}
@@ -385,26 +434,25 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 			MUtils.toast(this, getString(R.string.network_error));
 			return;
 		}
-			try {
-				// 解析域名的IP地址
-				iAdd = InetAddress.getByName(ip);
-				// 得到字符串形式的IP地址
-				ip = iAdd.getHostAddress();
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
+		try {
+			// 解析域名的IP地址
+			iAdd = InetAddress.getByName(ip);
+			// 得到字符串形式的IP地址
+			ip = iAdd.getHostAddress();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
 
-			}
-			Pattern pattern = Pattern.compile(
-					"^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$");
-			Matcher matcher = pattern.matcher(ip);
-			if (!matcher.matches()) {
-				MUtils.commonToast(this, R.string.ipFailed);
-				return;
-			}
-			int port = Integer.parseInt(portStr.equals("") ? "0" : portStr);
-			// 登录
-		LogUtils.getInstance().localLog(TAG, "JNI_login:" + u + p + ip + port);
-		JNVPlayerUtil.JNV_N_Login(ip, port, u, p, 30, loginControl, "callbackLoginEvent", 0);
+		}
+		Pattern pattern = Pattern.compile(
+				"^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$");
+		Matcher matcher = pattern.matcher(ip);
+		if (!matcher.matches()) {
+			MUtils.commonToast(this, R.string.ipFailed);
+			return;
+		}
+		// 登录
+		LogUtils.getInstance().localLog(TAG, "JNI_login:" + u + p + ip + port, LogUtils.LOG_NAME);
+		JNVPlayerUtil.JNV_N_Login(ip, port, u, p, 30, loginControl, "callbackLogin", 0);
 	}
 }

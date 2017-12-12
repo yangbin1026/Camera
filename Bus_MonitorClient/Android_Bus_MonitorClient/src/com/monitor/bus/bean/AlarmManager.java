@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.monitor.bus.activity.R;
+import com.monitor.bus.utils.LogUtils;
 
 import android.content.Context;
 
 public class AlarmManager {
+	private static final String TAG=AlarmManager.class.getSimpleName();
 	private List<AlarmInfo> alarmList = new ArrayList<AlarmInfo>();// 报警信息
 	static AlarmManager manager;
 	private Context mContext;
@@ -17,6 +19,9 @@ public class AlarmManager {
 	}
 
 	public synchronized static AlarmManager getInstance(Context context) {
+		if(context==null){
+			LogUtils.getInstance().localLog(TAG, "Context IS NULL!!!", LogUtils.LOG_NAME);
+		}
 		if (manager == null) {
 			manager = new AlarmManager(context);
 		}
