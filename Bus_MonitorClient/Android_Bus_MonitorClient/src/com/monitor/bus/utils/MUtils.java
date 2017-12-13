@@ -481,7 +481,7 @@ public class MUtils {
 		 * 获取谷歌市场的下载地址
 		 */
 		public static Uri getGoogleStoreUri(Activity activity) {
-			SharedPreferences spf = activity.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+			SharedPreferences spf = activity.getSharedPreferences(SPUtils.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
 			String storeUrl = spf.getString(Constants.STORE_URL_KEY, Constants.STORE_URL);
 			// Log.i(TAG, "谷歌市场下载地址："+storeUrl);
@@ -492,7 +492,7 @@ public class MUtils {
 		 * 获取谷歌服务的下载地址
 		 */
 		public static Uri getGoogleServiceUri(Activity activity) {
-			SharedPreferences spf = activity.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+			SharedPreferences spf = activity.getSharedPreferences(SPUtils.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
 			String serviceUrl = spf.getString(Constants.SERVICE_URL_KEY, Constants.SERVICE_URL);
 			// Log.i(TAG, "谷歌服务下载地址："+serviceUrl);

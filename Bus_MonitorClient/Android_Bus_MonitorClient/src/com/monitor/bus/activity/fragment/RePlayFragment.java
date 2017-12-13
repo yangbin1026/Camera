@@ -9,9 +9,14 @@ import java.util.List;
 
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
+import com.jniUtil.JNVPlayerUtil;
 import com.monitor.bus.activity.R;
+import com.monitor.bus.activity.VideoListLocalActivity;
+import com.monitor.bus.activity.VideoListActivity;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.DeviceManager;
+import com.monitor.bus.bean.RecodInfo;
+import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.view.dialog.DateUtil;
 import com.monitor.bus.view.dialog.MyDataPickerDialog;
@@ -20,7 +25,9 @@ import com.monitor.bus.view.dialog.MyTimePickerDialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +44,9 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	private Dialog dateDialog, timeDialog, chooseDialog;
 
 	private List<DeviceInfo> deviceList;
+	private RecodInfo recodInfo = new RecodInfo();
+	private DeviceManager deviceManger;
+	String dateString;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,7 +58,8 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	}
 
 	private void initData() {
-		deviceList = DeviceManager.getInstance().getDeviceList();
+		deviceManger = DeviceManager.getInstance();
+		deviceList = deviceManger.getDeviceList();
 	}
 
 	private void setTitle() {
@@ -58,12 +69,15 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 
 	void initView() {
 		tv_channel = (TextView) contentView.findViewById(R.id.tv_channel);
-		tv_end_time = (TextView) contentView.findViewById(R.id.tv_end_time);
 		tv_file_local = (TextView) contentView.findViewById(R.id.tv_find_local);
+		tv_type = (TextView) contentView.findViewById(R.id.tv_type);
+
 		tv_select_device = (TextView) contentView.findViewById(R.id.tv_select_device);
+
 		tv_select_time = (TextView) contentView.findViewById(R.id.tv_select_time);
 		tv_start_time = (TextView) contentView.findViewById(R.id.tv_start_time);
-		tv_type = (TextView) contentView.findViewById(R.id.tv_type);
+		tv_end_time = (TextView) contentView.findViewById(R.id.tv_end_time);
+
 		rl_1 = (RelativeLayout) contentView.findViewById(R.id.rl_1);
 		rl_2 = (RelativeLayout) contentView.findViewById(R.id.rl_2);
 		rl_3 = (RelativeLayout) contentView.findViewById(R.id.rl_3);
@@ -103,30 +117,19 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	 * @return
 	 */
 	public void queryRecord() {
-		String queryStartTime = tv_start_time.getText() + " " + tv_start_time.getText();// 获取选择的开始时间
-		String queryEndTime = tv_end_time.getText() + " " + tv_end_time.getText();// 获取选择的结束时间
-		if (!isUsefullTime(queryStartTime, queryEndTime)) {
+		if (!isUsefullTime(recodInfo.getStartTime(), recodInfo.getEndTime())) {
 			MUtils.commonToast(getContext(), R.string.time_validate);
 			return;
 		}
+		if(!recodInfo.isLocalVideo()){
+			 JNVPlayerUtil.JNV_N_RecQuery(recodInfo.getDeviceId(), 0, recodInfo.getType(), recodInfo.getStartTime(),
+					 recodInfo.getEndTime(), recodInfo.getChannelId(),
+					 Constants.DEVRECORD_PASTH);
+		}
+		Intent intent = new Intent(getContext(),VideoListActivity.class);
+		intent.putExtra(VideoListActivity.EXTRA_RECODINFO, recodInfo);
+		getContext().startActivity(intent);
 
-		/*
-		 * if (rb_native.isChecked()) {// 本地 Intent intent = new Intent();
-		 * intent.setClass(getContext(), LocalRecordActivity.class);
-		 * intent.putExtra("start_time", queryStartTime);
-		 * intent.putExtra("end_time", queryEndTime); startActivity(intent); }
-		 * else {// 设备端 // String guId =
-		 * queryDevList.getSelectedItem().toString(); int chnNumber =
-		 * sp_queryDevChnCount.getSelectedItemPosition() + 1; int iType =
-		 * sp_queryRecordType.getSelectedItemPosition() + 1;
-		 * Log.e("RecordQueryActivity", "guId:" + guId + "开始时间：" +
-		 * queryStartTime + "结束时间：" + queryEndTime + "设备ID:" + guId + "=通道号：" +
-		 * chnNumber + "录像类型：" + iType); JNVPlayerUtil.JNV_N_RecQuery(guId, 0,
-		 * iType, queryStartTime, queryEndTime, chnNumber,
-		 * Constants.DEVRECORD_PASTH); Intent intent = new Intent();
-		 * intent.setClass(getContext(), DevRecordListActivity.class);
-		 * intent.putExtra("guid", guId); startActivity(intent); }
-		 */
 	}
 
 	/**
@@ -135,7 +138,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	 * @param time
 	 * @throws ParseException
 	 */
-	public boolean isUsefullTime(String start_time, String end_time) {
+	private boolean isUsefullTime(String start_time, String end_time) {
 		try {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 			Date start_date = df.parse(start_time);
@@ -158,7 +161,9 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 				.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
 					@Override
 					public void onDataSelected(String itemValue, int position) {
+						Log.i(TAG, "selectDevice:" + itemValue + "  position:" + position);
 						tv_select_device.setText(itemValue);
+						recodInfo.setDeviceId("" + deviceList.get(position).getDeviceId());
 					}
 
 					@Override
@@ -179,8 +184,8 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 				.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
 					@Override
 					public void onDataSelected(String itemValue, int position) {
-						// mTextView.setText(itemValue);
 						tv_type.setText(itemValue);
+						recodInfo.setType(position + 1);
 					}
 
 					@Override
@@ -201,8 +206,8 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 				.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
 					@Override
 					public void onDataSelected(String itemValue, int position) {
-						// mTextView.setText(itemValue);
 						tv_file_local.setText(itemValue);
+						recodInfo.setType(position + 1);
 					}
 
 					@Override
@@ -219,18 +224,16 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 		builder.setOnDateSelectedListener(new MyDatePickerDialog.OnDateSelectedListener() {
 			@Override
 			public void onDateSelected(int[] dates) {
-				tv_select_time.setText(dates[0] + "-" + (dates[1] > 9 ? dates[1] : ("0" + dates[1])) + "-"
-						+ (dates[2] > 9 ? dates[2] : ("0" + dates[2])));
-
+				dateString = dates[0] + "-" + (dates[1] > 9 ? dates[1] : ("0" + dates[1])) + "-"
+						+ (dates[2] > 9 ? dates[2] : ("0" + dates[2]));
+				tv_select_time.setText(dateString);
 			}
 
 			@Override
 			public void onCancel() {
 
 			}
-		})
-
-				.setSelectYear(date.get(0) - 1).setSelectMonth(date.get(1) - 1).setSelectDay(date.get(2) - 1);
+		}).setSelectYear(date.get(0) - 1).setSelectMonth(date.get(1) - 1).setSelectDay(date.get(2) - 1);
 
 		builder.setMaxYear(DateUtil.getYear());
 		builder.setMaxMonth(DateUtil.getDateForString(DateUtil.getToday()).get(1));
@@ -247,7 +250,9 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 			timeDialog = builder.setOnTimeSelectedListener(new MyTimePickerDialog.OnTimeSelectedListener() {
 				@Override
 				public void onTimeSelected(int[] times) {
-					tv_start_time.setText(times[0] + ":" + times[1]);
+					String startDate = times[0] + ":" + times[1];
+					tv_start_time.setText(startDate);
+					recodInfo.setStartTime(startDate);
 				}
 			}).create();
 		}
@@ -264,7 +269,9 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 			timeDialog = builder.setOnTimeSelectedListener(new MyTimePickerDialog.OnTimeSelectedListener() {
 				@Override
 				public void onTimeSelected(int[] times) {
+					String endDate = times[0] + ":" + times[1];
 					tv_end_time.setText(times[0] + ":" + times[1]);
+					recodInfo.setEndTime(endDate);
 				}
 			}).create();
 		}
@@ -279,6 +286,9 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 		case R.id.rl_1:// 设备
 			List<String> deviceNames = new ArrayList<String>();
 			for (DeviceInfo info : deviceList) {
+				if (info.getDeviceName() == null || info.getDeviceName().isEmpty()) {
+					LogUtils.getInstance().localLog(TAG, "deviceName is NULL!!!");
+				}
 				deviceNames.add(info.getDeviceName());
 			}
 			showDeviceDialog(deviceNames);

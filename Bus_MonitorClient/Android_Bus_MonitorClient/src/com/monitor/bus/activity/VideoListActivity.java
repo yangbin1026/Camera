@@ -14,61 +14,64 @@ import android.widget.ListView;
 
 import com.monitor.bus.adapter.DevRecordListAdapter;
 import com.monitor.bus.bean.DevRecordInfo;
+import com.monitor.bus.bean.RecodInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 
 /**
- * 设备端录像文件列表
+ * 远程录像文件列表
  */
-public class DevRecordListActivity extends BaseActivity {
-
-	private ListView recordListView;
-	private static String TAG = "DevRecordListActivity";
-	private String guId;
+public class VideoListActivity extends BaseActivity {
+	public static final String EXTRA_RECODINFO="recodInfo";
+	private static String TAG = "VideoListActivity";
+	
+	private RecodInfo recodinfo;
 	ProgressDialog myProgressDialog;
+	private ListView recordListView;
+	private Context mContext;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		Intent intent = getIntent();
-		guId = intent.getStringExtra("guid");
-		recordListView = (ListView) findViewById(R.id.localListView);  
-		if( 0 == Constants.RECORD_LIST.size()){
-			myProgressDialog = ProgressDialog.show(this, getString(R.string.loading_data_title), getString(R.string.waiting),true,true);
-		}
+		recodinfo = (RecodInfo) intent.getSerializableExtra(EXTRA_RECODINFO);
+		registerBoradcastReceiver();//注册广播接收器
+		initView();
+		initData();
 		recordListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
 					long arg3) {
 				DevRecordInfo devRecordInfo = Constants.RECORD_LIST.get(position);
-				devRecordInfo.setGuId(guId);
+				devRecordInfo.setGuId(recodinfo.getDeviceId());
 				Intent intent = new Intent();
 				intent.putExtra("devRecordInfo", devRecordInfo);
-				intent.setClass(DevRecordListActivity.this, ReplayActivity.class);
+				intent.setClass(mContext, ReplayActivity.class);
 				startActivity(intent);
 			}
 		});
 		
 	}
 
-	@Override
-	protected void onResume() { 
-		registerBoradcastReceiver();//注册广播接收器
+	private void initData() {
 		DevRecordListAdapter devRecordAdapter = new DevRecordListAdapter(this,Constants.RECORD_LIST);
 		recordListView.setAdapter(devRecordAdapter);
-		super.onResume();
+		if( 0 == Constants.RECORD_LIST.size()){
+			myProgressDialog = ProgressDialog.show(this, getString(R.string.loading_data_title), getString(R.string.waiting),true,true);
+		}
 	}
+
+	private void initView() {
+		recordListView = (ListView) findViewById(R.id.localListView);  
+	}
+
 	
-	@Override
-	protected void onStop() {
-		unregisterReceiver(mBroadcastReceiver);
-		super.onStop();
-	}
 	
 	@Override
 	protected void onDestroy() {
+		unregisterReceiver(mBroadcastReceiver);
 		File devRecordFile = new File(Constants.DEVRECORD_PASTH);
 		if(devRecordFile.exists()){	//存在删除
 			devRecordFile.delete();
@@ -77,27 +80,25 @@ public class DevRecordListActivity extends BaseActivity {
 		super.onDestroy();
 	}
 
-	public void registerBoradcastReceiver(){ 
+	private void registerBoradcastReceiver(){ 
         IntentFilter myIntentFilter = new IntentFilter(); 
         myIntentFilter.addAction("ACTION_NAME"); 
-        //注册广播       
         registerReceiver(mBroadcastReceiver, myIntentFilter); 
     } 
 	
-	//广播接收器
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){ 
         @Override 
         public void onReceive(Context context, Intent intent) { 
             String action = intent.getAction(); 
             if(action.equals("ACTION_NAME")){ 
-            	int eventType = intent.getIntExtra(Constants.WHAT_LOGIN_EVENT_TYPE, 0);// 
+            	int eventType = intent.getIntExtra(Constants.WHAT_LOGIN_EVENT_TYPE, 0);
             	LogUtils.i(TAG, "========广播接收器=======当前登陆状态:"+eventType);
             	if(eventType == CALLBACKFLAG.GET_EVENT_RECLIST){
             		myProgressDialog.dismiss();
-            		DevRecordListAdapter devRecordAdapter = new DevRecordListAdapter(DevRecordListActivity.this,Constants.RECORD_LIST);
+            		DevRecordListAdapter devRecordAdapter = new DevRecordListAdapter(VideoListActivity.this,Constants.RECORD_LIST);
             		recordListView.setAdapter(devRecordAdapter);
             		if(Constants.RECORD_LIST.size() == 0){
-            			MUtils.commonToast(DevRecordListActivity.this, R.string.not_dev_recordfile);
+            			MUtils.commonToast(mContext, R.string.not_dev_recordfile);
             		}
             	}
             }

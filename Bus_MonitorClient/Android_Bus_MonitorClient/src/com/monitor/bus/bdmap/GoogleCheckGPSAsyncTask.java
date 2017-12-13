@@ -10,6 +10,11 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 
+/**
+ * gps校正任务
+ * @author Administrator
+ *
+ */
 public class GoogleCheckGPSAsyncTask extends AsyncTask<Void,Integer,Integer>{
 	protected Context context = null;
 	protected String  gpsCorrectionFileName = "";
@@ -26,7 +31,6 @@ public class GoogleCheckGPSAsyncTask extends AsyncTask<Void,Integer,Integer>{
 	
 	@Override
 	protected Integer doInBackground(Void... params) {
-		// TODO Auto-generated method stub
 		return GpsCorrection.getInstance().initialize(gpsCorrectionFileName);
 	}
 

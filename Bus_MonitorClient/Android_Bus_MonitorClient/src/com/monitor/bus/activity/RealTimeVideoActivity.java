@@ -34,9 +34,9 @@ import com.monitor.bus.view.MyVideoView;
  * 
  */
 public class RealTimeVideoActivity extends BaseActivity implements OnTouchListener, View.OnClickListener {
-
 	private static String TAG = "VideoActivity";
 	public static final String KEY_DEVICE_INFO = "key_device_info";
+	
 	String recordFilePath = null;// 当前录像文件存储路径
 	String times = "";// 当前文件名称
 	boolean isCapturePicture = false;// 是否有操作过抓拍
@@ -55,7 +55,7 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 
 	private DeviceInfo deviceInfo;// 设备信息
 	private String titleString;
-	BaiduMapManager mapManager;
+	BaiduMapManager baiduMapManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +71,13 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mapManager.Resume();
+		baiduMapManager.Resume();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		mapManager.Pauser();
+		baiduMapManager.Pauser();
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 					Uri.parse("file://" + Environment.getExternalStorageDirectory())));// 刷新相册环境
 		}
 		super.onDestroy();
-		mapManager.Destory();
+		baiduMapManager.Destory();
 	}
 
 	@Override
@@ -143,8 +143,8 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 			return;
 		}
 		titleString = deviceInfo.getDeviceName() + " - " + "channel_" + deviceInfo.getCurrentChn();
-		mapManager = BaiduMapManager.getInstance(this);
-		mapManager.setDeviceInfo(deviceInfo);
+		baiduMapManager = BaiduMapManager.getInstance(this);
+		baiduMapManager.setDeviceInfo(deviceInfo);
 	}
 
 	private void initView() {

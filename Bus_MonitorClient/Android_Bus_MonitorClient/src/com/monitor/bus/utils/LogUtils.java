@@ -63,6 +63,10 @@ public class LogUtils {
 		if (Debug)
 			Log.i(tag, msg);
 	}
+	
+	public void localLog(String tag,String log){
+		localLog(tag, log, LOG_NAME);
+	}
 
 	public void localLog(String tag, String log, String fileName) {
 		if (log == null) {

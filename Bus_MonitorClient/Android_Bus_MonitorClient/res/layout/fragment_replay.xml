@@ -111,7 +111,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="5dp"
                 android:layout_toLeftOf="@id/iv_3"
-                android:text="123"
+                android:text="@string/channel"
                 android:textSize="18dp" />
 
             <View

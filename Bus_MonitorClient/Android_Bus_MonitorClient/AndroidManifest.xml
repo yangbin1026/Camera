@@ -79,7 +79,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LocalVideoListActivity"
+            android:name=".VideoListLocalActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".RealTimeVideoActivity"
@@ -95,7 +95,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".DevRecordListActivity"
+            android:name=".VideoListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".UserMapActivity"

@@ -43,7 +43,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 
 public class DeviceListFragment extends BaseFragment implements View.OnClickListener{
-	private static String TAG = "BusDeviceList";
+	private static String TAG = "DeviceListFragment";
 	private HashMap<String, String> groupLocationMap;// 存储组及所处位置
 	
 	private ProgressDialog progressDialog;
@@ -170,14 +170,14 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 					disMissWaittingDialog();
 					updataByPid("0");
 				} else {
-					String DEVID = intent.getStringExtra("devID");//
-					String myLocation = groupLocationMap.get(DEVID);
-					if (myLocation != null || "".equals(myLocation)) {
-						int location = Integer.parseInt(myLocation);
-						if (eventType == 4096) {// 设备上线
-						} else if (eventType == 8192) {// 设备离线
-						}
-					}
+//					String DEVID = intent.getStringExtra("devID");//
+//					String myLocation = groupLocationMap.get(DEVID);
+//					if (myLocation != null || "".equals(myLocation)) {
+//						int location = Integer.parseInt(myLocation);
+//						if (eventType == 4096) {// 设备上线
+//						} else if (eventType == 8192) {// 设备离线
+//						}
+//					}
 				}
 			}
 		}

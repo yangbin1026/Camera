@@ -12,6 +12,7 @@ public class SPUtils {
 	private static SharedPreferences sp_login;
 	private static String TAG= SPUtils.class.getSimpleName();
 	private static final String MY_SP_KEY = "appkey";
+	public static final String SHARED_PREFERENCES_NAME = "setting";
 	
 	
 	private static final String LOGIN_INFO="login_info";

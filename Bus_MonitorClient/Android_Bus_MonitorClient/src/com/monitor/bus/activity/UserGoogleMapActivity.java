@@ -41,12 +41,12 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.jniUtil.GpsCorrection;
 import com.jniUtil.JNVPlayerUtil;
 import com.monitor.bus.utils.MUtils;
+import com.monitor.bus.utils.SPUtils;
 import com.monitor.bus.bdmap.GoogleCheckGPSAsyncTask;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.utils.LogUtils;
-import com.monitor.bus.utils.MUtils;
 
 public class UserGoogleMapActivity extends FragmentActivity {
 
@@ -56,7 +56,7 @@ public class UserGoogleMapActivity extends FragmentActivity {
 	public static final int MSG_WHAT_GET_GPS_START = 1;
 	public static final int MSG_WHAT_NEW_LOCATION = 2;
 
-	private boolean IsAsynCheckGPS = false;// 异步加载gps校验数据
+	private boolean IsAsynCheckGPS = true;// 异步加载gps校验数据
 	private boolean busListEntrance = false;
 	private boolean isToOtherMap = false;
 	private boolean isBroadcastRegister = false;
@@ -67,7 +67,7 @@ public class UserGoogleMapActivity extends FragmentActivity {
 	private LatLng prePoint;
 	private LatLng curPoint;
 	private Polyline mPolyline;
-	private LinearLayout myLayout;
+	private LinearLayout myLayout;//下拉设备选择框
 
 	private LinkedList<LatLng> mLatLngs = new LinkedList<LatLng>();
 	private LocationManager locationManager;
@@ -81,12 +81,13 @@ public class UserGoogleMapActivity extends FragmentActivity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MSG_WHAT_GET_GPS_START:
+				//开始获取gps信息
 				LogUtils.i(TAG, "请求GPS信息参数：" + guid);
 				JNVPlayerUtil.JNV_N_GetGPSStart(guid);// 请求下发GPS数据
 				break;
 			case MSG_WHAT_NEW_LOCATION:
-				IsAsynCheckGPS = (Boolean) msg.obj;
 				// 刷新位置
+				IsAsynCheckGPS = (Boolean) msg.obj;
 				setUpMapIfNeeded();
 				mGoogleMap.setOnMapLongClickListener(new OnMapLongClickListener() {
 					public void onMapLongClick(LatLng arg0) {
@@ -118,8 +119,9 @@ public class UserGoogleMapActivity extends FragmentActivity {
 
 		String f = MUtils.saveIfNeed(this, g_GpsFixFileName, R.raw.commondata);
 		File targetFile = new File(f);
+		
 		if (targetFile.exists()) {
-			SharedPreferences spf = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			SharedPreferences spf = getSharedPreferences(SPUtils.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 			boolean IsGpsCorrection = spf.getBoolean(Constants.GOOGLE_GPS_CORRRECTION,
 					Constants.IS_GOOGLE_GPS_CORRRECTION);
 			if (IsGpsCorrection) {
@@ -312,16 +314,6 @@ public class UserGoogleMapActivity extends FragmentActivity {
 			break;
 		case 2:
 			isToOtherMap = true;
-			JNVPlayerUtil.JNV_N_GetGPSStop(guid);
-			guid = "";
-
-			Intent intent2 = new Intent();
-			if (busListEntrance) {
-				intent2.putExtra(RealTimeVideoActivity.KEY_DEVICE_INFO, curCtlDevInfo);
-			}
-			intent2.setClass(this, UserMapActivity.class);
-			startActivity(intent2);
-			finish();
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -337,14 +329,6 @@ public class UserGoogleMapActivity extends FragmentActivity {
 		isBroadcastRegister = true;
 	}
 
-	/**
-	 * 修改焦点车辆
-	 * 
-	 * @param location
-	 */
-	public void changeFocusBus(int location) {
-		initDevLocationGPS();
-	}
 
 	/**
 	 * 获取我的位置

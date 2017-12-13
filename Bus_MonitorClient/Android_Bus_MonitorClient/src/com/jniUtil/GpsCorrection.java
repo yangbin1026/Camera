@@ -55,11 +55,11 @@ public class GpsCorrection {
 			return -1;
 		}
 		
-		File f = null;
-		InputStream is = null;
+		File file = null;
+		InputStream inputStream = null;
 		try{
-			f = new File(strFileName);
-			is = new FileInputStream(f);
+			file = new File(strFileName);
+			inputStream = new FileInputStream(file);
 			byte []data = new byte[50];
 			int byteread = 0;
 			String strData = null;
@@ -69,7 +69,7 @@ public class GpsCorrection {
 			String strlat2 = null;
 			int nIndex = 0;
 			while(true){
-				byteread = is.read(data);
+				byteread = inputStream.read(data);
 				if(byteread == -1){
 					break;
 				}
@@ -77,7 +77,6 @@ public class GpsCorrection {
 				strData = new String(data,0,byteread);
 				//去掉组后的回车换行
 				strData = strData.substring(0, strData.length() - 2);
-				
 				strlon1 = strData.substring(0,12);
 				strlon1 = strlon1.trim();
 				strlat1 = strData.substring(12,24);
@@ -104,9 +103,9 @@ public class GpsCorrection {
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			if(is != null){
+			if(inputStream != null){
 				try {
-					is.close();
+					inputStream.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

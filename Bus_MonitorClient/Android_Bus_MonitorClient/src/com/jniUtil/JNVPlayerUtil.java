@@ -63,13 +63,13 @@ public class JNVPlayerUtil {
 	// 录像下载相关
 	/**
 	 * 录像查询
-	 * @param deviceId		设备GUID
-	 * @param iCenter		中心或者设备录像，1，中心录像；0，设备录像
-	 * @param iType			录像类型，1,普通录像；2,报警录像
+	 * @param deviceId		设备ID
+	 * @param iCenter		1，中心录像；0，设备录像
+	 * @param iType			1,普通录像；2,报警录像
 	 * @param startTime		开始时间
 	 * @param endTime		结束时间
 	 * @param iChnFlag		通道号
-	 * @param filePath		设备端录像文件路径
+	 * @param filePath		设备端文件路径
 	 * @return
 	 */
 	public static native int JNV_N_RecQuery(String deviceId,int iCenter,int iType,String startTime,String endTime,int iChnFlag,String filePath);

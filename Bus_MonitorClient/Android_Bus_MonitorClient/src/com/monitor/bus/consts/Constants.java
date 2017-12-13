@@ -60,7 +60,6 @@ public class Constants {
 	public static boolean IS_CASCADE_SERVER = false; // 是否是级联服务器
 	public static final int SERVER_TYPES = 3; // 服务器类型数
 	public static final boolean HAS_LOGO = true;
-	public static final String SHARED_PREFERENCES_NAME = "setting";
 	public static final String SERVICE_URL_KEY = "service"; // 服务
 	public static final String STORE_URL_KEY = "store"; // 商店
 	public static final String GOOGLE_GPS_CORRRECTION = "GoogleGpsCorrection";

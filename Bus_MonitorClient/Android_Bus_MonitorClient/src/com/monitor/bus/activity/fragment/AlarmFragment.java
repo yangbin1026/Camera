@@ -51,11 +51,12 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 	View popContentView;
 	PopupWindow mPopWindow;
 	
-	AlarmManager alarmManger = AlarmManager.getInstance(getContext());
+	AlarmManager alarmManger;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		contentView = inflater.inflate(R.layout.fragment_alarm, container, false);
+		alarmManger = AlarmManager.getInstance(getContext());
 		setTitle();
 		initData();
 		initView();
