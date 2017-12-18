@@ -56,15 +56,11 @@ public class Constants {
 	public static final int MIRROE_STATUS = 2;
 
 	public static boolean DERECTION_STATE = true;// 当前方向状态标志 true 正 false 反
-	public static boolean IS_ACTIVE = true;// 该应用程序是否处于前台运行状态 true：前台 false 后台
 	public static boolean IS_CASCADE_SERVER = false; // 是否是级联服务器
 	public static final int SERVER_TYPES = 3; // 服务器类型数
 	public static final boolean HAS_LOGO = true;
 	public static final String SERVICE_URL_KEY = "service"; // 服务
 	public static final String STORE_URL_KEY = "store"; // 商店
-	public static final String GOOGLE_GPS_CORRRECTION = "GoogleGpsCorrection";
-	public static final boolean IS_GOOGLE_GPS_CORRRECTION = false; // 是否google
-																	// gps校正
 
 	public static List<ArrayList<ServerInfo>> SERVICE_LIST = new ArrayList<ArrayList<ServerInfo>>();// 服务器信息
 	public static List<DevRecordInfo> RECORD_LIST = new ArrayList<DevRecordInfo>();// 设备端录像

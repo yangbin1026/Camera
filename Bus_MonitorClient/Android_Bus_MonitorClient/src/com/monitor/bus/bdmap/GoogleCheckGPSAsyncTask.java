@@ -56,7 +56,7 @@ public class GoogleCheckGPSAsyncTask extends AsyncTask<Void,Integer,Integer>{
 		if(mHandler != null){
 			Message msg = new Message();
 			msg.what = UserGoogleMapActivity.MSG_WHAT_NEW_LOCATION;
-			msg.obj =false;
+			msg.obj =true;
 			mHandler.sendMessage(msg);
 		}
 	}

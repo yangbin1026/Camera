@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.monitor.bus.adapter.NotifycationManager;
 import com.monitor.bus.consts.Constants;
+import com.monitor.bus.utils.MUtils;
 
 /**
  * 公共activity
@@ -20,6 +21,7 @@ public class BaseActivity extends Activity {
 	private static String TAG = "BaseActivity";
 	
 	private NotifycationManager myNotification;//引用通知
+	
 	public boolean isCompleteExit = false;//是否完全退出程序
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +37,8 @@ public class BaseActivity extends Activity {
 		if (!isAppOnForeground()) {
 			// app 进入后台
 			if(!isCompleteExit){//
-				if(Constants.IS_ACTIVE){
+				if(MUtils.isBackGround(this)){
 					myNotification.showNotification(null);
-					Constants.IS_ACTIVE = false; // 记录当前已经进入后台
 				}
 			}
 		}
@@ -46,10 +47,9 @@ public class BaseActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (!Constants.IS_ACTIVE) {
+		if (!MUtils.isBackGround(this)){
 			// app 从后台唤醒，进入前台
 			myNotification.cancelNotification();
-			Constants.IS_ACTIVE = true;
 		}
 	}
 
@@ -58,7 +58,7 @@ public class BaseActivity extends Activity {
 	 * 
 	 * @return
 	 */
-	public boolean isAppOnForeground() {
+	private boolean isAppOnForeground() {
 		ActivityManager activityManager = (ActivityManager) getApplicationContext()
 				.getSystemService(Context.ACTIVITY_SERVICE);
 		String packageName = getApplicationContext().getPackageName();

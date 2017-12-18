@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -19,16 +18,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
-import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.LocationSource.OnLocationChangedListener;
@@ -50,41 +45,38 @@ import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.utils.LogUtils;
 
 public class UserGoogleMapActivity extends FragmentActivity {
-
 	private static final String TAG = "UserGoogleMapActivity";
-	static final String Apptag = "Google";
-	final String g_GpsFixFileName = "commondata.gft";
+	public static final String GPS_FIX_FILE_NAME = "commondata.gft";
+	public static final int ZOOM = 16;
+
 	public static final int MSG_WHAT_GET_GPS_START = 1;
 	public static final int MSG_WHAT_NEW_LOCATION = 2;
-	public static final int ZOOM=16;
 
-	private boolean IsAsynCheckGPS = true;// 异步加载gps校验数据
-	private boolean isBroadcastRegister = false;
+	private boolean IsAsynCheckGPS = false;// gps校正任务是否完成
 	private boolean isAnimationEnd = false;
-	public boolean isResume=false;
 
 	private GoogleMap mapView;
 	private Marker mMarker;
 	private LatLng prePoint;
 	private LatLng curPoint;
-	private Polyline mPolyline;
+	private Polyline mPolyline;// 路线
 
 	private LinkedList<LatLng> mLatLngs = new LinkedList<LatLng>();
-	private Location location;
-	private LocationSource mLocationSource;
 
-	private DeviceInfo curCtlDevInfo = null; // 当前可操作的设备
-	private String deviceId = null;
-	
-	public OnLocationChangedListener mListener;
+	private DeviceInfo deviceInfo = null; // 当前可操作的设备
+
+	public OnLocationChangedListener mLocationChangedListenerListener;
+
+	boolean isGPSCheck;
+	Context mContext;
 
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MSG_WHAT_GET_GPS_START:
-				//开始获取gps信息
-				LogUtils.i(TAG, "请求GPS信息参数：" + deviceId);
-				JNVPlayerUtil.JNV_N_GetGPSStart(deviceId);// 请求下发GPS数据
+				// 开始获取gps信息
+				LogUtils.i(TAG, "请求GPS信息参数：" + deviceInfo.getNewGuId());
+				JNVPlayerUtil.JNV_N_GetGPSStart(deviceInfo.getNewGuId());// 请求下发GPS数据
 				break;
 			case MSG_WHAT_NEW_LOCATION:
 				// 刷新位置
@@ -102,154 +94,92 @@ public class UserGoogleMapActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.user_google_mapview);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
+		mContext = this;
 
 		Intent intent = getIntent();
-		curCtlDevInfo = (DeviceInfo) intent.getSerializableExtra(RealTimeVideoActivity.KEY_DEVICE_INFO);// 获取当前设备坐标
+		deviceInfo = (DeviceInfo) intent.getSerializableExtra(RealTimeVideoActivity.KEY_DEVICE_INFO);// 获取当前设备坐标
+		if (deviceInfo == null) {
+			MUtils.toast(this, "请先选择设备");
+		}
+		isGPSCheck = SPUtils.getBoolean(mContext, SPUtils.KEY_GSP_CHECK, false);
+
 		initView();
-		
-		mLocationSource = new LocationSource(){
+		initDevLocationGPS();
+		initData();
 
-			@Override
-			public void activate(OnLocationChangedListener arg0) {
-				mListener = arg0;
-			}
-
-			@Override
-			public void deactivate() {
-				mListener = null;
-				
-			}
-			
-		};
-
-
-		String f = MUtils.saveIfNeed(this, g_GpsFixFileName, R.raw.commondata);
-		File targetFile = new File(f);
-		
-		if (targetFile.exists()) {
-			SharedPreferences spf = getSharedPreferences(SPUtils.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-			boolean IsGpsCorrection = spf.getBoolean(Constants.GOOGLE_GPS_CORRRECTION,
-					Constants.IS_GOOGLE_GPS_CORRRECTION);
-			if (IsGpsCorrection) {
-				if (!GpsCorrection.getInstance().IsInitialize()) {
-					IsAsynCheckGPS = true;
-					new GoogleCheckGPSAsyncTask(this, handler, targetFile.getPath()).execute();
-				}
-			}
-		}
-
-		if (!IsAsynCheckGPS) {
-			mapView.setOnMapLongClickListener(new OnMapLongClickListener() {
-				public void onMapLongClick(LatLng arg0) {
-					openOptionsMenu();
-				}
-			});
-		}
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if (!IsAsynCheckGPS) {
+		if (IsAsynCheckGPS) {
 			registerBoradcastReceiver();// 注册广播接收器
-			isResume=true;
 		}
-	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		isResume=false;
 	}
 
 	@Override
 	protected void onDestroy() {
 		unregisterReceiver(mBroadcastReceiver);
-		isBroadcastRegister = false;
-		JNVPlayerUtil.JNV_N_GetGPSStop(deviceId);
+		JNVPlayerUtil.JNV_N_GetGPSStop(deviceInfo.getNewGuId());
 		super.onDestroy();
 	}
-	
-	private void initView(){
+
+	private void initView() {
 		isAnimationEnd = false;
-			mapView = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-			mapView.getUiSettings().setRotateGesturesEnabled(false);// 禁用旋转手势
-			mapView.setMyLocationEnabled(true);// 开启本机位置图层
-			mapView.getUiSettings().setMyLocationButtonEnabled(false);
-			mapView.setLocationSource(mLocationSource);
-			mapView.setOnMarkerClickListener(new OnMarkerClickListener() {
+		mapView = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+		mapView.getUiSettings().setRotateGesturesEnabled(false);// 禁用旋转手势
+		mapView.setMyLocationEnabled(true);// 开启本机位置图层
+		mapView.getUiSettings().setMyLocationButtonEnabled(false);
+		mapView.setLocationSource(new LocationSource() {
 
-				@Override
-				public boolean onMarkerClick(Marker marker) {
-					if (marker.equals(mMarker)) {
-						Toast.makeText(UserGoogleMapActivity.this, "设备名称：" + curCtlDevInfo.getDeviceName(),
-								Toast.LENGTH_SHORT).show();
-						return true;
-					}
-					return false;
+			@Override
+			public void activate(OnLocationChangedListener arg0) {
+				mLocationChangedListenerListener = arg0;
+			}
+
+			@Override
+			public void deactivate() {
+				mLocationChangedListenerListener = null;
+
+			}
+
+		});
+		mapView.setOnMarkerClickListener(new OnMarkerClickListener() {
+
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				if (marker.equals(mMarker)) {
+					Toast.makeText(UserGoogleMapActivity.this, "设备名称：" + deviceInfo.getDeviceName(), Toast.LENGTH_SHORT)
+							.show();
+					return true;
 				}
-			});
-
-			if (curCtlDevInfo != null) {// 设备列表入口
-				initDevLocationGPS();
-
-			} 
-	}
-	private void initData(){
-		
+				return false;
+			}
+		});
 	}
 
-
-	/**
-	 * 移动摄像头 ,移动视窗到位置
-	 * 
-	 * @param zoom
-	 *            不进行缩放时，指定为0
-	 */
-	private void moveCamera(LatLng latLng, int zoom) {
-		if (zoom == 0) {
-			if (isAnimationEnd)
-				mapView.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-		} else {
-			mapView.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom), callback);
-			isAnimationEnd = false;
+	private void initData() {
+		String f = MUtils.saveIfNeed(this, GPS_FIX_FILE_NAME, R.raw.commondata);
+		File targetFile = new File(f);
+		if (targetFile.exists() && isGPSCheck && !GpsCorrection.getInstance().IsInitialize()) {
+			new GoogleCheckGPSAsyncTask(this, handler, targetFile.getPath()).execute();
 		}
+
 	}
-
-	/**
-	 * 摄像头相关回调
-	 */
-	private CancelableCallback callback = new CancelableCallback() {
-
-		@Override
-		public void onFinish() {
-			LogUtils.i(TAG, "动画结束了！！");
-			isAnimationEnd = true;
-		}
-
-		@Override
-		public void onCancel() {
-			LogUtils.i(TAG, "动画被取消了！！");
-		}
-	};
 
 	/**
 	 * 初始化对应设备的GPS信息
 	 */
-	public void initDevLocationGPS() {
+	private void initDevLocationGPS() {
 		LogUtils.i(TAG, "运行到initDevLocationGPS");
-		if (validateGps()) {
-			double longitude = curCtlDevInfo.getLongitude();
-			double latitude = curCtlDevInfo.getLatitude();
+		if (0d != deviceInfo.getLatitude() && 0d != deviceInfo.getLongitude()) {
+			double longitude = deviceInfo.getLongitude();
+			double latitude = deviceInfo.getLatitude();
 			LogUtils.i(TAG, "表中获得：lon=" + longitude + ",lat=" + latitude);
-			LatLng myPoint = MUtils.fromWgs84ToGoogle(latitude, longitude);
 
 			mapView.clear();
 			mLatLngs.clear();
 
-			mMarker = mapView.addMarker(new MarkerOptions().anchor(0.5f, 0.5f).position(myPoint)
-					.title("设备名称：" + curCtlDevInfo.getDeviceName())
-					.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_image_map)));
+			LatLng myPoint = MUtils.fromWgs84ToGoogle(latitude, longitude);
+			mMarker = mapView.addMarker(
+					new MarkerOptions().anchor(0.5f, 0.5f).position(myPoint).title("设备名称：" + deviceInfo.getDeviceName())
+							.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_image_map)));
 
 			mPolyline = mapView.addPolyline(new PolylineOptions().color(Color.GREEN).width(4));
 
@@ -257,29 +187,15 @@ public class UserGoogleMapActivity extends FragmentActivity {
 		} else {
 			getCurrentLocation();
 		}
-		deviceId = curCtlDevInfo.getNewGuId();
 		handler.sendEmptyMessage(MSG_WHAT_GET_GPS_START);
 	}
-
+ 
 	/**
-	 * 验证是否具有有效的GPS数据
-	 * 
-	 * @return
-	 */
-	private boolean validateGps() {
-		if (curCtlDevInfo != null && 0d != curCtlDevInfo.getLatitude() && 0d != curCtlDevInfo.getLongitude()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * 获取我的位置
+	 * 没有device位置信息时，获取当前位置显示
 	 */
 	private void getCurrentLocation() {
-		LocationManager locationManager= (LocationManager) getSystemService(LOCATION_SERVICE);
-		
+		LogUtils.getInstance().localLog(TAG, "getCurrentLocation()!!!!!!!!!");
+		LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
 		// ACCURACY_FINE 较高精确度
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
@@ -288,12 +204,10 @@ public class UserGoogleMapActivity extends FragmentActivity {
 		criteria.setCostAllowed(true);
 		criteria.setPowerRequirement(Criteria.POWER_LOW);
 
-
 		String provider = locationManager.getBestProvider(criteria, true);
-
 		LogUtils.i(TAG, "位置提供者" + provider);
 
-		location = locationManager.getLastKnownLocation(provider);// locationManager.GPS_PROVIDER
+		Location location = locationManager.getLastKnownLocation(provider);// locationManager.GPS_PROVIDER
 		if (location != null)
 			updateLocation(location);
 
@@ -320,7 +234,33 @@ public class UserGoogleMapActivity extends FragmentActivity {
 	}
 
 	/**
-	 * 更新位置
+	 * 移动摄像头 ,移动视窗到位置
+	 * 
+	 * @param zoom
+	 *            不进行缩放时，指定为0
+	 */
+	private void moveCamera(LatLng latLng, int zoom) {
+		if (zoom == 0) {
+			if (isAnimationEnd)
+				mapView.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+		} else {
+			mapView.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom), new CancelableCallback() {
+				@Override
+				public void onFinish() {
+					LogUtils.i(TAG, "动画结束了！！");
+					isAnimationEnd = true;
+				}
+
+				@Override
+				public void onCancel() {
+					LogUtils.i(TAG, "动画被取消了！！");
+				}
+			});
+		}
+	}
+
+	/**
+	 * 根据GPS数据更新位置
 	 * 
 	 * @param location
 	 */
@@ -329,12 +269,12 @@ public class UserGoogleMapActivity extends FragmentActivity {
 		LatLng tmp = MUtils.fromWgs84ToGoogle(location.getLatitude(), location.getLongitude());
 		location.setLatitude(tmp.latitude);
 		location.setLongitude(tmp.longitude);
-		if (mListener != null && isResume) {
+		if (mLocationChangedListenerListener != null) {
 			Location newLocation = new Location("LongPressLocationProvider");
 			location.setLatitude(location.getLatitude());
 			location.setLongitude(location.getLongitude());
 			location.setAccuracy(location.getAccuracy());
-			mListener.onLocationChanged(location);
+			mLocationChangedListenerListener.onLocationChanged(location);
 		}
 		moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), ZOOM);
 	}
@@ -346,9 +286,7 @@ public class UserGoogleMapActivity extends FragmentActivity {
 		IntentFilter myIntentFilter = new IntentFilter();
 		myIntentFilter.addAction("ACTION_NAME");
 		registerReceiver(mBroadcastReceiver, myIntentFilter);
-		isBroadcastRegister = true;
 	}
-
 
 	/**
 	 * 广播接收器
@@ -359,14 +297,13 @@ public class UserGoogleMapActivity extends FragmentActivity {
 			String action = intent.getAction();
 			if (action.equals("ACTION_NAME")) {
 				int eventType = intent.getIntExtra(Constants.WHAT_LOGIN_EVENT_TYPE, 0);//
-				if (isBroadcastRegister && eventType == CALLBACKFLAG.DEVICE_EVENT_GPS_INFO) {// GPS基本
-
+				if (eventType == CALLBACKFLAG.DEVICE_EVENT_GPS_INFO) {// GPS基本
 					String gpsDevID = intent.getStringExtra("gpsDevID");
-					if (curCtlDevInfo != null && curCtlDevInfo.getGuId().equals(gpsDevID)) {
+					if (deviceInfo != null && deviceInfo.getGuId().equals(gpsDevID)) {
 						double longitude = intent.getDoubleExtra("gpsBaseLongitude", 0);
 						double latitude = intent.getDoubleExtra("gpsBaseLatitude", 0);
 						int baseDirect = intent.getIntExtra("gpsBaseDirect", 0);
-						curPoint =MUtils.fromWgs84ToGoogle(latitude, longitude);
+						curPoint = MUtils.fromWgs84ToGoogle(latitude, longitude);
 						if (!curPoint.equals(prePoint)) {
 							Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.bus_image_map);
 							Bitmap dstBitmap = MUtils.getRotatedBmp(bmp, baseDirect);
@@ -375,10 +312,8 @@ public class UserGoogleMapActivity extends FragmentActivity {
 							mLatLngs.add(curPoint);
 							mPolyline.setPoints(mLatLngs);
 
-							if (isAnimationEnd) {
-								mMarker.setPosition(curPoint);
-								moveCamera(curPoint, 0);
-							}
+							mMarker.setPosition(curPoint);
+							moveCamera(curPoint, 0);
 							prePoint = curPoint;
 						}
 					}

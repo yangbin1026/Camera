@@ -27,12 +27,9 @@ import android.net.nsd.NsdManager.RegistrationListener;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
-public class BaiduMapManager {
-	private static BaiduMapManager manager;
+public class BaiduMapManager extends BaseMapManager {
 	private Context mContext;
 
-	private RelativeLayout rl_Layout;
-	private Spinner queryDevList;
 	private MapView mapView;
 	private BaiduMap mBaiduMap;
 	private Marker mMarkerA; // 覆盖图标
@@ -46,33 +43,39 @@ public class BaiduMapManager {
 	MapStatus.Builder builder;
 	DeviceInfo deviceInfo;
 
-	private BaiduMapManager(Context context) {
+	public BaiduMapManager(Context context) {
 		mContext = context;
 	}
 
-	public synchronized static BaiduMapManager getInstance(Context context) {
-		if (manager == null) {
-			manager = new BaiduMapManager(context);
-		}
-		return manager;
-	}
-
+	@Override
 	public void setDeviceInfo(DeviceInfo info) {
 		deviceInfo = info;
+		if (deviceInfo == null) {
+			MUtils.toast(mContext, "请先选择设备");
+		}
 		registReciver();
 	}
 
-	public void Resume() {
+	@Override
+	public void onCreat() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onResum() {
 		initView();
 		initOverlay();
 		mapView.onResume();
 	}
 
-	public void Pauser() {
+	@Override
+	public void onPause() {
 		mapView.onPause();
 	}
 
-	public void Destory() {
+	@Override
+	public void onDestory() {
 		mapView.onDestroy();
 		unRegistReciver();
 	}
@@ -87,12 +90,12 @@ public class BaiduMapManager {
 		mMarkerA = null;
 	}
 
-	public void resetOverLay() {
+	private void resetOverLay() {
 		clearOverlay();
 		initOverlay();
 	}
 
-	public void initView() {
+	private void initView() {
 		mapView = (MapView) ((Activity) mContext).findViewById(R.id.bmapView);
 		mBaiduMap = mapView.getMap();
 	}
@@ -100,7 +103,7 @@ public class BaiduMapManager {
 	/**
 	 * 初始化图层
 	 */
-	public void initOverlay() {
+	private void initOverlay() {
 		if (null == deviceInfo) {
 			MUtils.toast(mContext, "未监测到设备");
 		}

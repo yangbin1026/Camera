@@ -10,8 +10,8 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -21,7 +21,9 @@ import android.widget.TextView;
 
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.bean.BaiduMapManager;
+import com.monitor.bus.bean.BaseMapManager;
 import com.monitor.bus.bean.DeviceInfo;
+import com.monitor.bus.bean.GoogleMapManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.control.VideoPlayControl;
 import com.monitor.bus.database.DatabaseHelper;
@@ -33,10 +35,10 @@ import com.monitor.bus.view.MyVideoView;
  * 实时视频Activity
  * 
  */
-public class RealTimeVideoActivity extends BaseActivity implements OnTouchListener, View.OnClickListener {
+public class RealTimeVideoActivity extends FragmentActivity implements OnTouchListener, View.OnClickListener {
 	private static String TAG = "VideoActivity";
 	public static final String KEY_DEVICE_INFO = "key_device_info";
-	
+
 	String recordFilePath = null;// 当前录像文件存储路径
 	String times = "";// 当前文件名称
 	boolean isCapturePicture = false;// 是否有操作过抓拍
@@ -55,29 +57,33 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 
 	private DeviceInfo deviceInfo;// 设备信息
 	private String titleString;
-	BaiduMapManager baiduMapManager;
+	BaseMapManager mMapManager;
+
+	boolean isGoogleMap = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
 		setContentView(R.layout.activity_realtime);
-		Constants.STREAM_PLAY_TYPE = 1;// 设置播放类型为实时视频
+		Constants.STREAM_PLAY_TYPE = 1;// 设置播放类型为实时视频.
 
 		initData();
 		initView();
+		mMapManager.onCreat();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		baiduMapManager.Resume();
+		mMapManager.onResum();
+		;
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		baiduMapManager.Pauser();
+		mMapManager.onPause();
 	}
 
 	@Override
@@ -122,7 +128,7 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 					Uri.parse("file://" + Environment.getExternalStorageDirectory())));// 刷新相册环境
 		}
 		super.onDestroy();
-		baiduMapManager.Destory();
+		mMapManager.onDestory();
 	}
 
 	@Override
@@ -143,8 +149,13 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 			return;
 		}
 		titleString = deviceInfo.getDeviceName() + " - " + "channel_" + deviceInfo.getCurrentChn();
-		baiduMapManager = BaiduMapManager.getInstance(this);
-		baiduMapManager.setDeviceInfo(deviceInfo);
+
+		if (isGoogleMap) {
+			mMapManager = new GoogleMapManager(this);
+		} else {
+			mMapManager = new BaiduMapManager(this);
+		}
+		mMapManager.setDeviceInfo(deviceInfo);
 	}
 
 	private void initView() {
@@ -247,39 +258,41 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 		}
 	}
 
-	private class MySimpleGesture extends SimpleOnGestureListener {
-
-		@Override
-		public boolean onDoubleTap(MotionEvent e) {
-			changeScreenOrientation();
-			return super.onDoubleTap(e);
-		}
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			return super.onFling(e1, e2, velocityX, velocityY);
-		}
-
-		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-
-			if (e1.getX() - e2.getX() > 50) {
-				yunCtrl(Constants.PTZ_DERECTION.PTZ_LEFT);
-				return true;
-			} else if (e1.getX() - e2.getX() < -50) {
-				yunCtrl(Constants.PTZ_DERECTION.PTZ_RIGHT);
-				return true;
-			} else if (e1.getY() - e2.getY() > 50) {
-				yunCtrl(Constants.PTZ_DERECTION.PTZ_UP);
-				return true;
-			} else if (e1.getY() - e2.getY() < -50) {
-				yunCtrl(Constants.PTZ_DERECTION.PTZ_DOWN);
-				return true;
-			}
-			return super.onScroll(e1, e2, distanceX, distanceY);
-		}
-
-	}
+	// private class MySimpleGesture extends SimpleOnGestureListener {
+	//
+	// @Override
+	// public boolean onDoubleTap(MotionEvent e) {
+	// changeScreenOrientation();
+	// return super.onDoubleTap(e);
+	// }
+	//
+	// @Override
+	// public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+	// float velocityY) {
+	// return super.onFling(e1, e2, velocityX, velocityY);
+	// }
+	//
+	// @Override
+	// public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+	// float distanceY) {
+	//
+	// if (e1.getX() - e2.getX() > 50) {
+	// yunCtrl(Constants.PTZ_DERECTION.PTZ_LEFT);
+	// return true;
+	// } else if (e1.getX() - e2.getX() < -50) {
+	// yunCtrl(Constants.PTZ_DERECTION.PTZ_RIGHT);
+	// return true;
+	// } else if (e1.getY() - e2.getY() > 50) {
+	// yunCtrl(Constants.PTZ_DERECTION.PTZ_UP);
+	// return true;
+	// } else if (e1.getY() - e2.getY() < -50) {
+	// yunCtrl(Constants.PTZ_DERECTION.PTZ_DOWN);
+	// return true;
+	// }
+	// return super.onScroll(e1, e2, distanceX, distanceY);
+	// }
+	//
+	// }
 
 	@Override
 	public void onClick(View arg0) {
@@ -407,20 +420,6 @@ public class RealTimeVideoActivity extends BaseActivity implements OnTouchListen
 		default:
 			break;
 		}
-		// switch (event.getAction()) {
-		// case MotionEvent.ACTION_DOWN:
-		// x = event.getX();
-		// y = event.getY();
-		// break;
-		// case MotionEvent.ACTION_UP:
-		// yunCtrl(Constants.PTZ_DERECTION.PTZ_STOP);
-		// break;
-		// case MotionEvent.ACTION_MOVE:
-		// mx = (int) (event.getRawX() - x);
-		// my = (int) (event.getRawY() - y);
-		// // v.layout(mx, my, mx + v.getWidth(), my + v.getHeight());
-		// break;
-		// }
 		return super.onTouchEvent(event);
 
 	}

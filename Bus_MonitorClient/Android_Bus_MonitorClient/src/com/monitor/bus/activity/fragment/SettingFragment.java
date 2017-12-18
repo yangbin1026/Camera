@@ -57,7 +57,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 		tv_username.setText(loginInfo.getUserName());
 		
 		boolean autoLogin=SPUtils.getBoolean(getContext(), SPUtils.KEY_AUTO_LOGIN, false);
-		boolean gps=SPUtils.getBoolean(getContext(), SPUtils.KEY_GSP, false);
+		boolean gps=SPUtils.getBoolean(getContext(), SPUtils.KEY_GSP_CHECK, false);
 		boolean local=SPUtils.getBoolean(getContext(), SPUtils.KEY_LOCAL, false);
 		sb_autologin.setChecked(autoLogin);
 		sb_gps.setChecked(gps);
@@ -102,7 +102,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 			SPUtils.saveBoolean(getContext(), SPUtils.KEY_AUTO_LOGIN, arg1);
 			break;
 		case R.id.sb_gps:
-			SPUtils.saveBoolean(getContext(), SPUtils.KEY_GSP, arg1);
+			SPUtils.saveBoolean(getContext(), SPUtils.KEY_GSP_CHECK, arg1);
 			break;
 		case R.id.sb_localpaser:
 			SPUtils.saveBoolean(getContext(), SPUtils.KEY_LOCAL, arg1);

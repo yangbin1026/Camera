@@ -21,6 +21,11 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:clickable="true" />
+        <fragment
+      	  	android:id="@+id/googleMapView"
+   	    	android:layout_width="match_parent"
+        	android:layout_height="match_parent"
+       		class="com.google.android.gms.maps.SupportMapFragment" />
 
         <LinearLayout
             android:layout_width="match_parent"

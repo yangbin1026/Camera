@@ -279,7 +279,7 @@ public class LoginEventControl {
 					}
 					manager.addAlarmInfo(alarmInfo);
 
-					if (!Constants.IS_ACTIVE) {// 后台运行
+					if (MUtils.isBackGround(mContext)) {// 后台运行
 						myNotification.showNotification("您有报警信息");
 					}
 

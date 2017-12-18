@@ -31,6 +31,8 @@ import com.monitor.bus.consts.Constants;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.KeyguardManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -499,5 +501,17 @@ public class MUtils {
 			return Uri.parse(serviceUrl);
 		}
 		
+		public static boolean  isBackGround(Context context){
+			 ActivityManager activityManager = (ActivityManager) context
+		                .getSystemService(Context.ACTIVITY_SERVICE);
+		        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
+		                .getRunningAppProcesses();
+		        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+		            if (appProcess.processName!=null&&appProcess.processName.equals(context.getPackageName())) {
+		                return appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND;
+		            }
+		        }
+		        return false;
+		}
 
 }

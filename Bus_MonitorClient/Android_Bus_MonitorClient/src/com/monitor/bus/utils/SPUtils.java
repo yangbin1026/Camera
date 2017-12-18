@@ -17,7 +17,7 @@ public class SPUtils {
 	
 	private static final String LOGIN_INFO="login_info";
 	public static final String KEY_AUTO_LOGIN="key_auto_login";
-	public static final String KEY_GSP="key_gps";
+	public static final String KEY_GSP_CHECK="key_gps_check";
 	public static final String KEY_LOCAL="key_local";
 	private static final String KEY_INFO_NAME="login_name";
 	private static final String KEY_INFO_PW="login_pw";
@@ -72,6 +72,8 @@ public class SPUtils {
 		}
 		return data;
 	}
+	
+	
 	public static void saveLoginInfo(Context context,LoginInfo info) {
 		if (null == sp_login) {
 			sp_login = context.getSharedPreferences(LOGIN_INFO, Context.MODE_APPEND);
