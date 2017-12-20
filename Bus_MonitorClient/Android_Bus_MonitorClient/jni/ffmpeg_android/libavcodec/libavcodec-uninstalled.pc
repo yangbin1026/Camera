@@ -1,0 +1,12 @@
+prefix=
+exec_prefix=
+libdir=${pcfiledir}
+includedir=/n/JXJ/myProject/Bus/Android_Bus_MonitorClient/jni/ffmpeg_android
+
+Name: libavcodec
+Description: FFmpeg codec library
+Version: 53.8.0
+Requires: libavutil = 51.9.1
+Conflicts:
+Libs: ${libdir}/libavcodec.a -lm -lz 
+Cflags: -I${includedir}
