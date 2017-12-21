@@ -82,19 +82,19 @@ public class LoginEventControl {
 	/***
 	 * 简单测试用
 	 */
-	public int simpleCallBack(long iUserParam, String strEvent) {
-		JSONObject jo;
-		try {
-			jo = new JSONObject(strEvent);
-			int eventType = jo.getInt("eventType");
-			if (eventType == 1) {
-				LogUtils.i(TAG, "登陆成功！！");
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return 0;
-	}
+//	public int simpleCallBack(long iUserParam, String strEvent) {
+//		JSONObject jo;
+//		try {
+//			jo = new JSONObject(strEvent);
+//			int eventType = jo.getInt("eventType");
+//			if (eventType == 1) {
+//				LogUtils.i(TAG, "登陆成功！！");
+//			}
+//		} catch (JSONException e) {
+//			e.printStackTrace();
+//		}
+//		return 0;
+//	}
 
 	/**
 	 * 登陆之后的回调函数
@@ -172,8 +172,8 @@ public class LoginEventControl {
 					} else {
 						// JNVPlayerUtil.JNV_N_GetAlarmStart("");//获取报警信息
 						for (int i = 0; i < DeviceManager.getInstance().getSize(); i++) {
-							DeviceInfo info = DeviceManager.getInstance().getDeviceList().get(i);
-							if ("0".equals(info.getIsDeviceGroup())) {
+							DeviceInfo info = DeviceManager.getInstance().getDeviceListAll().get(i);
+							if (!info.issDeviceGroup()) {
 								String guid = info.getGuId();
 								int ret = JNVPlayerUtil.JNV_N_GetAlarmStart(guid);// 获取报警信息
 								if (ret != 0) {
@@ -208,8 +208,8 @@ public class LoginEventControl {
 					} else {
 						upDataServerList();
 						for (int i = 0; i < DeviceManager.getInstance().getSize(); i++) {
-							DeviceInfo info = DeviceManager.getInstance().getDeviceList().get(i);
-							if ("0".equals(info.getIsDeviceGroup())) {
+							DeviceInfo info = DeviceManager.getInstance().getDeviceListAll().get(i);
+							if (!info.issDeviceGroup()) {
 								// String guid = info.getGuId();
 								String guid = info.getNewGuId();
 								int ret = JNVPlayerUtil.JNV_N_GetAlarmStart(guid);// 获取报警信息

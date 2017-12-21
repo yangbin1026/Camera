@@ -12,10 +12,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,7 +31,6 @@ import com.monitor.bus.consts.Constants;
 import com.monitor.bus.control.VideoPlayControl;
 import com.monitor.bus.database.DatabaseHelper;
 import com.monitor.bus.utils.LogUtils;
-import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.view.MyVideoView;
 
 /**
@@ -45,7 +47,9 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 	boolean isRecording = false;// 当前录像状态标志 true 开始录像 false 停止录像
 
 	private MyVideoView myVideoView;
-	private TextView text_tilte_name;// 标题名称
+	private TextView tv_tilte;// 标题名称
+	private Button bt_setting;
+	private ImageButton ib_record,ib_takePhoto,ib_voice,ib_mic;
 
 	private Intent intent;
 	private VideoPlayControl playControl;
@@ -59,17 +63,17 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 	private String titleString;
 	BaseMapManager mMapManager;
 
-	boolean isGoogleMap = true;
+	boolean isGoogleMap = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
 		setContentView(R.layout.activity_realtime);
-		Constants.STREAM_PLAY_TYPE = 1;// 设置播放类型为实时视频.
 
-		initData();
+		initTitle();
 		initView();
+		initData();
 		mMapManager.onCreat();
 	}
 
@@ -141,6 +145,18 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		}
 	}
 
+	private void initTitle() {
+		tv_tilte = (TextView) findViewById(R.id.tilte_name);
+		tv_tilte.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+		bt_setting=(Button) findViewById(R.id.bt_setting);
+		bt_setting.setBackgroundDrawable(null);
+		bt_setting.setText(R.string.channle);
+		bt_setting.setVisibility(View.VISIBLE);
+		bt_setting.setOnClickListener(this);
+				
+		
+	}
+
 	private void initData() {
 		intent = this.getIntent();
 		deviceInfo = (DeviceInfo) intent.getSerializableExtra(KEY_DEVICE_INFO);
@@ -148,7 +164,6 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			MUtils.toast(this, "设备为空");
 			return;
 		}
-		titleString = deviceInfo.getDeviceName() + " - " + "channel_" + deviceInfo.getCurrentChn();
 
 		if (isGoogleMap) {
 			mMapManager = new GoogleMapManager(this);
@@ -156,15 +171,25 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			mMapManager = new BaiduMapManager(this);
 		}
 		mMapManager.setDeviceInfo(deviceInfo);
+		
+		titleString = deviceInfo.getDeviceName() + " - " + "channel_" + deviceInfo.getCurrentChn();
+		tv_tilte.setText(titleString);
+		playControl = new VideoPlayControl(this, myVideoView);
+		playControl.initVideoPlay(intent,VideoPlayControl.STREAM_TYPE_REAL);// 初始化界面
 	}
 
 	private void initView() {
-		text_tilte_name = (TextView) findViewById(R.id.tilte_name);
 		myVideoView = (MyVideoView) findViewById(R.id.myVideoView);
 		myVideoView.setOnTouchListener(this);
-		playControl = new VideoPlayControl(this, myVideoView);
-		playControl.initVideoPlay(intent);// 初始化界面
-		text_tilte_name.setText(titleString);
+		ib_record=(ImageButton) findViewById(R.id.ib_record);
+		ib_takePhoto=(ImageButton) findViewById(R.id.ib_takephoto);
+		ib_voice=(ImageButton) findViewById(R.id.ib_voice);
+		ib_mic=(ImageButton) findViewById(R.id.ib_mic);
+		ib_record.setOnClickListener(this);
+		ib_takePhoto.setOnClickListener(this);
+		ib_voice.setOnClickListener(this);
+		ib_mic.setOnClickListener(this);
+		
 	}
 
 	private void startRecord() {
@@ -179,7 +204,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		times = MUtils.getCurrentDateTime(Constants.YMD_HMS_FORMAT);
 		String path = recordFilePath + times + Constants.RECORD_FILE_FORMAT;
 		LogUtils.i(TAG, "-------------开始录像！");
-		int i = playControl.RecordStart(path);
+		int i = playControl.recordStart(path);
 		if (i == 0) {
 			MUtils.commonToast(this, R.string.record_fail);
 			LogUtils.i(TAG, "-------------开始录像失败！");
@@ -191,10 +216,10 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		recordTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				if (myVideoView.is_draw_circle) {
-					myVideoView.is_draw_circle = false;
+				if (myVideoView.shoudDrawCircle) {
+					myVideoView.shoudDrawCircle = false;
 				} else {
-					myVideoView.is_draw_circle = true;
+					myVideoView.shoudDrawCircle = true;
 				}
 
 			}
@@ -206,7 +231,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			db = new DatabaseHelper(this, Constants.DATABASE_NAME);// 初始化数据操作对象
 		}
 		LogUtils.i(TAG, "-------------停止录像！");
-		int i = playControl.RecordStop();
+		int i = playControl.recordStop();
 		if (i == 1) {
 			db.insertRecordInfo(times, times + Constants.RECORD_FILE_FORMAT, recordFilePath);
 		} else {
@@ -214,16 +239,8 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			MUtils.commonToast(this, R.string.stop_recordfail);
 			return;
 		}
-		myVideoView.is_draw_circle = false;
+		myVideoView.shoudDrawCircle = false;
 		recordTimer.cancel();
-	}
-
-	private void takePhoto() {
-		if (!myVideoView.isNormalPlay()) {
-			return;
-		}
-		playControl.CapturePicture();
-		isCapturePicture = true;
 	}
 
 	/**
@@ -333,7 +350,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 				}
 			}
 			break;
-		case R.id.ib_speak:
+		case R.id.ib_mic:
 			// 对讲
 			if (myVideoView.isNormalPlay()) {// 正常播放
 				if (Constants.ISOPEN_TALK) {// 对讲已开启
@@ -352,7 +369,11 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			}
 			break;
 		case R.id.ib_takephoto:
-			takePhoto();
+			if (!myVideoView.isNormalPlay()) {
+				return;
+			}
+			playControl.CapturePicture();
+			isCapturePicture = true;
 			break;
 		case R.id.aboutLayoutId:
 			// 镜像
@@ -365,7 +386,10 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 				Constants.DERECTION_STATE = !Constants.DERECTION_STATE;
 			}
 			break;
-
+		case R.id.bt_setting:
+			//通道按钮
+			
+			break;
 		default:
 			break;
 		}

@@ -49,9 +49,10 @@ public class PullParseXML {
 				deviceInfo.setGroupId(parser.getAttributeValue(null, "GroupID"));
 				deviceInfo.setParentId(parser.getAttributeValue(null, "ParentID"));
 				deviceInfo.setGroupName(parser.getAttributeValue(null, "GroupName"));
-				deviceInfo.setIsDeviceGroup(parser.getAttributeValue(null, "IsDeviceGroup"));
+				deviceInfo.setIsDeviceGroup("1".equals(parser.getAttributeValue(null, "IsDeviceGroup")));
 
 				if ("0".equals(parser.getAttributeValue(null, "IsDeviceGroup"))) {// 具有子节点时不需要加载设备信息
+					//设备
 					deviceInfo.setDeviceId(parser.getAttributeValue(null, "DeviceID"));
 					deviceInfo.setDeviceName(parser.getAttributeValue(null, "DeviceName"));
 					deviceInfo.setGuId(parser.getAttributeValue(null, "GUID"));

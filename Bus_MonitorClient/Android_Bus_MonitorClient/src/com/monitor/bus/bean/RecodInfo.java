@@ -77,6 +77,13 @@ public class RecodInfo implements Serializable{
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
+	@Override
+	public String toString() {
+		return "RecodInfo [isLocalVideo=" + isLocalVideo + ", deviceId=" + deviceId + ", center=" + center + ", type="
+				+ type + ", startTime=" + startTime + ", endTime=" + endTime + ", channelId=" + channelId + ", path="
+				+ path + "]";
+	}
+	
 	
 
 

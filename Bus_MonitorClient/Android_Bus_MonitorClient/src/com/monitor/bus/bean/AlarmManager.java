@@ -182,7 +182,7 @@ public class AlarmManager {
 					+ mContext.getString(R.string.device_online);
 			// BusDeviceInfo busInfo = new BusDeviceInfo();
 
-			for (DeviceInfo busInfo : DeviceManager.getInstance().getDeviceList()) {
+			for (DeviceInfo busInfo : DeviceManager.getInstance().getDeviceListAll()) {
 				if (devId.equals(busInfo.getGuId())) {
 					busInfo.setOnLine(1);
 				}
@@ -192,7 +192,7 @@ public class AlarmManager {
 
 			alarmInfo = dev_name + devList + exists
 					+ mContext.getString(R.string.device_offline);
-			for (DeviceInfo busInfo : DeviceManager.getInstance().getDeviceList()) {
+			for (DeviceInfo busInfo : DeviceManager.getInstance().getDeviceListAll()) {
 				if (devId.equals(busInfo.getGuId())) {
 					busInfo.setOnLine(0);
 				}

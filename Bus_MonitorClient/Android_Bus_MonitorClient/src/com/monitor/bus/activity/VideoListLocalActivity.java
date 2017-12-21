@@ -16,34 +16,35 @@ import com.monitor.bus.consts.Constants;
 import com.monitor.bus.database.DatabaseHelper;
 
 /**
- * 本地jav文件列表
+ * 本地視頻文件列表
  * 
  */
 public class VideoListLocalActivity extends BaseActivity {
 
 	private String start_time = null;
 	private String end_time = null;
+	
 	List<HashMap<String, String>> testLocalListView;
 	DatabaseHelper dbHelper;
-	private ListView localListView;
+	
+	private ListView lv_recoder;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		localListView = (ListView) findViewById(R.id.localListView);
+		lv_recoder = (ListView) findViewById(R.id.lv_recoder);
 		Intent intent = getIntent();
 		start_time = intent.getStringExtra("start_time");
 		end_time = intent.getStringExtra("end_time");
 		dbHelper = new DatabaseHelper(this, Constants.DATABASE_NAME);
 
-		localListView.setOnItemClickListener(new OnItemClickListener() {
+		lv_recoder.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int position, long arg3) {
 				Intent intent = new Intent();
-				String path = testLocalListView.get(position).get("file_path")
-						+ testLocalListView.get(position).get("file_name");
+				String path = testLocalListView.get(position).get("file_path")+ testLocalListView.get(position).get("file_name");
 				intent.putExtra("playFileName", path);
 				intent.putExtra("id", testLocalListView.get(position).get("id"));
 				intent.setClass(VideoListLocalActivity.this, ReplayActivity.class);
@@ -56,7 +57,7 @@ public class VideoListLocalActivity extends BaseActivity {
 		SimpleAdapter simpleAdapter = new SimpleAdapter(this,
 				testLocalListView, R.layout.local_item,
 				new String[] { "file_name" }, new int[] { R.id.localTest });
-		localListView.setAdapter(simpleAdapter);
+		lv_recoder.setAdapter(simpleAdapter);
 		if (testLocalListView.size() == 0) {
 			MUtils.commonToast(this, R.string.not_recordfile);
 		}

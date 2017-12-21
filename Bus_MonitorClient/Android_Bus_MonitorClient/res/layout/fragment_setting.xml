@@ -70,7 +70,9 @@
                 android:layout_height="wrap_content"
                 android:text="设置" />
 
-            <RelativeLayout style="@style/setting_item" >
+            <RelativeLayout 
+                android:id="@+id/rl_mode"
+                style="@style/setting_item" >
 
                 <TextView
                     style="@style/setting_item_text"

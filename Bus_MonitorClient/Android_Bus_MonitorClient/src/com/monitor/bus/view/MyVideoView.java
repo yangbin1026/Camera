@@ -28,14 +28,16 @@ public class MyVideoView extends ImageView {
 	private static String TAG = "MyVideoView";
 	private Paint mPaint;// 画笔对象
 	public ByteBuffer buffer; // 内存数组包
+	
 	public Bitmap VideoBit; // 图像
 	private Bitmap bitmap;// 转换后的图像
+	
 	public int posWidth;// 当前视频显示的位置----距view的宽
 	public int posHeight;// 当前视频显示的位置---距view的高
 
 	public boolean isPlaying = false; // 播放显示标志
 	public boolean is_drawblack = false;// 是否将画布画黑 true :画黑
-	public boolean is_draw_circle = false;// 是否画实心圆标志
+	public boolean shoudDrawCircle = false;// 是否画实心圆标志
 
 	public int videoHeight; // 视频原高度
 	public int videoWidth;// 视频原宽度
@@ -99,9 +101,11 @@ public class MyVideoView extends ImageView {
 	public void drawStream(Canvas canvas) throws IOException {
 		if (isPlaying) {// 显示图像
 			VideoBit.copyPixelsFromBuffer(buffer.position(0));
+			LogUtils.d(TAG, "drawStream()VideoBit.Height:"+VideoBit.getHeight()+"Width:"+VideoBit.getWidth());
 			bitmap = Bitmap.createScaledBitmap(VideoBit, displayWidth, displayHeight, true);
+			LogUtils.d(TAG, "drawStream()bitmap.Height:"+bitmap.getHeight()+"Width:"+bitmap.getWidth());
 			canvas.drawBitmap(bitmap, posWidth, posHeight, mPaint);
-			if (is_draw_circle == true) {// 画红圆
+			if (shoudDrawCircle == true) {// 画红圆
 				mPaint.setColor(Color.RED);
 				canvas.drawCircle(getWidth() - 40, 50, 30, mPaint);
 			}

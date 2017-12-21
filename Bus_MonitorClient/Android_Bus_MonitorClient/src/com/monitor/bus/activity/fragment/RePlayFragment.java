@@ -7,23 +7,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.monitor.bus.utils.MyDateUtils;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 import com.jniUtil.JNVPlayerUtil;
 import com.monitor.bus.activity.R;
-import com.monitor.bus.activity.VideoListLocalActivity;
 import com.monitor.bus.activity.VideoListActivity;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.bean.RecodInfo;
 import com.monitor.bus.consts.Constants;
-import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.view.dialog.DateUtil;
 import com.monitor.bus.view.dialog.MyDataPickerDialog;
 import com.monitor.bus.view.dialog.MyDatePickerDialog;
 import com.monitor.bus.view.dialog.MyTimePickerDialog;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,7 +39,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	TextView tv_select_device, tv_file_local, tv_channel, tv_type, tv_select_time, tv_start_time, tv_end_time;
 	RelativeLayout rl_1, rl_2, rl_3, rl_4, rl_5, rl_6, rl_7;
 	Button bt_find;
-	private Dialog dateDialog, timeDialog, chooseDialog;
+	private Dialog dateDialog, endTimeDialog,startTimeDialog, chooseDeviceDialog,chooseLocalDialog,chooseChannelDialog,chooseTypeDialog;
 
 	private List<DeviceInfo> deviceList;
 	private RecodInfo recodInfo = new RecodInfo();
@@ -60,6 +58,15 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	private void initData() {
 		deviceManger = DeviceManager.getInstance();
 		deviceList = deviceManger.getDeviceList();
+		tv_start_time.setText("00:00");
+		tv_end_time.setText("23:59");
+		tv_select_time.setText(MyDateUtils.getToday(MyDateUtils.FORMAT_1));
+		if(deviceList.size()>0){
+			tv_select_device.setText(deviceList.get(0).getDeviceName());
+			tv_channel.setText(""+deviceList.get(0).getCurrentChn());
+		}
+		tv_type.setText("普通视频");
+		tv_file_local.setText("本地视频");
 	}
 
 	private void setTitle() {
@@ -71,12 +78,12 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 		tv_channel = (TextView) contentView.findViewById(R.id.tv_channel);
 		tv_file_local = (TextView) contentView.findViewById(R.id.tv_find_local);
 		tv_type = (TextView) contentView.findViewById(R.id.tv_type);
-
 		tv_select_device = (TextView) contentView.findViewById(R.id.tv_select_device);
-
 		tv_select_time = (TextView) contentView.findViewById(R.id.tv_select_time);
 		tv_start_time = (TextView) contentView.findViewById(R.id.tv_start_time);
 		tv_end_time = (TextView) contentView.findViewById(R.id.tv_end_time);
+	
+			
 
 		rl_1 = (RelativeLayout) contentView.findViewById(R.id.rl_1);
 		rl_2 = (RelativeLayout) contentView.findViewById(R.id.rl_2);
@@ -116,17 +123,17 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	 *            设备端录像文件路径
 	 * @return
 	 */
-	public void queryRecord() {
-		if (!isUsefullTime(recodInfo.getStartTime(), recodInfo.getEndTime())) {
+	private void queryRecord() {
+		LogUtils.i(TAG, "query() RecordInfo:"+recodInfo.toString()); 
+		if (!isUsefullTime(dateString,recodInfo.getStartTime(), recodInfo.getEndTime())) {
 			MUtils.commonToast(getContext(), R.string.time_validate);
 			return;
 		}
-		if(!recodInfo.isLocalVideo()){
-			 JNVPlayerUtil.JNV_N_RecQuery(recodInfo.getDeviceId(), 0, recodInfo.getType(), recodInfo.getStartTime(),
-					 recodInfo.getEndTime(), recodInfo.getChannelId(),
-					 Constants.DEVRECORD_PASTH);
+		if (!recodInfo.isLocalVideo()) {
+			JNVPlayerUtil.JNV_N_RecQuery(recodInfo.getDeviceId(), 0, recodInfo.getType(),dateString+" "+ recodInfo.getStartTime(),
+					dateString+" "+recodInfo.getEndTime(), recodInfo.getChannelId(), Constants.DEVRECORD_PASTH);
 		}
-		Intent intent = new Intent(getContext(),VideoListActivity.class);
+		Intent intent = new Intent(getContext(), VideoListActivity.class);
 		intent.putExtra(VideoListActivity.EXTRA_RECODINFO, recodInfo);
 		getContext().startActivity(intent);
 
@@ -138,11 +145,11 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	 * @param time
 	 * @throws ParseException
 	 */
-	private boolean isUsefullTime(String start_time, String end_time) {
+	private boolean isUsefullTime(String day,String start_time, String end_time) {
 		try {
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-			Date start_date = df.parse(start_time);
-			Date end_date = df.parse(end_time);
+			DateFormat df = new SimpleDateFormat(MyDateUtils.FORMAT_RECORD);
+			Date start_date = df.parse(day+" "+start_time);
+			Date end_date = df.parse(day+" "+end_time);
 			if (start_date.getTime() <= end_date.getTime()) {
 				return true;
 			}
@@ -156,117 +163,149 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	 * chooseDialog
 	 */
 	private void showDeviceDialog(List<String> mlist) {
-		MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
-		chooseDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
-				.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
-					@Override
-					public void onDataSelected(String itemValue, int position) {
-						Log.i(TAG, "selectDevice:" + itemValue + "  position:" + position);
-						tv_select_device.setText(itemValue);
-						recodInfo.setDeviceId("" + deviceList.get(position).getDeviceId());
-					}
+		if(chooseDeviceDialog==null){
+			
+			MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
+			chooseDeviceDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
+					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
+						@Override
+						public void onDataSelected(String itemValue, int position) {
+							Log.i(TAG, "selectDevice:" + itemValue + "  position:" + position);
+							tv_select_device.setText(itemValue);
+							recodInfo.setDeviceId("" + deviceList.get(position).getDeviceId());
+						}
+						
+						@Override
+						public void onCancel() {
+							
+						}
+					}).create();
+		}
 
-					@Override
-					public void onCancel() {
+		chooseDeviceDialog.show();
+	}
+	
+	/**
+	 * chooseDialog
+	 */
+	private void showLocalTypeDialog(List<String> mlist) {
+		if(chooseLocalDialog==null){
+			
+			MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
+			chooseLocalDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
+					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
+						@Override
+						public void onDataSelected(String itemValue, int position) {
+							tv_file_local.setText(itemValue);
+							recodInfo.setType(position + 1);
+						}
+						
+						@Override
+						public void onCancel() {
+							
+						}
+					}).create();
+		}
+	
+		chooseLocalDialog.show();
+	}
 
-					}
-				}).create();
+	private void showChannelDialog(List<String> mlist) {
+		if(chooseChannelDialog==null){
+			
+			MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
+			chooseChannelDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
+					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
+						@Override
+						public void onDataSelected(String itemValue, int position) {
+							tv_channel.setText(itemValue);
+							recodInfo.setChannelId(position+1);
+						}
+						
+						@Override
+						public void onCancel() {
+							
+						}
+					}).create();
+		}
 
-		chooseDialog.show();
+		chooseChannelDialog.show();
 	}
 
 	/**
 	 * chooseDialog
 	 */
 	private void showVideoTypeDialog(List<String> mlist) {
-		MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
-		chooseDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
-				.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
-					@Override
-					public void onDataSelected(String itemValue, int position) {
-						tv_type.setText(itemValue);
-						recodInfo.setType(position + 1);
-					}
+		if(chooseTypeDialog==null){
+			MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
+			chooseTypeDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
+					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
+						@Override
+						public void onDataSelected(String itemValue, int position) {
+							tv_type.setText(itemValue);
+							recodInfo.setType(position + 1);
+						}
+						
+						@Override
+						public void onCancel() {
+							
+						}
+					}).create();
+		}
 
-					@Override
-					public void onCancel() {
-
-					}
-				}).create();
-
-		chooseDialog.show();
-	}
-
-	/**
-	 * chooseDialog
-	 */
-	private void showLocalTypeDialog(List<String> mlist) {
-		MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
-		chooseDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
-				.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
-					@Override
-					public void onDataSelected(String itemValue, int position) {
-						tv_file_local.setText(itemValue);
-						recodInfo.setType(position + 1);
-					}
-
-					@Override
-					public void onCancel() {
-
-					}
-				}).create();
-
-		chooseDialog.show();
+		chooseTypeDialog.show();
 	}
 
 	private void showDateDialog(List<Integer> date) {
-		MyDatePickerDialog.Builder builder = new MyDatePickerDialog.Builder(getContext());
-		builder.setOnDateSelectedListener(new MyDatePickerDialog.OnDateSelectedListener() {
-			@Override
-			public void onDateSelected(int[] dates) {
-				dateString = dates[0] + "-" + (dates[1] > 9 ? dates[1] : ("0" + dates[1])) + "-"
-						+ (dates[2] > 9 ? dates[2] : ("0" + dates[2]));
-				tv_select_time.setText(dateString);
-			}
-
-			@Override
-			public void onCancel() {
-
-			}
-		}).setSelectYear(date.get(0) - 1).setSelectMonth(date.get(1) - 1).setSelectDay(date.get(2) - 1);
-
-		builder.setMaxYear(DateUtil.getYear());
-		builder.setMaxMonth(DateUtil.getDateForString(DateUtil.getToday()).get(1));
-		builder.setMaxDay(DateUtil.getDateForString(DateUtil.getToday()).get(2));
-		dateDialog = builder.create();
+		if(dateDialog==null){
+			
+			MyDatePickerDialog.Builder builder = new MyDatePickerDialog.Builder(getContext());
+			builder.setOnDateSelectedListener(new MyDatePickerDialog.OnDateSelectedListener() {
+				@Override
+				public void onDateSelected(int[] dates) {
+					dateString = dates[0] + "-" + (dates[1] > 9 ? dates[1] : ("0" + dates[1])) + "-"
+							+ (dates[2] > 9 ? dates[2] : ("0" + dates[2]));
+					tv_select_time.setText(dateString);
+				}
+				
+				@Override
+				public void onCancel() {
+					
+				}
+			}).setSelectYear(date.get(0) - 1).setSelectMonth(date.get(1) - 1).setSelectDay(date.get(2) - 1);
+			
+			builder.setMaxYear(DateUtil.getYear());
+			builder.setMaxMonth(DateUtil.getDateForString(DateUtil.getToday()).get(1));
+			builder.setMaxDay(DateUtil.getDateForString(DateUtil.getToday()).get(2));
+			dateDialog = builder.create();
+		}
 		dateDialog.show();
 	}
 
 	private void showStartTimePick() {
 
-		if (timeDialog == null) {
-
+		if (startTimeDialog == null) {
 			MyTimePickerDialog.Builder builder = new MyTimePickerDialog.Builder(getContext());
-			timeDialog = builder.setOnTimeSelectedListener(new MyTimePickerDialog.OnTimeSelectedListener() {
+			startTimeDialog = builder.setOnTimeSelectedListener(new MyTimePickerDialog.OnTimeSelectedListener() {
 				@Override
 				public void onTimeSelected(int[] times) {
-					String startDate = times[0] + ":" + times[1];
+					String startDate = (times[0]>9? times[0]: ("0" + times[0]))+":" + (times[1]>9? times[1]: ("0" + times[1]));
 					tv_start_time.setText(startDate);
 					recodInfo.setStartTime(startDate);
 				}
 			}).create();
 		}
 
-		timeDialog.show();
+		startTimeDialog.show();
 
 	}
 
 	private void showStopTimePick() {
 
-		if (timeDialog == null) {
+		if (endTimeDialog == null) {
 
 			MyTimePickerDialog.Builder builder = new MyTimePickerDialog.Builder(getContext());
-			timeDialog = builder.setOnTimeSelectedListener(new MyTimePickerDialog.OnTimeSelectedListener() {
+			endTimeDialog = builder.setOnTimeSelectedListener(new MyTimePickerDialog.OnTimeSelectedListener() {
 				@Override
 				public void onTimeSelected(int[] times) {
 					String endDate = times[0] + ":" + times[1];
@@ -276,7 +315,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 			}).create();
 		}
 
-		timeDialog.show();
+		endTimeDialog.show();
 
 	}
 
@@ -284,9 +323,11 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	public void onClick(View arg0) {
 		switch (arg0.getId()) {
 		case R.id.rl_1:// 设备
+			deviceList = deviceManger.getDeviceList();
 			List<String> deviceNames = new ArrayList<String>();
 			for (DeviceInfo info : deviceList) {
 				if (info.getDeviceName() == null || info.getDeviceName().isEmpty()) {
+					LogUtils.d(TAG, "deviceName："+info.toString());
 					LogUtils.getInstance().localLog(TAG, "deviceName is NULL!!!");
 				}
 				deviceNames.add(info.getDeviceName());
@@ -306,7 +347,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 			channel.add("通道3");
 			channel.add("通道4");
 			channel.add("通道5");
-			showVideoTypeDialog(channel);
+			showChannelDialog(channel);
 			break;
 		case R.id.rl_4:// 录像类型
 			List<String> test = new ArrayList<String>();

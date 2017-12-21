@@ -119,7 +119,6 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 					Intent intent = new Intent();
 					intent.setClass(mContext, HomeActivity.class);
 					mContext.startActivity(intent);
-					
 					((Activity) mContext).finish();
 					break;
 				case CALLBACKFLAG.LOGIN_ING:

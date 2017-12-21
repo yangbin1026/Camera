@@ -22,7 +22,6 @@ public class BaseActivity extends Activity {
 	
 	private NotifycationManager myNotification;//引用通知
 	
-	public boolean isCompleteExit = false;//是否完全退出程序
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
@@ -36,10 +35,8 @@ public class BaseActivity extends Activity {
 		super.onStop();
 		if (!isAppOnForeground()) {
 			// app 进入后台
-			if(!isCompleteExit){//
-				if(MUtils.isBackGround(this)){
-					myNotification.showNotification(null);
-				}
+			if(MUtils.isBackGround(this)){
+				myNotification.showNotification(null);
 			}
 		}
 	}

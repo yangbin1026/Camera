@@ -45,19 +45,28 @@ public class DeviceManager {
 			LogUtils.getInstance().localLog(TAG, "addAsDir  "+info.toString(),LogUtils.LOG_NAME_DEVICE);
 		}
 	}
-	public void setDeviceList(List<DeviceInfo> list){
-		mDeviceList=list;
-		LogUtils.getInstance().localLog(TAG, "setDeviceList"+list.size(),LogUtils.LOG_NAME_DEVICE);
-	}
-	public boolean removeFirst(){
-		if(mDeviceList.size()>0){
-			mDeviceList.remove(0);
-			return true;
-		}
-		return false;
-	}
-	public List<DeviceInfo> getDeviceList(){
+//	public void setDeviceList(List<DeviceInfo> list){
+//		mDeviceList=list;
+//		LogUtils.getInstance().localLog(TAG, "setDeviceList"+list.size(),LogUtils.LOG_NAME_DEVICE);
+//	}
+//	public boolean removeFirst(){
+//		if(mDeviceList.size()>0){
+//			mDeviceList.remove(0);
+//			return true;
+//		}
+//		return false;
+//	}
+	public List<DeviceInfo> getDeviceListAll(){
 		return mDeviceList;
+	}
+	public ArrayList<DeviceInfo> getDeviceList(){
+		ArrayList<DeviceInfo> list=new ArrayList<DeviceInfo>();
+		for(DeviceInfo info: mDeviceList){
+			if(!info.issDeviceGroup()){
+				list.add(info);
+			}
+		}
+		return list;
 	}
 	public DeviceInfo getDeviceInfoById(String id){
 		for(DeviceInfo info: mDeviceList){
@@ -91,6 +100,8 @@ public class DeviceManager {
 		}
 		return mDeviceMap.get(parentId);
 	}
+	
+	
 	
 
 }

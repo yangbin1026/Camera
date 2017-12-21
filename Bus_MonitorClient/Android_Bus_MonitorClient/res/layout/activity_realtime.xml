@@ -20,43 +20,65 @@
             android:id="@+id/bmapView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:clickable="true" />
-        <fragment
-      	  	android:id="@+id/googleMapView"
-   	    	android:layout_width="match_parent"
-        	android:layout_height="match_parent"
-       		class="com.google.android.gms.maps.SupportMapFragment" />
+            android:clickable="true"
+            android:visibility="invisible" />
+
+        <RelativeLayout
+            android:id="@+id/rl_googlemap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible" >
+
+            <fragment
+                android:id="@+id/googleMapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                class="com.google.android.gms.maps.SupportMapFragment" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:background="@color/black"
             android:weightSum="4" >
 
             <ImageButton
                 android:id="@+id/ib_record"
-                android:layout_width="7dp"
-                android:layout_height="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                android:background="@null"
+                android:src="@drawable/record_on" />
+
+            <ImageButton
+                android:id="@+id/ib_takephoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                 android:scaleType="centerInside"
+                 android:src="@drawable/camera"
                 android:layout_weight="1" />
 
             <ImageButton
                 android:id="@+id/ib_voice"
-                android:layout_width="7dp"
-                android:layout_height="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null" 
+                android:scaleType="centerInside"
+                 android:src="@drawable/voice_off"
                 android:layout_weight="1" />
 
             <ImageButton
-                android:id="@+id/ib_takephoto"
-                android:layout_width="7dp"
-                android:layout_height="7dp"
-                android:layout_weight="1" />
-
-            <ImageButton
-                android:id="@+id/ib_speak"
-                android:layout_width="7dp"
-                android:layout_height="7dp"
+                android:id="@+id/ib_mic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null" 
+                android:scaleType="centerInside"
+                 android:src="@drawable/mic"
                 android:layout_weight="1" />
         </LinearLayout>
     </RelativeLayout>
@@ -74,8 +96,8 @@
             android:background="@color/black" />
 
         <RelativeLayout
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true" >
 

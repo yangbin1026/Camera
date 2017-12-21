@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.jniUtil.JNVPlayerUtil;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.activity.R;
+import com.monitor.bus.activity.RealTimeVideoActivity;
 import com.monitor.bus.bean.DevRecordInfo;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.consts.Constants;
@@ -37,6 +38,11 @@ import com.monitor.bus.view.MyVideoView;
 @SuppressLint("HandlerLeak")
 public  class VideoPlayControl {
 	private static String TAG = "VideoPlayControl";
+	
+	 // 播放视频类型 1： 实时流 2： 录像回放
+	public static final int STREAM_TYPE_REAL=1;
+	public static final int STREAM_TYPE_RECORD=2;
+	
 	//private VideoActivity videoActivity;// 实时视频
 	//private int playType; // 播放类型 1:录像回放 2:实时流
 	public AudioTrack track;// 音频操作对象
@@ -48,7 +54,7 @@ public  class VideoPlayControl {
 	public int replayStreamId = -1;//设备端录像返回的id，JNV_ReplayStart返回
 	public int talkId = -1;//打开对讲返回的id
 	private DatabaseHelper db;// 数据库操作对象
-	private DeviceInfo currentDeviceInfo;// 当前设备信息
+	private DeviceInfo mDeviceInfo;// 当前设备信息
 	private Toast myToast;
 	//private int start_stream_flag = 0;// 打开流的标志
 	int maxjitter;
@@ -68,7 +74,18 @@ public  class VideoPlayControl {
 		loadingDialog = new ProgressDialog(currentContext);// 进度条	
 	}
 	 
-	
+	/**
+	 * 視頻流回調
+	 * @param lStream JNV_OpenStream或JNV_ReplayStart或JNV_RecOpenFile 函数的返回值.
+	 * @param lpBuf 解码后数据;
+	 * @param lSize 解码后数据长;
+	 * @param lWidth 图像的宽;
+	 * @param lHeight 图像的高;
+	 * @param lStamp 帧的时间戳;
+	 * @param lType 帧的类型,见 AVPDecCBType 说明;
+	 * @param lUserParam JNV_OpenStream或JNV_ReplayStart或JNV_RecOpenFile 函数中指定的用户参数;
+	 * @return
+	 */
 	public int callbackSetStreamInfo(int lStream,byte[] lpBuf,int lSize,int lWidth,int lHeight,long lStamp,int lType,int lUserParam)
 	{
 		if(lType==8){//视频
@@ -94,7 +111,14 @@ public  class VideoPlayControl {
 		return 0;
 	} 
 	
-
+	/**
+	 * 打开远程录像回放回調，JNV_RecOpenFile 函数的返回值
+	 * @param iType
+	 * @param lParam1
+	 * @param lParam2
+	 * @param userParam
+	 * @return
+	 */
 	public int callbackPlayInfo(int iType,long lParam1,long lParam2,int userParam){
 		//iType = 6;
 		System.out.println("callbackPlayInfo:"+iType+" "+lParam1+" "+lParam2);
@@ -135,9 +159,9 @@ public  class VideoPlayControl {
 	/**
 	 * 初始化
 	 */
-	public void initVideoPlay(Intent intent) {
+	public void initVideoPlay(Intent intent,int type) {
 		initAudio();// 初始化音频 
-		if (2 == Constants.STREAM_PLAY_TYPE) {// 录像回放
+		if (STREAM_TYPE_RECORD == type) {// 录像回放
 			DevRecordInfo devRecordInfo = (DevRecordInfo) intent.getSerializableExtra("devRecordInfo");// 回放的文件名称
 				if( null != devRecordInfo ){//设备端播放
 					
@@ -159,17 +183,17 @@ public  class VideoPlayControl {
 					}
 					recStreamId = JNVPlayerUtil.JNV_RecOpenFile(filePath, this, "callbackSetStreamInfo", "callbackPlayInfo", 0);
 			}
-		} else if (1 == Constants.STREAM_PLAY_TYPE) {// 实时视频流
-			currentDeviceInfo = (DeviceInfo) intent.getSerializableExtra("videoData");
+		} else if (STREAM_TYPE_REAL == type) {// 实时视频流
+			mDeviceInfo = (DeviceInfo) intent.getSerializableExtra(RealTimeVideoActivity.KEY_DEVICE_INFO);
 			initSendTalk();// 初始化对讲
-			if (currentDeviceInfo == null) {
+			if (mDeviceInfo == null) {
 				MUtils.commonToast(currentContext, R.string.not_playdata);
 				return;
 			}
 			Constants.DERECTION_STATE = AVP_GetMirror();// 获取当前设备的镜像状态
-			Log.e(TAG, "打开流参数："+currentDeviceInfo.getNewGuId()
-					+","+currentDeviceInfo.getCurrentChn());
-			startStream(currentDeviceInfo.getNewGuId(), currentDeviceInfo.getCurrentChn());// 打开实时流
+			Log.e(TAG, "打开流参数："+mDeviceInfo.getNewGuId()
+					+","+mDeviceInfo.getCurrentChn());
+			startStream(mDeviceInfo.getNewGuId(), mDeviceInfo.getCurrentChn());// 打开实时流
 		}
 	}
 	
@@ -178,7 +202,7 @@ public  class VideoPlayControl {
 	/**
 	 * 开始实时视频
 	 */
-	public void startStream(String deviceId,int deviceChn) {
+	private void startStream(String deviceId,int deviceChn) {
 		Log.e(TAG, "Open Strean:" + deviceId+","+deviceChn);
 		startStreamId=JNVPlayerUtil.JNV_OpenStream(deviceId, deviceChn, 0, 0, this, "callbackSetStreamInfo", 0);
 		System.out.println("openStreamId = " + startStreamId);
@@ -211,7 +235,7 @@ public  class VideoPlayControl {
 	 *            速度
 	 */
 	public void PTZCtrl(int iDirection) {
-		JNVPlayerUtil.JNV_N_PtzCtrl(currentDeviceInfo.getNewGuId(), currentDeviceInfo.getCurrentChn(), iDirection, 0, 0);
+		JNVPlayerUtil.JNV_N_PtzCtrl(mDeviceInfo.getNewGuId(), mDeviceInfo.getCurrentChn(), iDirection, 0, 0);
 	}
 
 	// ----------------------------------------------录像-----------------------------
@@ -221,7 +245,7 @@ public  class VideoPlayControl {
 	 * @param path
 	 *            录像的存储路径及文件名
 	 */
-	public int RecordStart(String path) {
+	public int recordStart(String path) {
 		
 		if (startStreamId < 0) {
 			return 0;
@@ -235,7 +259,7 @@ public  class VideoPlayControl {
 	/**
 	 * 停止录像
 	 */
-	public int RecordStop() {
+	public int recordStop() {
 		if (startStreamId < 0) {
 			return 0;
 		}
@@ -247,15 +271,20 @@ public  class VideoPlayControl {
 	}
 
 	// ----------------------------本地回放-------------------------
+
+	
+
 	/**
-	 * 本地文件播放
+	 * 本地文件继续播放 
 	 * 
 	 * @param handleId
 	 * @param status
 	 */
-	public  void AVP_Native_Start() {
-		//JAVNativeUtil.JAV_Native_StartPlayFile(handleId, 0);
-
+	public void resumeVideo() {
+		if (0 > recStreamId) {
+			return; 
+		}
+		JNVPlayerUtil.JNV_RecPlayStart(recStreamId);
 	}
 
 	/**
@@ -270,27 +299,14 @@ public  class VideoPlayControl {
 		}
 		JNVPlayerUtil.JNV_RecPlayPause(recStreamId);
 	}
-
-	/**
-	 * 本地文件继续播放 
-	 * 
-	 * @param handleId
-	 * @param status
-	 */
-	public void resumePlayFileVideo() {
-		if (0 > recStreamId) {
-			return; 
-		}
-		JNVPlayerUtil.JNV_RecPlayStart(recStreamId);
-	}
-
+	
 	/**
 	 * 本地文件播放停止
 	 * 
 	 * @param handleId
 	 * @param status
 	 */
-	public void AVP_Native_Stop() {
+	public void stopVideo() {
 		Log.e(TAG, "++++++++++++AVP_Native_Stop:"+ recStreamId);
 		if (0 > recStreamId) {
 			return; 
@@ -312,11 +328,101 @@ public  class VideoPlayControl {
 		JNVPlayerUtil.JNV_ReplayCtrl(replayStreamId, status, 1);
 	}
 	
+	/**
+		 * 打开对讲
+		 * 
+		 * @return
+		 */
+		public void openTalk() {
+			//File file = new File(Constants.SDCardRoot+"test.pcm");
+	        // 删除录音文件
+	        //if (file.exists())
+	           // file.delete();
+	        // 创建录音文件
+	       // try {
+	        //    file.createNewFile();
+	       // } catch (IOException e) {
+	       //     throw new IllegalStateException("Failed to create " + file.toString());
+	      //  }
+	       // try {
+			//	fos = new FileOutputStream(file);
+		//	} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+			//	e.printStackTrace();
+			//}// 建立一个可存取字节的文件
+	        
+	//		talkId = JNVPlayerUtil.JNV_N_TalkStart(currentDeviceInfo.getGuId(),currentDeviceInfo.getCurrentChn());
+			talkId = JNVPlayerUtil.JNV_N_TalkStart(mDeviceInfo.getNewGuId(),mDeviceInfo.getCurrentChn());
+			if(0 > talkId){
+				return;
+			}else{
+				new Thread(talkRunnable).start();
+			}
+		}
+
+	/**
+		 * 关闭对讲
+		 * 
+		 * @return
+		 */
+		public boolean closeTalk() {
+			if(0 > talkId){
+				return false;
+			}
+	//		try {
+	//			fos.close();
+	//		} catch (IOException e) {
+	//			// TODO Auto-generated catch block
+	//			e.printStackTrace();
+	//		}
+			if (-1 < JNVPlayerUtil.JNV_N_TalkStop(talkId)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+	// ----------------------------镜像管理-------------------------
+	/**
+	 * 调用接口，进行镜像翻转
+	 */
+	public int AVP_SetMirror(int MirrorParam) {
+		//return JAVNativeUtil.JAV_Native_SetMirror(handleId,currentDeviceInfo.getCurrentChn(), MirrorParam);
+		return 1;
+	}
+
+	/**
+	 * 抓拍，将当前的文件存储在本地
+	 * 
+	 * @param bitmap
+	 * @throws IOException
+	 */
+	public void CapturePicture() {
+		String imageFilePath = MUtils.getCurrentFilePath(Constants.IMAGE_PATH + "/", mDeviceInfo);// 文件目录
+		File devFile = new File(imageFilePath);
+		if (!devFile.exists()) {// 目录不存在
+			devFile.mkdirs();// 创建相应的文件夹
+		}
+		String times = MUtils.getCurrentDateTime(Constants.YMD_HMSS_FORMAT);// 当前时间 yyyyMMddHHmmssSSS格式
+	
+		File f = new File(imageFilePath + times +".jpg");// 文件路径
+		if(videoView.saveBitmap(f)){//抓拍成功
+			if(myToast == null){
+				myToast = Toast.makeText(currentContext, R.string.capture_success, Toast.LENGTH_SHORT);
+			}else{
+				//myToast.cancel();
+				myToast.setText(R.string.capture_success);
+			}
+			myToast.show();
+		  
+		}
+	}
+
 	// ----------------------------音频管理-------------------------
 	/**
 	 * 初始化音频
 	 */
-	public void initAudio() {
+	private void initAudio() {
 
 		maxjitter = AudioTrack.getMinBufferSize(Constants.AUDIO_RATE,
 				AudioFormat.CHANNEL_CONFIGURATION_MONO,
@@ -332,7 +438,7 @@ public  class VideoPlayControl {
 	/**
 	 * 写入音频
 	 */
-	public void writeAudioTrack(byte[] trackData,int dataLenght) {
+	private void writeAudioTrack(byte[] trackData,int dataLenght) {
 			track.write(trackData, 0, dataLenght);
 	}
 
@@ -342,7 +448,7 @@ public  class VideoPlayControl {
 	/**
 	 * 初始化录音
 	 */
-	public void initSendTalk() {
+	private void initSendTalk() {
 		int min = AudioRecord.getMinBufferSize(Constants.AUDIO_RATE,
 				AudioFormat.CHANNEL_CONFIGURATION_MONO,
 				AudioFormat.ENCODING_PCM_16BIT);
@@ -358,62 +464,8 @@ public  class VideoPlayControl {
 	/**
 	 * 读取本地音频
 	 */
-	public int readAudioRecord() {
+	private int readAudioRecord() {
 		return audioRecord.read(encodeData, 0, Constants.FRAME_SIZE);
-	}
-
-	/**
-	 * 打开对讲
-	 * 
-	 * @return
-	 */
-	public void openTalk() {
-		//File file = new File(Constants.SDCardRoot+"test.pcm");
-        // 删除录音文件
-        //if (file.exists())
-           // file.delete();
-        // 创建录音文件
-       // try {
-        //    file.createNewFile();
-       // } catch (IOException e) {
-       //     throw new IllegalStateException("Failed to create " + file.toString());
-      //  }
-       // try {
-		//	fos = new FileOutputStream(file);
-	//	} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-		//	e.printStackTrace();
-		//}// 建立一个可存取字节的文件
-        
-//		talkId = JNVPlayerUtil.JNV_N_TalkStart(currentDeviceInfo.getGuId(),currentDeviceInfo.getCurrentChn());
-		talkId = JNVPlayerUtil.JNV_N_TalkStart(currentDeviceInfo.getNewGuId(),currentDeviceInfo.getCurrentChn());
-		if(0 > talkId){
-			return;
-		}else{
-			new Thread(talkRunnable).start();
-		}
-	}
-
-	/**
-	 * 关闭对讲
-	 * 
-	 * @return
-	 */
-	public boolean closeTalk() {
-		if(0 > talkId){
-			return false;
-		}
-//		try {
-//			fos.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		if (-1 < JNVPlayerUtil.JNV_N_TalkStop(talkId)) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	/**
@@ -421,7 +473,7 @@ public  class VideoPlayControl {
 	 * 
 	 * @param isOpenAudio
 	 */
-	public void AVP_SendTalk_Ctrl(byte[] pBuff, int size) {
+	 private void AVP_SendTalk_Ctrl(byte[] pBuff, int size) {
 		JNVPlayerUtil.JNV_N_TalkSend(talkId, pBuff, size);
 		
 	}
@@ -453,22 +505,13 @@ public  class VideoPlayControl {
 	};
 
 	
-	// ----------------------------镜像管理-------------------------
-		/**
-		 * 调用接口，进行镜像翻转
-		 */
-		public int AVP_SetMirror(int MirrorParam) {
-			//return JAVNativeUtil.JAV_Native_SetMirror(handleId,currentDeviceInfo.getCurrentChn(), MirrorParam);
-			return 1;
-		}
-
-		/**
+	/**
 		 * 调用接口，获取镜像翻转
 		 * 
 		 * @param MirrorParam
 		 * @return
 		 */
-		public boolean AVP_GetMirror() {
+		private boolean AVP_GetMirror() {
 			/*
 			if (0 == JAVNativeUtil.JAV_Native_SetMirror(handleId,currentDeviceInfo.getCurrentChn(), Constants.MIRROE_STATUS)) {// 正常
 				return true;
@@ -477,34 +520,6 @@ public  class VideoPlayControl {
 				return false;
 			}*/
 			return true;
-		}
-		
-		
-		/**
-		 * 抓拍，将当前的文件存储在本地
-		 * 
-		 * @param bitmap
-		 * @throws IOException
-		 */
-		public void CapturePicture() {
-			String imageFilePath = MUtils.getCurrentFilePath(Constants.IMAGE_PATH + "/", currentDeviceInfo);// 文件目录
-			File devFile = new File(imageFilePath);
-			if (!devFile.exists()) {// 目录不存在
-				devFile.mkdirs();// 创建相应的文件夹
-			}
-			String times = MUtils.getCurrentDateTime(Constants.YMD_HMSS_FORMAT);// 当前时间 yyyyMMddHHmmssSSS格式
-
-			File f = new File(imageFilePath + times +".jpg");// 文件路径
-			if(videoView.saveBitmap(f)){//抓拍成功
-				if(myToast == null){
-					myToast = Toast.makeText(currentContext, R.string.capture_success, Toast.LENGTH_SHORT);
-				}else{
-					//myToast.cancel();
-					myToast.setText(R.string.capture_success);
-				}
-				myToast.show();
-			  
-			}
 		}
 		
  

@@ -74,10 +74,10 @@ public class LogUtils {
 			return;
 		}
 		currentLogFile = new File(logDir, fileName + ".log");
-		Log.i(TAG, "currentLogFile==" + currentLogFile.getAbsolutePath());
+//		Log.i(TAG, "currentLogFile==" + currentLogFile.getAbsolutePath());
 
 		try {
-			Log.i(TAG, "outpath" + currentLogFile.getAbsolutePath());
+//			Log.i(TAG, "outpath" + currentLogFile.getAbsolutePath());
 			this.out = new PrintWriter(new FileOutputStream(currentLogFile, true));
 		} catch (Exception e) {
 			e.printStackTrace();

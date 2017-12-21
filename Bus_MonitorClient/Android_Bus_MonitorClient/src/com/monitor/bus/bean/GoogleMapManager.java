@@ -26,6 +26,7 @@ import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.utils.SPUtils;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -41,6 +42,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class GoogleMapManager extends BaseMapManager {
@@ -54,6 +57,7 @@ public class GoogleMapManager extends BaseMapManager {
 	private boolean IsAsynCheckGPS = false;// gps校正任务是否完成
 	private boolean isAnimationEnd = false;
 
+	private RelativeLayout rl_googlemap;
 	private GoogleMap mapView;
 	private Marker mMarker;
 	private LatLng prePoint;
@@ -118,6 +122,7 @@ public class GoogleMapManager extends BaseMapManager {
 
 	private void initView() {
 		isAnimationEnd = false;
+		((Activity)mContext).findViewById(R.id.rl_googlemap).setVisibility(View.VISIBLE);
 		mapView = ((SupportMapFragment) ((FragmentActivity) mContext).getSupportFragmentManager()
 				.findFragmentById(R.id.googleMapView)).getMap();
 		mapView.getUiSettings().setRotateGesturesEnabled(false);// 禁用旋转手势

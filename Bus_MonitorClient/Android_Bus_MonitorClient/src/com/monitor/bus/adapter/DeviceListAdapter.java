@@ -70,7 +70,7 @@ public class DeviceListAdapter extends BaseAdapter{
 		iv_icon=(ImageView) convertView.findViewById(R.id.iv_icon);
 		tv_content = (TextView) convertView.findViewById(R.id.tv_content);
 		DeviceInfo info= mList.get(position);
-		if("1".equals(info.getIsDeviceGroup())){
+		if(info.issDeviceGroup()){
 			//是分组
 			tv_content.setText(info.getGroupName());
 		}else{

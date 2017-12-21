@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/alert" />
+                android:src="@drawable/arrow_gray" />
 
             <TextView
                 android:id="@+id/tv_select_device"
@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/alert" />
+                android:src="@drawable/arrow_gray" />
 
             <TextView
                 android:id="@+id/tv_find_local"
@@ -102,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/alert" />
+                android:src="@drawable/arrow_gray" />
 
             <TextView
                 android:id="@+id/tv_channel"
@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/alert" />
+                android:src="@drawable/arrow_gray" />
 
             <TextView
                 android:id="@+id/tv_type"
@@ -172,7 +172,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/alert" />
+                android:src="@drawable/arrow_gray" />
 
             <TextView
                 android:id="@+id/tv_select_time"
@@ -207,7 +207,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/alert" />
+                android:src="@drawable/arrow_gray" />
 
             <TextView
                 android:id="@+id/tv_start_time"
@@ -242,7 +242,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/alert" />
+                android:src="@drawable/arrow_gray" />
 
             <TextView
                 android:id="@+id/tv_end_time"

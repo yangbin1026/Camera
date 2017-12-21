@@ -14,7 +14,7 @@ public class DeviceInfo implements Serializable{
 	private	String	groupName;//组名称
 
 	private	String	parentId;//父ID
-	private	String 	isDeviceGroup;//是否为设备的组
+	private	boolean isDeviceGroup;//是否为设备的组
 	private String	deviceId;//设备ID
 	private String	deviceName;//设备名称
 	private String	guId;//唯一标示id
@@ -54,10 +54,10 @@ public class DeviceInfo implements Serializable{
 	public void setParentId(String parentId) {
 		this.parentId = parentId;
 	}
-	public String getIsDeviceGroup() {
+	public boolean issDeviceGroup() {
 		return isDeviceGroup;
 	}
-	public void setIsDeviceGroup(String isDeviceGroup) {
+	public void setIsDeviceGroup(boolean isDeviceGroup) {
 		this.isDeviceGroup = isDeviceGroup;
 	}
 	public String getGroupName() {

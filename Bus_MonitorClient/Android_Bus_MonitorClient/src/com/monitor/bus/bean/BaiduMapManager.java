@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.nsd.NsdManager.RegistrationListener;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
@@ -97,6 +98,7 @@ public class BaiduMapManager extends BaseMapManager {
 
 	private void initView() {
 		mapView = (MapView) ((Activity) mContext).findViewById(R.id.bmapView);
+		mapView.setVisibility(View.VISIBLE);
 		mBaiduMap = mapView.getMap();
 	}
 

@@ -92,7 +92,7 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 				DeviceInfo info= mDeviceListAdapter.getDataByPosition(position);
-				if(info.getIsDeviceGroup().equals("1")){
+				if(info.issDeviceGroup()){
 					//组
 					updataByPid(info.getGroupId());
 				}else{
@@ -142,7 +142,7 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 	}
 
 	private void showWaittingDialog() {
-		if (0 == DeviceManager.getInstance().getDeviceList().size()) {
+		if (0 == DeviceManager.getInstance().getDeviceListAll().size()) {
 			progressDialog = new ProgressDialog(getContext());
 			progressDialog.setTitle(R.string.loading_data_title);
 			progressDialog.setMessage(this.getString(R.string.waiting));

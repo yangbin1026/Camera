@@ -215,8 +215,8 @@ public class UserMapActivity extends Activity {
 	// 获取所有的bus设备
 	private void getBusDevices() {
 		listBus = new ArrayList<DeviceInfo>();
-		for (DeviceInfo busInfo :DeviceManager.getInstance().getDeviceList()) {
-			if ("0".equals(busInfo.getIsDeviceGroup())) {
+		for (DeviceInfo busInfo :DeviceManager.getInstance().getDeviceListAll()) {
+			if (!busInfo.issDeviceGroup()) {
 				listBus.add(busInfo);
 			}
 		}

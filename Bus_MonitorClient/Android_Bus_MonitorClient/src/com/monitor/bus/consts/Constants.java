@@ -22,7 +22,6 @@ public class Constants {
 	public static final int DATABASE_VERSION = 6; // 数据库版本
 
 	public static final int SCREEN_COUNT = 4; // 分屏数(so初始化)
-	public static int STREAM_PLAY_TYPE = 1; // 播放视频类型 1： 实时流 2： 录像回放
 
 	public static final String SDCardRoot = Environment.getExternalStorageDirectory().getAbsolutePath()
 			+ File.separator;
@@ -53,9 +52,8 @@ public class Constants {
 	// ------镜像-------- 0=正常;1=反转;2 =获取当前正反状态----------
 	public static final int MIRROE_NORMAL = 0;
 	public static final int MIRROE_REVERSE = 1;
-	public static final int MIRROE_STATUS = 2;
-
 	public static boolean DERECTION_STATE = true;// 当前方向状态标志 true 正 false 反
+
 	public static boolean IS_CASCADE_SERVER = false; // 是否是级联服务器
 	public static final int SERVER_TYPES = 3; // 服务器类型数
 	public static final boolean HAS_LOGO = true;

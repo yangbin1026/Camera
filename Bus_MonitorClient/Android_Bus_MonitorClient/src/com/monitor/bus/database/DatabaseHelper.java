@@ -118,18 +118,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 					new String[] { "ID,REC_FILENAME,REC_PATH,REC_FILENAME" },
 					"REC_DATE >= datetime('" + start+ "') AND REC_DATE <= datetime('" + end + "')",null, "", "", "ID");
 			LogUtils.i(TAG, "++++++++++所有录像记录数:"+ cursor.getCount());
-			ArrayList<HashMap<String, String>> testLocalListView = new ArrayList<HashMap<String, String>>();
+			ArrayList<HashMap<String, String>> recoderList = new ArrayList<HashMap<String, String>>();
 			while (cursor.moveToNext()) {
 				HashMap<String, String> map = new HashMap<String, String>();
 				map.put("file_name",	cursor.getString(cursor.getColumnIndex("REC_FILENAME")));
 				map.put("file_path",	cursor.getString(cursor.getColumnIndex("REC_PATH")));
 				map.put("id",	cursor.getString(cursor.getColumnIndex("ID")));
-				testLocalListView.add(map);
+				recoderList.add(map);
 			}
 			cursor.close();
 			db.close();
 			
-			return testLocalListView;
+			return recoderList;
 		}
 		
 }

@@ -1,17 +1,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/main_bg"
     android:orientation="vertical" >
 
-        <include
+    <include
         android:id="@+id/include1"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/title_size"
         layout="@layout/title_themes" />
-    
+
     <ListView
-        android:id="@+id/localListView"
+        android:id="@+id/lv_recoder"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:cacheColorHint="#00000000"

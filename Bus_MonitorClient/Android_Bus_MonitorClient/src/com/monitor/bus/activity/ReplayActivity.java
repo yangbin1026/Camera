@@ -38,14 +38,14 @@ public class ReplayActivity extends BaseActivity implements OnTouchListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		LogUtils.i(TAG, "+++++++++++++++++回放Activity onCreate");
 		super.onCreate(savedInstanceState);
-		Constants.STREAM_PLAY_TYPE = 2;//设置播放类型为录像回放
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
+		
 		Intent intent=this.getIntent();
 		devRecordInfo = (DevRecordInfo) intent.getSerializableExtra("devRecordInfo");// 回放的文件名称
 		
 		myVideoView=(MyVideoView)findViewById(R.id.myVideoView);
 		playControl = new VideoPlayControl(this, myVideoView);
-		playControl.initVideoPlay(intent);//初始化界面
+		playControl.initVideoPlay(intent,VideoPlayControl.STREAM_TYPE_RECORD);//初始化界面
 		mGestureDetector = new GestureDetector(new MySimpleGesture());
 		myVideoView.setOnTouchListener(this);
 		myVideoView.setLongClickable(true);
@@ -89,8 +89,8 @@ public class ReplayActivity extends BaseActivity implements OnTouchListener{
 		if( null != devRecordInfo ){//设备端播放
 			playControl.AVP_Native_RecordStop();
 		}else{
-			playControl.AVP_Native_Stop();
-			playControl.AVP_Native_Stop();
+			playControl.stopVideo();
+			playControl.stopVideo();
 		}
 		
 //		if( null != devRecordInfo ){//设备端播放
@@ -130,7 +130,7 @@ public class ReplayActivity extends BaseActivity implements OnTouchListener{
 			}else{//继续播放
 				LogUtils.i(TAG, "本地录像播放====继续播放");
 				playControl.track.play();
-				playControl.resumePlayFileVideo();
+				playControl.resumeVideo();
 				play_or_pause=false;
 				pauseButton.setText(R.string.pause);
 			}
@@ -150,8 +150,8 @@ public class ReplayActivity extends BaseActivity implements OnTouchListener{
 			if( null != devRecordInfo ){//设备端播放
 				playControl.AVP_Native_RecordStop();
 			}else{
-				playControl.AVP_Native_Stop();
-				playControl.AVP_Native_Stop();
+				playControl.stopVideo();
+				playControl.stopVideo();
 			}
 			super.onBackPressed();
 		}

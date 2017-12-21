@@ -15,7 +15,9 @@ import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
+import com.monitor.bus.view.dialog.MyDataPickerDialog;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutCompat.LayoutParams;
@@ -45,12 +47,12 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 	private ListView alarmListView;
 	private AlarmListAdapter mAlarmAdapter;
 
-	private DeviceInfo currentDeviceInfo;
+	private DeviceInfo mDeviceInfo;
 	private List<AlarmInfo> alarmList = new ArrayList<AlarmInfo>();
 	View contentView;
 	View popContentView;
 	PopupWindow mPopWindow;
-	
+	Dialog chooseChannelDialog;
 	AlarmManager alarmManger;
 
 	@Override
@@ -68,13 +70,12 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 		title.setText(getContext().getString(R.string.alarm_list));
 		Button bt_setting = (Button) contentView.findViewById(R.id.bt_setting);
 		bt_setting.setBackgroundDrawable(null);
-		bt_setting.setText("类型");
+		bt_setting.setText(R.string.type);
 		bt_setting.setVisibility(View.VISIBLE);
 		bt_setting.setOnClickListener(this);
 	}
 
 	private void initData() {
-		MUtils.toast(getContext(), "addSize:" + alarmManger.getAlarmList().size());
 		alarmList.addAll(alarmManger.getAlarmList());
 		for (int i = 0; i < alarmList.size(); i++) {
 			// 报警类型是移动，震动提示用户
@@ -84,7 +85,7 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 			}
 		}
 	}
-
+	
 	private void initView() {
 		alarmListView = (ListView) contentView.findViewById(R.id.alarmListView);
 		mAlarmAdapter = new AlarmListAdapter(getContext(), alarmList);
@@ -99,19 +100,19 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
 				AlarmInfo alarmInfo = alarmList.get(position);
-				currentDeviceInfo = getDeviceInfo(alarmInfo.getdeviceId());
-				LogUtils.i("-----", "当前设备信息:" + currentDeviceInfo);
+				mDeviceInfo = getDeviceInfo(alarmInfo.getdeviceId());
+				LogUtils.i("-----", "当前设备信息:" + mDeviceInfo);
 				if (alarmList.get(position).getAlarmString().contains(getString(R.string.motion_detection))) {
-					currentDeviceInfo.setCurrentChn(alarmInfo.getChannelId() - 1);
+					mDeviceInfo.setCurrentChn(alarmInfo.getChannelId() - 1);
 				} else {
-					currentDeviceInfo.setCurrentChn(alarmInfo.getChannelId());
+					mDeviceInfo.setCurrentChn(alarmInfo.getChannelId());
 				}
 
-				if (currentDeviceInfo.getDeviceName() == null) {
-					currentDeviceInfo.setDeviceName(alarmInfo.getdeviceId());
+				if (mDeviceInfo.getDeviceName() == null) {
+					mDeviceInfo.setDeviceName(alarmInfo.getdeviceId());
 				}
 				Intent intent = new Intent();
-				intent.putExtra(RealTimeVideoActivity.KEY_DEVICE_INFO, currentDeviceInfo);
+				intent.putExtra(RealTimeVideoActivity.KEY_DEVICE_INFO, mDeviceInfo);
 				intent.setClass(getContext(), RealTimeVideoActivity.class);
 				startActivity(intent);
 			}
@@ -125,7 +126,7 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 	 * @return
 	 */
 	public DeviceInfo getDeviceInfo(String guId) {
-		Iterator<DeviceInfo> itr = DeviceManager.getInstance().getDeviceList().iterator();
+		Iterator<DeviceInfo> itr = DeviceManager.getInstance().getDeviceListAll().iterator();
 		DeviceInfo deviceInfo = null;
 		while (itr.hasNext()) {
 			deviceInfo = itr.next();
@@ -166,6 +167,26 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 
 		// 显示PopupWindow
 		mPopWindow.showAtLocation(contentView, Gravity.TOP, 0, 0);
+	}
+	private void showChannelDialog(List<String> mlist) {
+		if(chooseChannelDialog==null){
+			
+			MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
+			chooseChannelDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
+					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
+						@Override
+						public void onDataSelected(String itemValue, int position) {
+							
+						}
+						
+						@Override
+						public void onCancel() {
+							
+						}
+					}).create();
+		}
+
+		chooseChannelDialog.show();
 	}
 
 }

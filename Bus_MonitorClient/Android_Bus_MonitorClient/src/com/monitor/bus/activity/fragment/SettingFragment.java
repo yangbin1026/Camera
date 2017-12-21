@@ -1,5 +1,7 @@
 package com.monitor.bus.activity.fragment;
 
+import java.util.List;
+
 import com.monitor.bus.activity.LoginActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.bean.LoginInfo;
@@ -7,6 +9,7 @@ import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.utils.SPUtils;
 import com.monitor.bus.view.SwitchButton;
+import com.monitor.bus.view.dialog.MyDataPickerDialog;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -21,6 +24,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
@@ -33,6 +37,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 	Button bt_logout;
 	SwitchButton sb_autologin,sb_local,sb_gps;
 	TextView tv_version,tv_showmode,tv_username;
+	RelativeLayout rl_mode;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_setting, container, false);
@@ -70,6 +75,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 		tv_version=(TextView) view.findViewById(R.id.tv_version);
 		tv_username=(TextView) view.findViewById(R.id.tv_username);
 		tv_showmode=(TextView) view.findViewById(R.id.tv_showmode);
+		rl_mode=(RelativeLayout) view.findViewById(R.id.rl_mode);
 		
 		sb_autologin=(SwitchButton) view.findViewById(R.id.sb_autologin);
 		sb_gps=(SwitchButton) view.findViewById(R.id.sb_gps);
@@ -77,6 +83,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 		sb_autologin.setOnCheckedChangeListener(this);
 		sb_gps.setOnCheckedChangeListener(this);
 		sb_local.setOnCheckedChangeListener(this);
+		rl_mode.setOnClickListener(this);
 	}
 
 	@Override
@@ -88,6 +95,9 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 			Intent intent=new Intent(getContext(),LoginActivity.class);
 			getContext().startActivity(intent);
 			getActivity().finish();
+			break;
+		case R.id.rl_mode:
+			
 			break;
 		default:
 			break;
@@ -112,5 +122,28 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 			break;
 		}
 	}
+	
+	/**
+	 * chooseDialog
+	 */
+//	private void showDeviceDialog(List<String> mlist) {
+//		MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
+//		chooseDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
+//				.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
+//					@Override
+//					public void onDataSelected(String itemValue, int position) {
+//						Log.i(TAG, "selectDevice:" + itemValue + "  position:" + position);
+//						tv_select_device.setText(itemValue);
+//						recodInfo.setDeviceId("" + deviceList.get(position).getDeviceId());
+//					}
+//
+//					@Override
+//					public void onCancel() {
+//
+//					}
+//				}).create();
+//
+//		chooseDialog.show();
+//	}
 
 }
