@@ -12,7 +12,7 @@ public class LoginInfo {
 	public LoginInfo(String userName, int port, String passWord, String ip) {
 		super();
 		this.userName = userName;
-		port = port;
+		this.port = port;
 		this.passWord = passWord;
 		this.ip = ip;
 	}
@@ -40,4 +40,9 @@ public class LoginInfo {
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
+	@Override
+	public String toString() {
+		return "LoginInfo [userName=" + userName + ", port=" + port + ", passWord=" + passWord + ", ip=" + ip + "]";
+	}
+	
 }

@@ -142,6 +142,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 			cb_autoLogin.setChecked(true);
 		}
 		LoginInfo info = SPUtils.getLoginInfo(this);
+		
 		String u = info.getUserName();
 		String p = info.getPassWord();
 		String ip = info.getIp();
@@ -160,8 +161,8 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		et_login_address.setIpConfigType();
 
 		if (LogUtils.Debug) {
-			et_userName.setEditText("123");
-			et_password.setEditText("123");
+//			et_userName.setEditText("123");
+//			et_password.setEditText("123");
 			et_login_port.setEditText("6008");
 			et_login_address.setEditText("183.61.171.28");
 		}
@@ -426,6 +427,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	 */
 	private void login(String u, String p, String ip, int port) {
 		if (MUtils.hasUselessString(u, p, ip) || port == 0) {
+			LogUtils.getInstance().localLog(TAG, "login Info:" + u + "  " + p + "  " + ip + "  " + port);
 			MUtils.toast(this, "请填写完整信息！");
 			return;
 		}

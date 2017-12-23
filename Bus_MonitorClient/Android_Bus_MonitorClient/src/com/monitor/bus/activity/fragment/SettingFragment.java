@@ -1,5 +1,6 @@
 package com.monitor.bus.activity.fragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.monitor.bus.activity.LoginActivity;
@@ -11,9 +12,11 @@ import com.monitor.bus.utils.SPUtils;
 import com.monitor.bus.view.SwitchButton;
 import com.monitor.bus.view.dialog.MyDataPickerDialog;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaRouter.UserRouteInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -32,12 +35,13 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 	private static final String TAG = "SettingActivity";
 	View view;
 	Button bt_change, bt_exit, bt_saveurl;
-	
-	
 	Button bt_logout;
 	SwitchButton sb_autologin,sb_local,sb_gps;
 	TextView tv_version,tv_showmode,tv_username;
 	RelativeLayout rl_mode;
+
+	Dialog modeDialog;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_setting, container, false);
@@ -64,9 +68,11 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 		boolean autoLogin=SPUtils.getBoolean(getContext(), SPUtils.KEY_AUTO_LOGIN, false);
 		boolean gps=SPUtils.getBoolean(getContext(), SPUtils.KEY_GSP_CHECK, false);
 		boolean local=SPUtils.getBoolean(getContext(), SPUtils.KEY_LOCAL, false);
+		LoginInfo info= SPUtils.getLoginInfo(getContext());
 		sb_autologin.setChecked(autoLogin);
 		sb_gps.setChecked(gps);
 		sb_local.setChecked(local);
+		tv_username.setText(info.getUserName());
 	}
 
 	private void initView() {
@@ -97,7 +103,11 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 			getActivity().finish();
 			break;
 		case R.id.rl_mode:
-			
+			List<String> list=new ArrayList<String>();
+			list.add("显示视频");
+			list.add("显示地图");
+			list.add("显示视频和地图");
+			showModeDialog(list);
 			break;
 		default:
 			break;
@@ -126,24 +136,29 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 	/**
 	 * chooseDialog
 	 */
-//	private void showDeviceDialog(List<String> mlist) {
-//		MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
-//		chooseDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
-//				.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
-//					@Override
-//					public void onDataSelected(String itemValue, int position) {
-//						Log.i(TAG, "selectDevice:" + itemValue + "  position:" + position);
-//						tv_select_device.setText(itemValue);
-//						recodInfo.setDeviceId("" + deviceList.get(position).getDeviceId());
-//					}
-//
-//					@Override
-//					public void onCancel() {
-//
-//					}
-//				}).create();
-//
-//		chooseDialog.show();
-//	}
+	/**
+	 * chooseDialog
+	 */
+	private void showModeDialog(List<String> mlist) {
+		if(modeDialog==null){
+			
+			MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
+			modeDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
+					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
+						@Override
+						public void onDataSelected(String itemValue, int position) {
+							tv_showmode.setText(itemValue);
+							SPUtils.saveInt(getContext(), SPUtils.KEY_REMEMBER_SHOWMODE, position);
+						}
+						
+						@Override
+						public void onCancel() {
+							
+						}
+					}).create();
+		}
+	
+		modeDialog.show();
+	}
 
 }
