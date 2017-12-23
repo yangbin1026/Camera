@@ -104,6 +104,7 @@ public class HomeActivity extends FragmentActivity implements OnClickListener{
 
 			@Override
 			public void onPageScrollStateChanged(int arg0) {
+				
 			}
 		});
 	}
