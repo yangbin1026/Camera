@@ -41,7 +41,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -122,7 +124,10 @@ public class GoogleMapManager extends BaseMapManager {
 
 	private void initView() {
 		isAnimationEnd = false;
-		((Activity)mContext).findViewById(R.id.rl_googlemap).setVisibility(View.VISIBLE);
+		
+		RelativeLayout rl_googlemap=(RelativeLayout) ((FragmentActivity)mContext).findViewById(R.id.rl_googlemap);
+		View fragment=LayoutInflater.from(mContext).inflate(R.layout.googlemap_layout,null);
+		rl_googlemap.addView(fragment);
 		mapView = ((SupportMapFragment) ((FragmentActivity) mContext).getSupportFragmentManager()
 				.findFragmentById(R.id.googleMapView)).getMap();
 		mapView.getUiSettings().setRotateGesturesEnabled(false);// 禁用旋转手势

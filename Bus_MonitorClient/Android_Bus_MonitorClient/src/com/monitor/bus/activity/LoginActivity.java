@@ -182,7 +182,6 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		}
 		dialog.setCancelable(true);
 		dialog.setCanceledOnTouchOutside(true);
-		dialog.getBuilder().loadText("登陆中");
 		dialog.show();
 	}
 

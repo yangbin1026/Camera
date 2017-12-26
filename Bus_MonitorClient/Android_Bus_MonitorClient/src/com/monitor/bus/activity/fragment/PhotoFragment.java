@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.monitor.bus.utils.MUtils;
+import com.monitor.bus.activity.PhotoActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.adapter.FileListAdapter;
 import com.monitor.bus.consts.Constants;
@@ -289,19 +290,11 @@ public class PhotoFragment extends BaseFragment{
 	 * 
 	 * @param f
 	 */
-	private void openFile(File f) {
+	private void openFile(File file) {
 		Intent intent = new Intent();
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.setAction(android.content.Intent.ACTION_VIEW);
-		// 跳出列表供选择
-		String type = "*/*";
-		if (isOpen == 0) {
-			type = MUtils.getMIMEType(f, true);
-		}
-		// 设置intent的file与MimeType
-		intent.setDataAndType(Uri.fromFile(f), type);
+		intent.setClass(getContext(), PhotoActivity.class);
+		intent.putExtra(PhotoActivity.KEY_FILE_PATH, file.getAbsolutePath());
 		startActivity(intent);
-//		isCompleteExit = true;//启动系统自带相册浏览器时，强制修改程序运行状态为前台
 	}
 
 	class TextViewListener implements android.view.View.OnClickListener {

@@ -39,7 +39,6 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 	SwitchButton sb_autologin,sb_local,sb_gps;
 	TextView tv_version,tv_showmode,tv_username;
 	RelativeLayout rl_mode;
-
 	Dialog modeDialog;
 	
 	@Override
@@ -55,26 +54,6 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 		TextView title= (TextView) view.findViewById(R.id.tilte_name);
 		title.setText(getContext().getString(R.string.setting));
 	}
-	private void initData() {
-		try {
-			String version=MUtils.getVerName(getContext());
-			tv_version.setText(version);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		LoginInfo loginInfo=SPUtils.getLoginInfo(getContext());
-		tv_username.setText(loginInfo.getUserName());
-		
-		boolean autoLogin=SPUtils.getBoolean(getContext(), SPUtils.KEY_AUTO_LOGIN, false);
-		boolean gps=SPUtils.getBoolean(getContext(), SPUtils.KEY_GSP_CHECK, false);
-		boolean local=SPUtils.getBoolean(getContext(), SPUtils.KEY_LOCAL, false);
-		LoginInfo info= SPUtils.getLoginInfo(getContext());
-		sb_autologin.setChecked(autoLogin);
-		sb_gps.setChecked(gps);
-		sb_local.setChecked(local);
-		tv_username.setText(info.getUserName());
-	}
-
 	private void initView() {
 		bt_logout=(Button) view.findViewById(R.id.bt_logout);
 		bt_logout.setOnClickListener(this);
@@ -90,6 +69,41 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 		sb_gps.setOnCheckedChangeListener(this);
 		sb_local.setOnCheckedChangeListener(this);
 		rl_mode.setOnClickListener(this);
+	}
+
+	private void initData() {
+		try {
+			String version=MUtils.getVerName(getContext());
+			tv_version.setText(version);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		LoginInfo loginInfo=SPUtils.getLoginInfo(getContext());
+		tv_username.setText(loginInfo.getUserName());
+		
+		boolean autoLogin=SPUtils.getBoolean(getContext(), SPUtils.KEY_AUTO_LOGIN, false);
+		boolean gps=SPUtils.getBoolean(getContext(), SPUtils.KEY_GSP_CHECK, false);
+		boolean local=SPUtils.getBoolean(getContext(), SPUtils.KEY_LOCAL, false);
+		sb_autologin.setChecked(autoLogin);
+		sb_gps.setChecked(gps);
+		sb_local.setChecked(local);
+		int mode=SPUtils.getInt(getContext(), SPUtils.KEY_REMEMBER_SHOWMODE, -1);
+		switch (mode) {
+		case 0:
+			tv_showmode.setText("显示视频");
+			break;
+		case 1:
+			tv_showmode.setText("显示地图");
+			break;
+		case 2:
+			tv_showmode.setText("显示视频和地图");
+			break;
+
+		default:
+			break;
+		}
+		
 	}
 
 	@Override

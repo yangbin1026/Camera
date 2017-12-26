@@ -78,6 +78,10 @@
             android:name=".HomeActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+         <activity
+            android:name=".PhotoActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".VideoListLocalActivity"
             android:screenOrientation="portrait" />

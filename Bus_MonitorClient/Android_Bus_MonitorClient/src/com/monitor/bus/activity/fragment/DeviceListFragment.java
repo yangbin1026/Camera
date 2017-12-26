@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.monitor.bus.utils.MUtils;
+import com.monitor.bus.view.dialog.ShapeLoadingDialog.ShapeLoadingDialog;
 import com.monitor.bus.activity.HomeActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.UserMapActivity;
@@ -20,6 +21,7 @@ import com.monitor.bus.control.LoginEventControl;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -44,9 +46,8 @@ import android.widget.ExpandableListView.OnGroupClickListener;
 
 public class DeviceListFragment extends BaseFragment implements View.OnClickListener{
 	private static String TAG = "DeviceListFragment";
-	private HashMap<String, String> groupLocationMap;// 存储组及所处位置
 	
-	private ProgressDialog progressDialog;
+	private ShapeLoadingDialog progressDialog;
 	View view;
 	ListView lv_device;
 	TextView tv_all,tv_online;
@@ -143,11 +144,17 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 
 	private void showWaittingDialog() {
 		if (0 == DeviceManager.getInstance().getDeviceListAll().size()) {
-			progressDialog = new ProgressDialog(getContext());
-			progressDialog.setTitle(R.string.loading_data_title);
-			progressDialog.setMessage(this.getString(R.string.waiting));
-			progressDialog.setCanceledOnTouchOutside(false);
+		if (progressDialog != null) {
 			progressDialog.show();
+			return;
+		}
+		if (progressDialog == null) {
+			progressDialog = new ShapeLoadingDialog.Builder(getContext()).cancelable(false).canceledOnTouchOutside(false)
+					.loadText(R.string.loading_data_title).build();
+		}
+		progressDialog.setCancelable(true);
+		progressDialog.setCanceledOnTouchOutside(true);
+		progressDialog.show();
 		}
 	}
 

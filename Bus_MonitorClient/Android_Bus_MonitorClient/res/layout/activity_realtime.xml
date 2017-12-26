@@ -26,14 +26,7 @@
         <RelativeLayout
             android:id="@+id/rl_googlemap"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="invisible" >
-
-            <fragment
-                android:id="@+id/googleMapView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                class="com.google.android.gms.maps.SupportMapFragment" />
+            android:layout_height="match_parent">
         </RelativeLayout>
 
         <LinearLayout

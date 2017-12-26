@@ -276,5 +276,7 @@
 	<!-- new -->
 	<string name="type">类型</string>
 	<string name="channle">通道</string>
+	<string name="all">全部</string>
+	
 	
 </resources>

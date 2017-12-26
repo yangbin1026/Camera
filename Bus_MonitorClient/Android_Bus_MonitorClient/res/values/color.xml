@@ -4,7 +4,6 @@
 	<color name="white">#FFFFFFFF</color><!-- 白色 -->
 	<color name="transparent">#00000000</color><!-- 透明 -->
 	<color name="blue">#ff0000ff</color><!-- 蓝色 -->
-	
 	<color name="home_tab_bg">#4f0000ff</color><!-- 蓝色 -->
 	
   <!--   <color name="triangle">#aa72d572</color>
@@ -23,8 +22,6 @@
 	<color name="bg_my_gray">#f0eff5</color>
 	
 	<color name="find_line">#7ec0dc</color>
-	
-	
 	<color name="home_tab_blue_qian">#408adf</color>
 	<color name="home_tab_blue_sheng">#257ae5</color>
 	

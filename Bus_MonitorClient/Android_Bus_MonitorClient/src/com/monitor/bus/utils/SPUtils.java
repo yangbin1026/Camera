@@ -72,6 +72,14 @@ public class SPUtils {
 		e.putInt(key, value);
 		e.commit();
 	}
+	
+	public static int getInt(Context context, String key, int defaultvalue) {
+		LogUtils.d(TAG, "getInt:" + key + "：" + defaultvalue);
+		if (null == sp) {
+			sp = context.getSharedPreferences(MY_SP_KEY, Context.MODE_APPEND);
+		}
+		return sp.getInt(key, defaultvalue);
+	}
 
 	public static int getBoolean(Context context, String key, int defaultvalue) {
 		LogUtils.d(TAG, "getint:" + key + "：" + defaultvalue);

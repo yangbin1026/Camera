@@ -66,14 +66,15 @@ public class AlarmManager {
 	 */
 	public String getAlarmMessageString(String devId, int chn, int alarmType) {
 		DeviceInfo deviceInfo = DeviceManager.getInstance().getDeviceInfoById(devId);
+		if(deviceInfo==null){
+			LogUtils.getInstance().localLog(TAG, "getAlarmMessageString（） device is NULL deviceid:"+devId);
+			return null;
+		}
 		String alarmInfo = null;
 		String devList = mContext.getString(R.string.devList);
 		String exists = mContext.getString(R.string.exists);
 		String overspeed = mContext.getString(R.string.overspeed);
 		String overspeed_cancel_alarm = mContext.getString(R.string.overspeed_cancel_alarm);
-		/*AlarmInfo devRecordInfo = alarms.get(0);*/
-		/*AlarmInfo devRecordInfo = null;*/
-		/*LogUtils.i("+++++++++++", devRecordInfo.getGuId()+ "+" + devId);*/
 		String dev_name = deviceInfo.getDeviceName();
 		if (1 == alarmType) {// 超速
 			alarmInfo = dev_name + devList + exists
