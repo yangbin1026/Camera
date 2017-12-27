@@ -75,6 +75,10 @@ public class LogUtils {
 		}
 		currentLogFile = new File(logDir, fileName + ".log");
 //		Log.i(TAG, "currentLogFile==" + currentLogFile.getAbsolutePath());
+		if(!currentLogFile.exists()){
+			e(TAG,"currentLogFile is NULL");
+		}
+			
 
 		try {
 //			Log.i(TAG, "outpath" + currentLogFile.getAbsolutePath());

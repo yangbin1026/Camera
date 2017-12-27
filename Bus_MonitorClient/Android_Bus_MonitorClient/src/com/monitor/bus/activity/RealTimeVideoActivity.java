@@ -63,7 +63,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 	private String titleString;
 	BaseMapManager mMapManager;
 
-	boolean isGoogleMap = false;
+	boolean isGoogleMap = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +164,8 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			MUtils.toast(this, "设备为空");
 			return;
 		}
+		titleString = deviceInfo.getDeviceName() + " - " + "channel_" + deviceInfo.getCurrentChn();
+		tv_tilte.setText(titleString);
 
 		if (isGoogleMap) {
 			mMapManager = new GoogleMapManager(this);
@@ -171,11 +173,8 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			mMapManager = new BaiduMapManager(this);
 		}
 		mMapManager.setDeviceInfo(deviceInfo);
-		
-		titleString = deviceInfo.getDeviceName() + " - " + "channel_" + deviceInfo.getCurrentChn();
-		tv_tilte.setText(titleString);
 		playControl = new VideoPlayControl(this, myVideoView);
-		playControl.initVideoPlay(intent,VideoPlayControl.STREAM_TYPE_REAL);// 初始化界面
+//		playControl.initVideoPlay(intent,VideoPlayControl.STREAM_TYPE_REAL);// 初始化界面
 	}
 
 	private void initView() {

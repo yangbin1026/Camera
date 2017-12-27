@@ -205,7 +205,7 @@ public  class VideoPlayControl {
 	private void startStream(String deviceId,int deviceChn) {
 		Log.e(TAG, "Open Strean:" + deviceId+","+deviceChn);
 		startStreamId=JNVPlayerUtil.JNV_OpenStream(deviceId, deviceChn, 0, 0, this, "callbackSetStreamInfo", 0);
-		System.out.println("openStreamId = " + startStreamId);
+//		System.out.println("openStreamId = " + startStreamId);
 		if(startStreamId<0){
 			Log.e(TAG, "++++++++++++打开流失败,失败返回值:"+ startStreamId);   
 		}

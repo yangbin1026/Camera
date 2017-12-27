@@ -26,7 +26,6 @@ import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.utils.SPUtils;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -126,8 +125,8 @@ public class GoogleMapManager extends BaseMapManager {
 		isAnimationEnd = false;
 		
 		RelativeLayout rl_googlemap=(RelativeLayout) ((FragmentActivity)mContext).findViewById(R.id.rl_googlemap);
-		View fragment=LayoutInflater.from(mContext).inflate(R.layout.googlemap_layout,null);
-		rl_googlemap.addView(fragment);
+		View rl_googleMap=LayoutInflater.from(mContext).inflate(R.layout.googlemap_layout,null);
+		rl_googlemap.addView(rl_googleMap);
 		mapView = ((SupportMapFragment) ((FragmentActivity) mContext).getSupportFragmentManager()
 				.findFragmentById(R.id.googleMapView)).getMap();
 		mapView.getUiSettings().setRotateGesturesEnabled(false);// 禁用旋转手势

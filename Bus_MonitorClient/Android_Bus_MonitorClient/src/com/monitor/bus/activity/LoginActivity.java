@@ -31,10 +31,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.jniUtil.JNVPlayerUtil;
 import com.monitor.bus.utils.MUtils;
+import com.monitor.bus.utils.MyDateUtils;
 import com.monitor.bus.bean.LoginInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
@@ -86,6 +88,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		mContext = this;
 		JNVPlayerUtil.JNV_Init(Constants.SCREEN_COUNT);// 初始化so
 		initView();
+		checkVersion();
 		initData();
 	}
 
@@ -119,7 +122,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 					Intent intent = new Intent();
 					intent.setClass(mContext, HomeActivity.class);
 					mContext.startActivity(intent);
-					((Activity) mContext).finish();
+//					((Activity) mContext).finish();
 					break;
 				case CALLBACKFLAG.LOGIN_ING:
 					showLoginDialog();
@@ -142,7 +145,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 			cb_autoLogin.setChecked(true);
 		}
 		LoginInfo info = SPUtils.getLoginInfo(this);
-		
+
 		String u = info.getUserName();
 		String p = info.getPassWord();
 		String ip = info.getIp();
@@ -161,8 +164,8 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		et_login_address.setIpConfigType();
 
 		if (LogUtils.Debug) {
-//			et_userName.setEditText("123");
-//			et_password.setEditText("123");
+			// et_userName.setEditText("123");
+			// et_password.setEditText("123");
 			et_login_port.setEditText("6008");
 			et_login_address.setEditText("183.61.171.28");
 		}
@@ -193,11 +196,12 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 
 	@Override
 	public void onBackPressed() {
-		/*
-		 * if (LoginEventControl.myProgress.isShowing()) {
-		 * super.onBackPressed(); } else { JNVPlayerUtil.JNV_UnInit();
-		 * Process.killProcess(Process.myPid()); }
-		 */
+		super.onBackPressed();
+		if (dialog != null && dialog.isShowing()) {
+		} else {
+			JNVPlayerUtil.JNV_UnInit();
+		}
+
 	}
 
 	/* 登陆按钮 */
@@ -240,7 +244,6 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	private void checkToUpdate() {
 		LogUtils.i(".....................", "checkToUpdate()" + "....");
 		if (getServerVersion()) {
-
 			try {
 				currentCode = MUtils.getVerCode(this);
 				if (newVerCode > currentCode) {
@@ -339,7 +342,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 					} while (true);
 					is.close();
 					fileOutputStream.close();
-					haveDownLoad();
+					installNewApkDialog();
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
@@ -352,7 +355,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	/**
 	 * 下载完成时要将进度条对话框取消并进行是否安装新应用的提示
 	 */
-	private void haveDownLoad() {
+	private void installNewApkDialog() {
 
 		handler.post(new Runnable() {
 
@@ -455,4 +458,13 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		LogUtils.getInstance().localLog(TAG, "JNI_login:" + u + p + ip + port, LogUtils.LOG_NAME);
 		JNVPlayerUtil.JNV_N_Login(ip, port, u, p, 30, loginControl, "callbackLogin", 0);
 	}
+	private void checkVersion() {
+		String today = MyDateUtils.getTodayDateString(MyDateUtils.FORMAT_1);
+		if (MyDateUtils.getTimeMails(today, MyDateUtils.FORMAT_1) > MyDateUtils.getTimeMails("2018-04-01",
+				MyDateUtils.FORMAT_1)) {
+			MUtils.toast(mContext, "请安装最新的版本");
+			finish();
+		}
+	}
+
 }

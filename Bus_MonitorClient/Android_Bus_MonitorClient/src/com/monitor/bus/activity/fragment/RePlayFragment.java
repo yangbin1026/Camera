@@ -60,7 +60,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 		deviceList = deviceManger.getDeviceList();
 		tv_start_time.setText("00:00");
 		tv_end_time.setText("23:59");
-		tv_select_time.setText(MyDateUtils.getToday(MyDateUtils.FORMAT_1));
+		tv_select_time.setText(MyDateUtils.getTodayDateString(MyDateUtils.FORMAT_1));
 		if(deviceList.size()>0){
 			tv_select_device.setText(deviceList.get(0).getDeviceName());
 			tv_channel.setText(""+deviceList.get(0).getCurrentChn());

@@ -114,7 +114,6 @@
     <!-- 相册 -->
     <string name="pic_list">相册</string>
     <string name="file_back">../(上层目录)</string>
-    <string name="not_imagefile">没有文件！</string>
     <string name="alert">注意</string>
     <string name="wrong">出错！</string>
     <string name="already_del">已删除！</string>

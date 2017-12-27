@@ -78,6 +78,7 @@ public class FileListAdapter extends BaseAdapter {
 		/* 设置文件或文件夹的文字与icon */
 		holder.f_title.setText(f.getName());
 		String f_type = MUtils.getMIMEType(f, false);
+		
 		if (f.isDirectory()) {
 			holder.f_icon.setImageBitmap(mIcon_folder);
 			holder.f_text.setText("");

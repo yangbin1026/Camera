@@ -64,12 +64,23 @@ public class MyDateUtils {
 		return times;
 	}
 	
-	public static String getToday(String fomat) {
+	public static String getTodayDateString(String fomat) {
 		Calendar calendar=Calendar.getInstance();
 		Date date = new Date();
 		date=calendar.getTime();
 		SimpleDateFormat from = new SimpleDateFormat(fomat);
 		String times = from.format(date);
 		return times;
+	}
+	public static long getTimeMails(String dateString,String formatString){
+		Date date=new Date();
+		SimpleDateFormat format=new SimpleDateFormat(formatString);
+		try {
+			date=format.parse(dateString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return date.getTime();
 	}
 }

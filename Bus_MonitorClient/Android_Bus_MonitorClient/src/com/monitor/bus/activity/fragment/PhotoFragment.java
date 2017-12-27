@@ -171,10 +171,10 @@ public class PhotoFragment extends BaseFragment{
 					}
 				}
 			} else {
-				MUtils.commonToast(getContext(), R.string.not_imagefile);
+//				MUtils.commonToast(getContext(), R.string.not_imagefile);
 			}
 		} else {
-			MUtils.commonToast(getContext(), R.string.not_imagefile);
+//			MUtils.commonToast(getContext(), R.string.not_imagefile);
 		}
 		/* 使用自定义的MyAdapter来将数据传入ListActivity */
 		fileList.setAdapter(new FileListAdapter(getContext(), items, paths, sizes));

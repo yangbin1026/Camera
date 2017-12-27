@@ -3,7 +3,6 @@ package com.monitor.bus.adapter;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.android.gms.internal.ed;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.control.LoginEventControl;
