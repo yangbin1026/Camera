@@ -26,6 +26,9 @@ import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.utils.SPUtils;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -40,8 +43,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -123,12 +126,13 @@ public class GoogleMapManager extends BaseMapManager {
 
 	private void initView() {
 		isAnimationEnd = false;
-		
-		RelativeLayout rl_googlemap=(RelativeLayout) ((FragmentActivity)mContext).findViewById(R.id.rl_googlemap);
-		View rl_googleMap=LayoutInflater.from(mContext).inflate(R.layout.googlemap_layout,null);
-		rl_googlemap.addView(rl_googleMap);
-		mapView = ((SupportMapFragment) ((FragmentActivity) mContext).getSupportFragmentManager()
-				.findFragmentById(R.id.googleMapView)).getMap();
+
+		SupportMapFragment fragment = SupportMapFragment.newInstance();
+		FragmentTransaction ft = ((android.support.v4.app.FragmentManager) ((FragmentActivity) mContext)
+				.getSupportFragmentManager()).beginTransaction();
+		ft.replace(R.id.rl_googlemap, fragment);
+		ft.commit();
+		mapView = fragment.getMap();
 		mapView.getUiSettings().setRotateGesturesEnabled(false);// 禁用旋转手势
 		mapView.setMyLocationEnabled(true);// 开启本机位置图层
 		mapView.getUiSettings().setMyLocationButtonEnabled(false);
@@ -157,6 +161,7 @@ public class GoogleMapManager extends BaseMapManager {
 				return false;
 			}
 		});
+
 	}
 
 	private void initData() {
@@ -177,7 +182,6 @@ public class GoogleMapManager extends BaseMapManager {
 			double longitude = deviceInfo.getLongitude();
 			double latitude = deviceInfo.getLatitude();
 			LogUtils.i(TAG, "表中获得：lon=" + longitude + ",lat=" + latitude);
-
 			mapView.clear();
 			mLatLngs.clear();
 

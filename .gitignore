@@ -14,7 +14,6 @@ build/
 gradlew
 gradlew.bat
 
-local.properties
 
 *.iml
 */*.iml
@@ -22,7 +21,6 @@ local.properties
 gradle/
 
 # Eclipse Project files
-.classpath
-.project
+
 .settings/
-*.properties
+
