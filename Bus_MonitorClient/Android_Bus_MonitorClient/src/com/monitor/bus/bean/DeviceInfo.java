@@ -23,8 +23,8 @@ public class DeviceInfo implements Serializable{
 	private	String	maxSpeed;//最大速度
 	private	String	minSpeed;//最小速度
 	private int 	currentChn;//当前通道
-	private Double	longitude;
-	private	Double	latitude;
+	private double	longitude =0.0d;
+	private	double	latitude =0.0d;
 	
 	
 	private	int		encoderNumber;
@@ -124,13 +124,13 @@ public class DeviceInfo implements Serializable{
 	public void setMinSpeed(String minSpeed) {
 		this.minSpeed = minSpeed;
 	}
-	public Double getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
-	public Double getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 	public void setLatitude(Double latitude) {

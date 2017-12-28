@@ -1,6 +1,8 @@
 package com.monitor.bus.activity;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -14,10 +16,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.monitor.bus.adapter.DevRecordListAdapter;
-import com.monitor.bus.bean.DevRecordInfo;
-import com.monitor.bus.bean.RecodInfo;
+import com.monitor.bus.bean.RecordInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
+import com.monitor.bus.database.DatabaseHelper;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 
@@ -28,20 +30,21 @@ public class VideoListActivity extends BaseActivity {
 	public static final String EXTRA_RECODINFO = "recodInfo";
 	private static String TAG = "VideoListActivity";
 
-	private RecodInfo recodinfo;
+	private RecordInfo recodinfo;
 	ProgressDialog myProgressDialog;
 
 	private ListView lv_recoder;
 	private Context mContext;
+	
+	DatabaseHelper dbHelper;
+	List<HashMap<String, String>> testLocalListView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.local_listview);
 		Intent intent = getIntent();
-		recodinfo = (RecodInfo) intent.getSerializableExtra(EXTRA_RECODINFO);
-
-		registerBoradcastReceiver();// 注册广播接收器
+		recodinfo = (RecordInfo) intent.getSerializableExtra(EXTRA_RECODINFO);
 		initView();
 		initData();
 
@@ -63,10 +66,10 @@ public class VideoListActivity extends BaseActivity {
 		lv_recoder.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				DevRecordInfo devRecordInfo = Constants.RECORD_LIST.get(position);
-				devRecordInfo.setGuId(recodinfo.getDeviceId());
+				RecordInfo devRecordInfo = Constants.RECORD_LIST.get(position);
+				devRecordInfo.setDeviceId(recodinfo.getDeviceId());
 				Intent intent = new Intent();
-				intent.putExtra("devRecordInfo", devRecordInfo);
+				intent.putExtra(ReplayActivity.EXTRA_RECORDINFO, devRecordInfo);
 				intent.setClass(mContext, ReplayActivity.class);
 				startActivity(intent);
 			}
@@ -74,12 +77,21 @@ public class VideoListActivity extends BaseActivity {
 	}
 
 	private void initData() {
+		if(recodinfo.isLocalVideo()){
+			//本地
+			dbHelper = new DatabaseHelper(this, Constants.DATABASE_NAME);
+			testLocalListView = dbHelper.queryRecordInfoList(recodinfo.getStartTime(), recodinfo.getEndTime());
+		}else{
+			//远程
+			registerBoradcastReceiver();
+			if (0 == Constants.RECORD_LIST.size()) {
+				myProgressDialog = ProgressDialog.show(this, getString(R.string.loading_data_title),
+						getString(R.string.waiting), true, true);
+			}
+		}
 		DevRecordListAdapter devRecordAdapter = new DevRecordListAdapter(this, Constants.RECORD_LIST);
 		lv_recoder.setAdapter(devRecordAdapter);
-		if (0 == Constants.RECORD_LIST.size()) {
-			myProgressDialog = ProgressDialog.show(this, getString(R.string.loading_data_title),
-					getString(R.string.waiting), true, true);
-		}
+		
 	}
 
 	private void registerBoradcastReceiver() {
@@ -87,7 +99,10 @@ public class VideoListActivity extends BaseActivity {
 		myIntentFilter.addAction("ACTION_NAME");
 		registerReceiver(mBroadcastReceiver, myIntentFilter);
 	}
-
+	
+	/**
+	 * 获取录像listReceiver，远程录像
+	 */
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {

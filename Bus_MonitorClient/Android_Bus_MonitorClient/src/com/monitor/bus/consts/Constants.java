@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.monitor.bus.bean.AlarmInfo;
-import com.monitor.bus.bean.DevRecordInfo;
+import com.monitor.bus.bean.RecordInfo;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.ServerInfo;
 
@@ -61,7 +61,7 @@ public class Constants {
 	public static final String STORE_URL_KEY = "store"; // 商店
 
 	public static List<ArrayList<ServerInfo>> SERVICE_LIST = new ArrayList<ArrayList<ServerInfo>>();// 服务器信息
-	public static List<DevRecordInfo> RECORD_LIST = new ArrayList<DevRecordInfo>();// 设备端录像
+	public static List<RecordInfo> RECORD_LIST = new ArrayList<RecordInfo>();// 设备端录像
 
 	public static final String SERVICE_APK_NAME = "com.google.android.gms"; // 服务
 	public static final String SERVICE_URL = "http://183.61.171.28:8002/download/googleplayservice_8.4.89.apk"; // 服务

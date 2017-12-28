@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.monitor.bus.activity.R;
-import com.monitor.bus.bean.DevRecordInfo;
+import com.monitor.bus.bean.RecordInfo;
 /**
  * 显示设备端录像列表的适配器
  */
@@ -18,11 +18,11 @@ import com.monitor.bus.bean.DevRecordInfo;
 public class DevRecordListAdapter extends BaseAdapter {
 
 	private LayoutInflater mInflater;
-	private List<DevRecordInfo> items;
+	private List<RecordInfo> items;
 	private TextView recordText;
 
 	/* MyAdapter的构造器 */
-	public DevRecordListAdapter(Context context, List<DevRecordInfo> it) {
+	public DevRecordListAdapter(Context context, List<RecordInfo> it) {
 
 		mInflater = LayoutInflater.from(context);
 		items = it;

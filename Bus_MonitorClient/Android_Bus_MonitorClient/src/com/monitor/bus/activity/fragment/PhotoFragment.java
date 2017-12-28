@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -31,9 +32,8 @@ public class PhotoFragment extends BaseFragment{
 	private List<String> sizes = null; // sizes：文件大小
 	private String rootPath = Constants.IMAGE_PATH; // rootPath：起始文件夹
 	private String currentPath = Constants.IMAGE_PATH;
-	private TextView back_title;
+	private RelativeLayout rl_back;
 	private ListView fileList;
-	private int isOpen = 0; 
 	
 	
 	@Override
@@ -53,7 +53,7 @@ public class PhotoFragment extends BaseFragment{
 	public boolean onBackPress() {
 		File file = new File(currentPath);
 		if (rootPath.equals(file.getParent())) {
-			back_title.setVisibility(View.INVISIBLE);
+			rl_back.setVisibility(View.INVISIBLE);
 		}
 		if (rootPath.equals(currentPath)) {
 		} else {
@@ -72,7 +72,7 @@ public class PhotoFragment extends BaseFragment{
 					long arg3) {
 				File file = new File(paths.get(position));
 				fileOrDirHandle(file, "short");
-				back_title.setVisibility(View.VISIBLE);
+				rl_back.setVisibility(View.VISIBLE);
 				
 			}
 		});
@@ -85,8 +85,8 @@ public class PhotoFragment extends BaseFragment{
 				return true;
 			}
 		});
-		back_title = (TextView) view.findViewById(R.id.back_title);
-		back_title.setOnClickListener(new TextViewListener());
+		rl_back = (RelativeLayout) view.findViewById(R.id.rl_back);
+		rl_back.setOnClickListener(new TextViewListener());
 	}
 
 	/**
@@ -304,7 +304,7 @@ public class PhotoFragment extends BaseFragment{
 			File file = new File(currentPath);
 			System.out.println(file.getParent());
 			if (rootPath.equals(file.getParent())) {
-				back_title.setVisibility(View.INVISIBLE);
+				rl_back.setVisibility(View.INVISIBLE);
 			}
 			if (!rootPath.equals(currentPath)) {
 				getFilePathList(file.getParent());

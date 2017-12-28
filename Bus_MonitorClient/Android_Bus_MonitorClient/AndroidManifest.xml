@@ -87,6 +87,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".RealTimeVideoActivity"
+            android:alwaysRetainTaskState="true"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

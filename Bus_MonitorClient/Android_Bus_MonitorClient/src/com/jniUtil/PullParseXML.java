@@ -14,7 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.util.Log;
 import android.util.Xml;
 
-import com.monitor.bus.bean.DevRecordInfo;
+import com.monitor.bus.bean.RecordInfo;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.bean.ServerInfo;
@@ -163,10 +163,10 @@ public class PullParseXML {
 		getBusDevices(in);
 	}
 
-	public static List<DevRecordInfo> getDevRecords(InputStream in) throws XmlPullParserException, IOException {
+	public static List<RecordInfo> getDevRecords(InputStream in) throws XmlPullParserException, IOException {
 
-		List<DevRecordInfo> recordInfoList = null;
-		DevRecordInfo recordInfo = null;
+		List<RecordInfo> recordInfoList = null;
+		RecordInfo recordInfo = null;
 
 		XmlPullParser parser = Xml.newPullParser();
 		InputStreamReader streamReader = new InputStreamReader(in, "gb2312");
@@ -179,17 +179,17 @@ public class PullParseXML {
 			switch (event) {
 
 			case XmlPullParser.START_DOCUMENT:// 判断当前事件是否是文档开始事件
-				recordInfoList = new ArrayList<DevRecordInfo>();
+				recordInfoList = new ArrayList<RecordInfo>();
 				break;
 			case XmlPullParser.START_TAG:// 判断当前事件是否是标签元素开始事件
-				recordInfo = new DevRecordInfo();
+				recordInfo = new RecordInfo();
 				if ("recInfo".equals(parser.getName())) {// 判断开始标签元素是否是name
 					recordInfo.setFileName(parser.getAttributeValue(0));
-					recordInfo.setbTime(parser.getAttributeValue(1));
-					recordInfo.seteTime(parser.getAttributeValue(2));
+					recordInfo.setStartTime(parser.getAttributeValue(1));
+					recordInfo.setEndTime(parser.getAttributeValue(2));
 					recordInfo.setFileSize(parser.getAttributeValue(3));
 					recordInfo.setTimeLen(parser.getAttributeValue(4));
-					recordInfo.setChnIndex(Integer.parseInt(parser.getAttributeValue(5)));
+					recordInfo.setChanneId(Integer.parseInt(parser.getAttributeValue(5)));
 					recordInfo.setRecType(Integer.parseInt(parser.getAttributeValue(6)));
 				}
 				break;

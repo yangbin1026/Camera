@@ -12,6 +12,7 @@ import com.monitor.bus.activity.HomeActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.UserMapActivity;
 import com.monitor.bus.activity.RealTimeVideoActivity;
+import com.monitor.bus.activity.UserGoogleMapActivity;
 import com.monitor.bus.adapter.DeviceListAdapter;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.DeviceManager;
@@ -37,6 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
@@ -44,23 +46,23 @@ import android.widget.TextView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 
-public class DeviceListFragment extends BaseFragment implements View.OnClickListener{
+public class DeviceListFragment extends BaseFragment implements View.OnClickListener {
 	private static String TAG = "DeviceListFragment";
-	
+
 	private ShapeLoadingDialog progressDialog;
 	View view;
 	ListView lv_device;
-	TextView tv_all,tv_online;
+	TextView tv_all, tv_online;
 	DeviceManager deviceManager = DeviceManager.getInstance();
-	
+
 	DeviceListAdapter mDeviceListAdapter;
 	ArrayList<DeviceInfo> deviceInfos;
-	DeviceManager manager= DeviceManager.getInstance();
+	DeviceManager manager = DeviceManager.getInstance();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_video, container, false);
-		mDeviceListAdapter=new DeviceListAdapter(getContext());
+		mDeviceListAdapter = new DeviceListAdapter(getContext());
 		setTitle();
 		initView();
 		updataByPid("0");
@@ -79,43 +81,48 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 	private void setTitle() {
 		TextView title = (TextView) view.findViewById(R.id.tilte_name);
 		title.setText(getContext().getString(R.string.dev_list));
+
+//		Button bt_setting = (Button) view.findViewById(R.id.bt_setting);
+//		bt_setting.setBackgroundDrawable(null);
+//		bt_setting.setText(R.string.test);
+//		bt_setting.setVisibility(View.VISIBLE);
+//		bt_setting.setOnClickListener(this);
 	}
 
 	private void initView() {
 		lv_device = (ListView) view.findViewById(R.id.lv_devicelist);
 		lv_device.setAdapter(mDeviceListAdapter);
-		tv_all=(TextView) view.findViewById(R.id.tv_all_device);
-		tv_online=(TextView) view.findViewById(R.id.tv_online_device);
+		tv_all = (TextView) view.findViewById(R.id.tv_all_device);
+		tv_online = (TextView) view.findViewById(R.id.tv_online_device);
 		tv_all.setOnClickListener(this);
 		tv_online.setOnClickListener(this);
-		
+
 		lv_device.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				DeviceInfo info= mDeviceListAdapter.getDataByPosition(position);
-				if(info.issDeviceGroup()){
-					//组
+				DeviceInfo info = mDeviceListAdapter.getDataByPosition(position);
+				if (info.issDeviceGroup()) {
+					// 组
 					updataByPid(info.getGroupId());
-				}else{
-					Intent intent=new Intent(getActivity(),RealTimeVideoActivity.class);
+				} else {
+					Intent intent = new Intent(getActivity(), RealTimeVideoActivity.class);
 					info.setCurrentChn(1);
 					intent.putExtra(RealTimeVideoActivity.KEY_DEVICE_INFO, info);
 					startActivity(intent);
 				}
 			}
 		});
-		
+
 	}
-	
-	
-	private void updataByPid(String id){
-		deviceInfos=manager.getListByPId(id);
+
+	private void updataByPid(String id) {
+		deviceInfos = manager.getListByPId(id);
 		mDeviceListAdapter.setData(deviceInfos);
 		mDeviceListAdapter.notifyDataSetChanged();
 	}
-	
-	private void updataByList(ArrayList<DeviceInfo> list){
-		deviceInfos=list;
+
+	private void updataByList(ArrayList<DeviceInfo> list) {
+		deviceInfos = list;
 		mDeviceListAdapter.setData(deviceInfos);
 		mDeviceListAdapter.notifyDataSetChanged();
 	}
@@ -144,17 +151,17 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 
 	private void showWaittingDialog() {
 		if (0 == DeviceManager.getInstance().getDeviceListAll().size()) {
-		if (progressDialog != null) {
+			if (progressDialog != null) {
+				progressDialog.show();
+				return;
+			}
+			if (progressDialog == null) {
+				progressDialog = new ShapeLoadingDialog.Builder(getContext()).cancelable(false)
+						.canceledOnTouchOutside(false).loadText(R.string.loading_data_title).build();
+			}
+			progressDialog.setCancelable(true);
+			progressDialog.setCanceledOnTouchOutside(true);
 			progressDialog.show();
-			return;
-		}
-		if (progressDialog == null) {
-			progressDialog = new ShapeLoadingDialog.Builder(getContext()).cancelable(false).canceledOnTouchOutside(false)
-					.loadText(R.string.loading_data_title).build();
-		}
-		progressDialog.setCancelable(true);
-		progressDialog.setCanceledOnTouchOutside(true);
-		progressDialog.show();
 		}
 	}
 
@@ -173,18 +180,18 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 				int eventType = intent.getIntExtra(Constants.WHAT_LOGIN_EVENT_TYPE, 0);//
 				if (!Constants.IS_CASCADE_SERVER && eventType == CALLBACKFLAG.GET_EVENT_DEVLIST
 						|| Constants.IS_CASCADE_SERVER && eventType == CALLBACKFLAG.JNET_EET_EVENT_SERVER_LIST) {
-					//获取成功
+					// 获取成功
 					disMissWaittingDialog();
 					updataByPid("0");
 				} else {
-//					String DEVID = intent.getStringExtra("devID");//
-//					String myLocation = groupLocationMap.get(DEVID);
-//					if (myLocation != null || "".equals(myLocation)) {
-//						int location = Integer.parseInt(myLocation);
-//						if (eventType == 4096) {// 设备上线
-//						} else if (eventType == 8192) {// 设备离线
-//						}
-//					}
+					// String DEVID = intent.getStringExtra("devID");//
+					// String myLocation = groupLocationMap.get(DEVID);
+					// if (myLocation != null || "".equals(myLocation)) {
+					// int location = Integer.parseInt(myLocation);
+					// if (eventType == 4096) {// 设备上线
+					// } else if (eventType == 8192) {// 设备离线
+					// }
+					// }
 				}
 			}
 		}
@@ -200,9 +207,16 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 		case R.id.tv_online_device:
 			updataByList(manager.getOnlineDevice());
 			break;
+		case R.id.bt_setting:
+			DeviceInfo info = DeviceManager.getInstance().getDeviceList().get(0);
+			Intent intent = new Intent();
+			intent.putExtra(RealTimeVideoActivity.KEY_DEVICE_INFO, info);
+			intent.setClass(getContext(), UserGoogleMapActivity.class);
+			startActivity(intent);
+			break;
 		default:
 			break;
 		}
-		
+
 	}
 }

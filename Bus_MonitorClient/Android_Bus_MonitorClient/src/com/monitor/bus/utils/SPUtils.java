@@ -111,6 +111,7 @@ public class SPUtils {
 		e.putString(KEY_INFO_IP, info.getIp());
 		e.putInt(KEY_INFO_PORT, info.getPort());
 		e.commit();
+		LogUtils.d(TAG, "saveLoginInfo:" + info.toString());
 	}
 
 	public static LoginInfo getLoginInfo(Context context) {
@@ -122,6 +123,7 @@ public class SPUtils {
 		info.setPassWord(sp_login.getString(KEY_INFO_PW, ""));
 		info.setIp(sp_login.getString(KEY_INFO_IP, ""));
 		info.setPort(sp_login.getInt(KEY_INFO_PORT, 0));
+		LogUtils.d(TAG, "getLoginInfo:" + info.toString());
 		return info;
 	}
 

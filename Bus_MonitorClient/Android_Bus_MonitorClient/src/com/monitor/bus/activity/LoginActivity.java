@@ -58,18 +58,19 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	private MyEditText et_password;// 密码
 	private MyEditText et_login_port;// 端口
 	private MyEditText et_login_address;// 地址
-	private ProgressDialog pbar;// 进度条对话框
 	private Button btn_login;
 	private CheckBox cb_remenber, cb_autoLogin;
+	private ShapeLoadingDialog dialog;
 
-	private String newVerName, newAppName;// 新版本名称,新应用程序名称
-	private int newVerCode;// 新版本号
-	private int currentCode = 0;// 旧版本号
-	private InetAddress iAdd;
 	private Handler handler = new Handler();
 	private LoginEventControl loginControl;// 登陆回调类
 	private Context mContext;
-	private ShapeLoadingDialog dialog;
+	private LoginInfo info;
+
+	private int currentCode = 0;// 旧版本号
+	private int newVerCode;// 新版本号
+	private String newVerName, newAppName;// 新版本名称,新应用程序名称
+	private ProgressDialog pbar;// 进度条对话框
 
 	static {
 		try {
@@ -119,15 +120,17 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 			public void onStatus(int statu) {
 				switch (statu) {
 				case CALLBACKFLAG.LOGIN_SUCCESS:
+					dissmissDialog();
 					Intent intent = new Intent();
 					intent.setClass(mContext, HomeActivity.class);
 					mContext.startActivity(intent);
-//					((Activity) mContext).finish();
+					((Activity) mContext).finish();
 					break;
 				case CALLBACKFLAG.LOGIN_ING:
 					showLoginDialog();
 					break;
 				case CALLBACKFLAG.LONGIN_FAILD:
+					dissmissDialog();
 					MUtils.toast(mContext, mContext.getString(R.string.loginFailed));
 					break;
 
@@ -138,25 +141,19 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		});
 		boolean savePwd = SPUtils.getBoolean(this, SPUtils.KEY_REMEMBER_USERINFO, true);
 		boolean autoLogin = SPUtils.getBoolean(this, SPUtils.KEY_AUTO_LOGIN, false);
+
 		if (savePwd) {
 			cb_remenber.setChecked(true);
 		}
 		if (autoLogin) {
 			cb_autoLogin.setChecked(true);
 		}
-		LoginInfo info = SPUtils.getLoginInfo(this);
+		info = SPUtils.getLoginInfo(this);
 
-		String u = info.getUserName();
-		String p = info.getPassWord();
-		String ip = info.getIp();
-		int port = info.getPort();
-		et_userName.setEditText(u);
-
-		et_password.setEditText(p);
-
-		et_login_address.setEditText(ip);
-
-		et_login_port.setEditText("" + port);
+		et_userName.setEditText(info.getUserName());
+		et_password.setEditText(info.getPassWord());
+		et_login_address.setEditText(info.getIp());
+		et_login_port.setEditText("" + info.getPort());
 
 		et_userName.setEditFocus();
 		et_password.setEditPasswordType();
@@ -164,25 +161,21 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		et_login_address.setIpConfigType();
 
 		if (LogUtils.Debug) {
-			// et_userName.setEditText("123");
-			// et_password.setEditText("123");
+			// et_userName.setEditText("hswl");
+			// et_password.setEditText("000000");
+			et_userName.setEditText("123");
+			et_password.setEditText("123");
 			et_login_port.setEditText("6008");
 			et_login_address.setEditText("183.61.171.28");
 		}
 		if (autoLogin) {
-			login(u, p, ip, port);
+			login(info);
 		}
 	}
 
 	private void showLoginDialog() {
-		if (dialog != null) {
-			dialog.show();
-			return;
-		}
-		if (dialog == null) {
-			dialog = new ShapeLoadingDialog.Builder(this).cancelable(false).canceledOnTouchOutside(false)
-					.loadText(R.string.logining).build();
-		}
+		dialog = new ShapeLoadingDialog.Builder(this).cancelable(false).canceledOnTouchOutside(false)
+				.loadText(R.string.logining).build();
 		dialog.setCancelable(true);
 		dialog.setCanceledOnTouchOutside(true);
 		dialog.show();
@@ -213,11 +206,11 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 			String password = et_password.getEditText();
 			String ip = et_login_address.getEditText();
 			int port = Integer.parseInt(et_login_port.getEditText());
-			LoginInfo info = new LoginInfo(userName, port, password, ip);
+			info = new LoginInfo(userName, port, password, ip);
 			if (cb_remenber.isChecked()) {
 				SPUtils.saveLoginInfo(this, info);
 			}
-			login(userName, password, ip, port);
+			login(info);
 			break;
 		}
 	}
@@ -427,9 +420,11 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	/**
 	 * 登录
 	 */
-	private void login(String u, String p, String ip, int port) {
-		if (MUtils.hasUselessString(u, p, ip) || port == 0) {
-			LogUtils.getInstance().localLog(TAG, "login Info:" + u + "  " + p + "  " + ip + "  " + port);
+	private void login(LoginInfo info) {
+		InetAddress iAdd;
+		String ipAdd = null;
+		if (MUtils.hasUselessString(info.getUserName(), info.getPassWord(), info.getIp()) || info.getPort() == 0) {
+			LogUtils.getInstance().localLog(TAG, "login Info Error:" + info.toString());
 			MUtils.toast(this, "请填写完整信息！");
 			return;
 		}
@@ -439,9 +434,9 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		}
 		try {
 			// 解析域名的IP地址
-			iAdd = InetAddress.getByName(ip);
+			iAdd = InetAddress.getByName(info.getIp());
 			// 得到字符串形式的IP地址
-			ip = iAdd.getHostAddress();
+			ipAdd = iAdd.getHostAddress();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -449,15 +444,17 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		}
 		Pattern pattern = Pattern.compile(
 				"^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$");
-		Matcher matcher = pattern.matcher(ip);
+		Matcher matcher = pattern.matcher(ipAdd);
 		if (!matcher.matches()) {
 			MUtils.commonToast(this, R.string.ipFailed);
 			return;
 		}
 		// 登录
-		LogUtils.getInstance().localLog(TAG, "JNI_login:" + u + p + ip + port, LogUtils.LOG_NAME);
-		JNVPlayerUtil.JNV_N_Login(ip, port, u, p, 30, loginControl, "callbackLogin", 0);
+		LogUtils.getInstance().localLog(TAG, "login Info:" + info.toString());
+		JNVPlayerUtil.JNV_N_Login(info.getIp(), info.getPort(), info.getUserName(), info.getPassWord(), 30,
+				loginControl, "callbackLogin", 0);
 	}
+
 	private void checkVersion() {
 		String today = MyDateUtils.getTodayDateString(MyDateUtils.FORMAT_1);
 		if (MyDateUtils.getTimeMails(today, MyDateUtils.FORMAT_1) > MyDateUtils.getTimeMails("2018-04-01",

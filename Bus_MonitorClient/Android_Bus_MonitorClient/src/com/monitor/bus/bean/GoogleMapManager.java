@@ -3,32 +3,6 @@ package com.monitor.bus.bean;
 import java.io.File;
 import java.util.LinkedList;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.LocationSource;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.GoogleMap.CancelableCallback;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.LocationSource.OnLocationChangedListener;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.jniUtil.GpsCorrection;
-import com.jniUtil.JNVPlayerUtil;
-import com.monitor.bus.activity.R;
-import com.monitor.bus.bdmap.GoogleCheckGPSAsyncTask;
-import com.monitor.bus.consts.Constants;
-import com.monitor.bus.consts.Constants.CALLBACKFLAG;
-import com.monitor.bus.utils.LogUtils;
-import com.monitor.bus.utils.MUtils;
-import com.monitor.bus.utils.SPUtils;
-
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -45,10 +19,34 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.CancelableCallback;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.LocationSource;
+import com.google.android.gms.maps.LocationSource.OnLocationChangedListener;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.jniUtil.GpsCorrection;
+import com.jniUtil.JNVPlayerUtil;
+import com.monitor.bus.utils.MUtils;
+import com.monitor.bus.utils.SPUtils;
+import com.monitor.bus.activity.R;
+import com.monitor.bus.bdmap.GoogleCheckGPSAsyncTask;
+import com.monitor.bus.bean.DeviceInfo;
+import com.monitor.bus.consts.Constants;
+import com.monitor.bus.consts.Constants.CALLBACKFLAG;
+import com.monitor.bus.utils.LogUtils;
+
 
 public class GoogleMapManager extends BaseMapManager {
 	private static final String TAG = "GoogleMapManager";
@@ -87,7 +85,6 @@ public class GoogleMapManager extends BaseMapManager {
 			case MSG_WHAT_NEW_LOCATION:
 				// 刷新位置
 				IsAsynCheckGPS = (Boolean) msg.obj;
-				registerBoradcastReceiver();// 注册广播接收器
 				break;
 			default:
 				break;
@@ -115,7 +112,7 @@ public class GoogleMapManager extends BaseMapManager {
 		if (IsAsynCheckGPS) {
 			registerBoradcastReceiver();// 注册广播接收器
 		}
-
+		registerBoradcastReceiver();// 注册广播接收器
 	}
 
 	@Override
@@ -126,13 +123,20 @@ public class GoogleMapManager extends BaseMapManager {
 
 	private void initView() {
 		isAnimationEnd = false;
-
-		SupportMapFragment fragment = SupportMapFragment.newInstance();
-		FragmentTransaction ft = ((android.support.v4.app.FragmentManager) ((FragmentActivity) mContext)
-				.getSupportFragmentManager()).beginTransaction();
-		ft.replace(R.id.rl_googlemap, fragment);
-		ft.commit();
-		mapView = fragment.getMap();
+		//////////////////////////////////////////////////////////////
+		
+		
+//		SupportMapFragment fragment = SupportMapFragment.newInstance();
+//		FragmentTransaction ft = ((android.support.v4.app.FragmentManager) ((FragmentActivity) mContext)
+//				.getSupportFragmentManager()).beginTransaction();
+//		ft.replace(R.id.rl_googlemap, fragment);
+//		ft.commit();
+//		mapView = fragment.getMap();
+		
+		
+		mapView = ((SupportMapFragment) ((FragmentActivity) mContext).getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+		
+		//////////////////////////////////////////////////////////////
 		mapView.getUiSettings().setRotateGesturesEnabled(false);// 禁用旋转手势
 		mapView.setMyLocationEnabled(true);// 开启本机位置图层
 		mapView.getUiSettings().setMyLocationButtonEnabled(false);

@@ -25,7 +25,7 @@ import com.jniUtil.JNVPlayerUtil;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.RealTimeVideoActivity;
-import com.monitor.bus.bean.DevRecordInfo;
+import com.monitor.bus.bean.RecordInfo;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.database.DatabaseHelper;
@@ -45,9 +45,11 @@ public  class VideoPlayControl {
 	
 	//private VideoActivity videoActivity;// 实时视频
 	//private int playType; // 播放类型 1:录像回放 2:实时流
+	
 	public AudioTrack track;// 音频操作对象
 	//public byte[] audioData ;
 	public AudioRecord audioRecord;// 对讲操作对象
+	
 	public byte[] encodeData;
 	public int startStreamId = -1; // 播放返回的id，JNV_OpenStream返回
 	public int recStreamId = -1;//录像回放返回的id,JNV_RecOpenFile返回
@@ -162,11 +164,11 @@ public  class VideoPlayControl {
 	public void initVideoPlay(Intent intent,int type) {
 		initAudio();// 初始化音频 
 		if (STREAM_TYPE_RECORD == type) {// 录像回放
-			DevRecordInfo devRecordInfo = (DevRecordInfo) intent.getSerializableExtra("devRecordInfo");// 回放的文件名称
+			RecordInfo devRecordInfo = (RecordInfo) intent.getSerializableExtra("devRecordInfo");// 回放的文件名称
 				if( null != devRecordInfo ){//设备端播放
 					
-					replayStreamId =	JNVPlayerUtil.JNV_ReplayStart(devRecordInfo.getGuId(), 0, devRecordInfo.getChnIndex(), 
-							devRecordInfo.getbTime(), devRecordInfo.geteTime(), 0, devRecordInfo.getRecType(), 
+					replayStreamId =	JNVPlayerUtil.JNV_ReplayStart(devRecordInfo.getDeviceId(), 0, devRecordInfo.getChanneId(), 
+							devRecordInfo.getStartTime(), devRecordInfo.getEndTime(), 0, devRecordInfo.getRecType(), 
 							0, this, "callbackSetStreamInfo", 0);
 					 
 					 
@@ -423,11 +425,10 @@ public  class VideoPlayControl {
 	 * 初始化音频
 	 */
 	private void initAudio() {
-
 		maxjitter = AudioTrack.getMinBufferSize(Constants.AUDIO_RATE,
 				AudioFormat.CHANNEL_CONFIGURATION_MONO,
 				AudioFormat.ENCODING_PCM_16BIT);
-		Log.e(TAG, "+++initAudio++++++++++初始化音频:"+maxjitter);
+		LogUtils.getInstance().localLog(TAG, "+++initAudio++++++++++初始化音频:"+maxjitter);
 		track = new AudioTrack(AudioManager.STREAM_MUSIC,
 				Constants.AUDIO_RATE, AudioFormat.CHANNEL_CONFIGURATION_MONO,
 				AudioFormat.ENCODING_PCM_16BIT, maxjitter*6,

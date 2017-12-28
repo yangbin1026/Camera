@@ -15,6 +15,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.monitor.bus.bean.RecordDBInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.LogUtils;
 
@@ -118,6 +119,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 					new String[] { "ID,REC_FILENAME,REC_PATH,REC_FILENAME" },
 					"REC_DATE >= datetime('" + start+ "') AND REC_DATE <= datetime('" + end + "')",null, "", "", "ID");
 			LogUtils.i(TAG, "++++++++++所有录像记录数:"+ cursor.getCount());
+			
+			
 			ArrayList<HashMap<String, String>> recoderList = new ArrayList<HashMap<String, String>>();
 			while (cursor.moveToNext()) {
 				HashMap<String, String> map = new HashMap<String, String>();
@@ -129,6 +132,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			cursor.close();
 			db.close();
 			
+			return recoderList;
+		}
+		
+		/**
+		 * 查询某个时间段的所有录像记录
+		 * @param start
+		 * @param end
+		 * @return
+		 */
+		public ArrayList<RecordDBInfo> queryAllDBList(String start,String end){
+			LogUtils.i(TAG, "queryAllDBList()");
+			SQLiteDatabase db = this.getReadableDatabase();
+			Cursor cursor = db.query("andr_playback",
+					new String[] { "ID,REC_FILENAME,REC_PATH,REC_FILENAME" },
+					"REC_DATE >= datetime('" + start+ "') AND REC_DATE <= datetime('" + end + "')",null, "", "", "ID");
+			
+			ArrayList<RecordDBInfo> recoderList = new ArrayList<RecordDBInfo>();
+			while (cursor.moveToNext()) {
+				RecordDBInfo info=new RecordDBInfo();
+				info.setFileName(cursor.getString(cursor.getColumnIndex("REC_FILENAME")));
+				info.setFilePath(cursor.getString(cursor.getColumnIndex("REC_PATH")));
+				info.setId(cursor.getString(cursor.getColumnIndex("ID")));
+				recoderList.add(info);
+			}
+			cursor.close();
+			db.close();
 			return recoderList;
 		}
 		

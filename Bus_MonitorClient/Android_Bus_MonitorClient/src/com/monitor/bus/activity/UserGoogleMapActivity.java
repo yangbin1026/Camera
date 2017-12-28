@@ -40,6 +40,7 @@ import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.utils.SPUtils;
 import com.monitor.bus.bdmap.GoogleCheckGPSAsyncTask;
 import com.monitor.bus.bean.DeviceInfo;
+import com.monitor.bus.bean.GoogleMapManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.utils.LogUtils;
@@ -54,6 +55,7 @@ public class UserGoogleMapActivity extends FragmentActivity {
 
 	private boolean IsAsynCheckGPS = false;// gps校正任务是否完成
 	private boolean isAnimationEnd = false;
+	GoogleMapManager mMapManager;
 
 	private GoogleMap mapView;
 	private Marker mMarker;
@@ -94,35 +96,42 @@ public class UserGoogleMapActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.user_google_mapview);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
+		
 		mContext = this;
-
 		Intent intent = getIntent();
 		deviceInfo = (DeviceInfo) intent.getSerializableExtra(RealTimeVideoActivity.KEY_DEVICE_INFO);// 获取当前设备坐标
 		if (deviceInfo == null) {
+			LogUtils.getInstance().localLog(TAG, "deviceInfo==NULL");
 			MUtils.toast(this, "请先选择设备");
 		}
-		isGPSCheck = SPUtils.getBoolean(mContext, SPUtils.KEY_GSP_CHECK, false);
-
-		initView();
-		initDevLocationGPS();
-		initData();
-
-		if (IsAsynCheckGPS) {
-			registerBoradcastReceiver();// 注册广播接收器
-		}
+		
+		
+		mMapManager = new GoogleMapManager(this);
+		mMapManager.setDeviceInfo(deviceInfo);
+		mMapManager.onCreat();
+		
+//		isGPSCheck = SPUtils.getBoolean(mContext, SPUtils.KEY_GSP_CHECK, false);
+//		initView();
+//		initDevLocationGPS();
+//		initData();
+//
+//		if (IsAsynCheckGPS) {
+//			registerBoradcastReceiver();// 注册广播接收器
+//		}
 
 	}
 
 	@Override
 	protected void onDestroy() {
-		unregisterReceiver(mBroadcastReceiver);
-		JNVPlayerUtil.JNV_N_GetGPSStop(deviceInfo.getNewGuId());
+//		unregisterReceiver(mBroadcastReceiver);
+//		JNVPlayerUtil.JNV_N_GetGPSStop(deviceInfo.getNewGuId());
+		mMapManager.onDestory();
 		super.onDestroy();
 	}
 
 	private void initView() {
 		isAnimationEnd = false;
-		mapView = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+		mapView = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.user_google_map)).getMap();
 		mapView.getUiSettings().setRotateGesturesEnabled(false);// 禁用旋转手势
 		mapView.setMyLocationEnabled(true);// 开启本机位置图层
 		mapView.getUiSettings().setMyLocationButtonEnabled(false);

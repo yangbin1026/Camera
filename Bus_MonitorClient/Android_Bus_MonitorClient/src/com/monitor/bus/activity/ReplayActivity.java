@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.monitor.bus.utils.MUtils;
-import com.monitor.bus.bean.DevRecordInfo;
+import com.monitor.bus.bean.RecordInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.control.VideoPlayControl;
 import com.monitor.bus.utils.LogUtils;
@@ -27,13 +27,14 @@ import com.monitor.bus.view.MyVideoView;
  *
  */
 public class ReplayActivity extends BaseActivity implements OnTouchListener{
+	public static final String EXTRA_RECORDINFO="record_info";
 	private static String TAG = "RecordActivity";
 	private MyVideoView myVideoView;
 	private Button pauseButton;//暂停按钮
 	private boolean play_or_pause = false;//播放暂停切换标志 false 暂停 true 继续播放 
 	GestureDetector mGestureDetector;
 	private VideoPlayControl playControl;
-	private DevRecordInfo devRecordInfo;
+	private RecordInfo devRecordInfo;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		LogUtils.i(TAG, "+++++++++++++++++回放Activity onCreate");
@@ -41,7 +42,7 @@ public class ReplayActivity extends BaseActivity implements OnTouchListener{
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
 		
 		Intent intent=this.getIntent();
-		devRecordInfo = (DevRecordInfo) intent.getSerializableExtra("devRecordInfo");// 回放的文件名称
+		devRecordInfo = (RecordInfo) intent.getSerializableExtra(EXTRA_RECORDINFO);// 回放的文件名称
 		
 		myVideoView=(MyVideoView)findViewById(R.id.myVideoView);
 		playControl = new VideoPlayControl(this, myVideoView);

@@ -15,7 +15,7 @@ import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.VideoListActivity;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.DeviceManager;
-import com.monitor.bus.bean.RecodInfo;
+import com.monitor.bus.bean.RecordInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.view.dialog.DateUtil;
 import com.monitor.bus.view.dialog.MyDataPickerDialog;
@@ -42,7 +42,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	private Dialog dateDialog, endTimeDialog,startTimeDialog, chooseDeviceDialog,chooseLocalDialog,chooseChannelDialog,chooseTypeDialog;
 
 	private List<DeviceInfo> deviceList;
-	private RecodInfo recodInfo = new RecodInfo();
+	private RecordInfo recodInfo = new RecordInfo();
 	private DeviceManager deviceManger;
 	String dateString;
 
@@ -126,12 +126,12 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	private void queryRecord() {
 		LogUtils.i(TAG, "query() RecordInfo:"+recodInfo.toString()); 
 		if (!isUsefullTime(dateString,recodInfo.getStartTime(), recodInfo.getEndTime())) {
-			MUtils.commonToast(getContext(), R.string.time_validate);
+			MUtils.toast(getContext(), getContext().getString(R.string.time_validate));
 			return;
 		}
 		if (!recodInfo.isLocalVideo()) {
-			JNVPlayerUtil.JNV_N_RecQuery(recodInfo.getDeviceId(), 0, recodInfo.getType(),dateString+" "+ recodInfo.getStartTime(),
-					dateString+" "+recodInfo.getEndTime(), recodInfo.getChannelId(), Constants.DEVRECORD_PASTH);
+			JNVPlayerUtil.JNV_N_RecQuery(recodInfo.getDeviceId(), 0, recodInfo.getRecType(),dateString+" "+ recodInfo.getStartTime(),
+					dateString+" "+recodInfo.getEndTime(), recodInfo.getChanneId(), Constants.DEVRECORD_PASTH);
 		}
 		Intent intent = new Intent(getContext(), VideoListActivity.class);
 		intent.putExtra(VideoListActivity.EXTRA_RECODINFO, recodInfo);
@@ -196,8 +196,9 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
 						@Override
 						public void onDataSelected(String itemValue, int position) {
+							Log.i(TAG, "selectisLocal:" + itemValue + "  position:" + position);
 							tv_file_local.setText(itemValue);
-							recodInfo.setType(position + 1);
+							recodInfo.setRecType(position + 1);
 						}
 						
 						@Override
@@ -218,8 +219,9 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
 						@Override
 						public void onDataSelected(String itemValue, int position) {
+							Log.i(TAG, "selectchannel:" + itemValue + "  position:" + position);
 							tv_channel.setText(itemValue);
-							recodInfo.setChannelId(position+1);
+							recodInfo.setChanneId(position+1);
 						}
 						
 						@Override
@@ -242,8 +244,9 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
 						@Override
 						public void onDataSelected(String itemValue, int position) {
+							Log.i(TAG, "selectteype:" + itemValue + "  position:" + position);
 							tv_type.setText(itemValue);
-							recodInfo.setType(position + 1);
+							recodInfo.setRecType(position + 1);
 						}
 						
 						@Override
@@ -266,6 +269,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 					dateString = dates[0] + "-" + (dates[1] > 9 ? dates[1] : ("0" + dates[1])) + "-"
 							+ (dates[2] > 9 ? dates[2] : ("0" + dates[2]));
 					tv_select_time.setText(dateString);
+					Log.i(TAG, "selectdate:" +dateString);
 				}
 				
 				@Override
@@ -292,6 +296,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 					String startDate = (times[0]>9? times[0]: ("0" + times[0]))+":" + (times[1]>9? times[1]: ("0" + times[1]));
 					tv_start_time.setText(startDate);
 					recodInfo.setStartTime(startDate);
+					Log.i(TAG, "selectdate:" +startDate);
 				}
 			}).create();
 		}
@@ -311,6 +316,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 					String endDate = times[0] + ":" + times[1];
 					tv_end_time.setText(times[0] + ":" + times[1]);
 					recodInfo.setEndTime(endDate);
+					Log.i(TAG, "selectdate:" +endDate);
 				}
 			}).create();
 		}

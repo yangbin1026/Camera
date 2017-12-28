@@ -1,10 +1,10 @@
 package com.monitor.bus.bean;
 
 public class LoginInfo {
-	String userName;
-	int port;
-	String passWord;
-	String ip;
+	private String userName;
+	private int port;
+	private String passWord;
+	private String ip;
 	
 	public LoginInfo(){
 		

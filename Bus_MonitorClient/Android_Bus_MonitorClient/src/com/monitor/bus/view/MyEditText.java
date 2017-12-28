@@ -100,10 +100,6 @@ public class MyEditText extends LinearLayout {
 		});
 	}
 
-	public void setEditHint(int resid) {
-		edit_input.setHint(resid);
-	}
-
 	public void setEditFocus() {
 		edit_input.requestFocus();
 	}
