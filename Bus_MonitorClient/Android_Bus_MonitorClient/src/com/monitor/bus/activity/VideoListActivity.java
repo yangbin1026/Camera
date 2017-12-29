@@ -29,6 +29,7 @@ import com.monitor.bus.utils.MUtils;
 public class VideoListActivity extends BaseActivity {
 	public static final String EXTRA_RECODINFO = "recodInfo";
 	private static String TAG = "VideoListActivity";
+	boolean isRegisted=false;
 
 	private RecordInfo recodinfo;
 	ProgressDialog myProgressDialog;
@@ -52,7 +53,9 @@ public class VideoListActivity extends BaseActivity {
 
 	@Override
 	protected void onDestroy() {
-		unregisterReceiver(mBroadcastReceiver);
+		if(isRegisted){
+			unregisterReceiver(mBroadcastReceiver);
+		}
 		File devRecordFile = new File(Constants.DEVRECORD_PASTH);
 		if (devRecordFile.exists()) { // 存在删除
 			devRecordFile.delete();
@@ -95,6 +98,7 @@ public class VideoListActivity extends BaseActivity {
 	}
 
 	private void registerBoradcastReceiver() {
+		isRegisted=true;
 		IntentFilter myIntentFilter = new IntentFilter();
 		myIntentFilter.addAction("ACTION_NAME");
 		registerReceiver(mBroadcastReceiver, myIntentFilter);

@@ -36,7 +36,6 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.jniUtil.JNVPlayerUtil;
 import com.monitor.bus.utils.MUtils;
-import com.monitor.bus.utils.MyDateUtils;
 import com.monitor.bus.bean.LoginInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
@@ -45,6 +44,7 @@ import com.monitor.bus.control.LoginEventControl.LoginStatusCallBack;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.SPUtils;
 import com.monitor.bus.view.MyEditText;
+import com.monitor.bus.view.dialog.DateUtil;
 import com.monitor.bus.view.dialog.ShapeLoadingDialog.ShapeLoadingDialog;
 
 /**
@@ -456,9 +456,9 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	}
 
 	private void checkVersion() {
-		String today = MyDateUtils.getTodayDateString(MyDateUtils.FORMAT_1);
-		if (MyDateUtils.getTimeMails(today, MyDateUtils.FORMAT_1) > MyDateUtils.getTimeMails("2018-04-01",
-				MyDateUtils.FORMAT_1)) {
+		String today = DateUtil.getTodayDateString(DateUtil.FORMAT_1);
+		if (DateUtil.getTimeMails(today, DateUtil.FORMAT_1) > DateUtil.getTimeMails("2018-04-01",
+				DateUtil.FORMAT_1)) {
 			MUtils.toast(mContext, "请安装最新的版本");
 			finish();
 		}

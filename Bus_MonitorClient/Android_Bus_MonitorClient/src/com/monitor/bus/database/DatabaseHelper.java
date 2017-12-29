@@ -41,7 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		LogUtils.i(TAG, "++++++++++++ 开始创建数据库");
+		LogUtils.i(TAG, "++++++++++++ onCreate");
 		createTable(db);
 	}
 
@@ -62,7 +62,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		LogUtils.i(TAG, "+++++++++++++++++++更新判断数据库");
+		LogUtils.i(TAG, "++++++++++++++++++onUpgrade");
 		db.execSQL("drop table if exists andr_playback;");
 		onCreate(db);
 	}
@@ -113,12 +113,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		 * @return
 		 */
 		public ArrayList<HashMap<String, String>> queryRecordInfoList(String start,String end){
-			LogUtils.i(TAG, "++++++++++查询某个时间段的所有录像记录");
+			LogUtils.i(TAG, "++++++++++queryRecordInfoList");
 			SQLiteDatabase db = this.getReadableDatabase();
 			Cursor cursor = db.query("andr_playback",
 					new String[] { "ID,REC_FILENAME,REC_PATH,REC_FILENAME" },
 					"REC_DATE >= datetime('" + start+ "') AND REC_DATE <= datetime('" + end + "')",null, "", "", "ID");
-			LogUtils.i(TAG, "++++++++++所有录像记录数:"+ cursor.getCount());
+			LogUtils.i(TAG, "++++++++++count:"+ cursor.getCount());
 			
 			
 			ArrayList<HashMap<String, String>> recoderList = new ArrayList<HashMap<String, String>>();

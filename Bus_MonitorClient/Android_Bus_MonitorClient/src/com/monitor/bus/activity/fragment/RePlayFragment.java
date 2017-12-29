@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.monitor.bus.utils.MyDateUtils;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 import com.jniUtil.JNVPlayerUtil;
@@ -55,20 +54,6 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 		return contentView;
 	}
 
-	private void initData() {
-		deviceManger = DeviceManager.getInstance();
-		deviceList = deviceManger.getDeviceList();
-		tv_start_time.setText("00:00");
-		tv_end_time.setText("23:59");
-		tv_select_time.setText(MyDateUtils.getTodayDateString(MyDateUtils.FORMAT_1));
-		if(deviceList.size()>0){
-			tv_select_device.setText(deviceList.get(0).getDeviceName());
-			tv_channel.setText(""+deviceList.get(0).getCurrentChn());
-		}
-		tv_type.setText("普通视频");
-		tv_file_local.setText("本地视频");
-	}
-
 	private void setTitle() {
 		TextView title = (TextView) contentView.findViewById(R.id.tilte_name);
 		title.setText(getContext().getString(R.string.find_record));
@@ -104,6 +89,27 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 
 	}
 
+	private void initData() {
+		deviceManger = DeviceManager.getInstance();
+		deviceList = deviceManger.getDeviceList();
+		if(deviceList.size()>0){
+			recodInfo.setDeviceId(deviceList.get(0).getDeviceId());
+		}
+		recodInfo.setStartTime(DateUtil.getTodayStart());
+		recodInfo.setEndTime(DateUtil.getTodayEnd());
+		
+		tv_start_time.setText("00:00");
+		tv_end_time.setText("23:59");
+		tv_type.setText("普通视频");
+		tv_file_local.setText("本地视频");
+		tv_select_time.setText(DateUtil.getTodayDateString(DateUtil.FORMAT_1));
+
+		if(deviceList.size()>0){
+			tv_select_device.setText(deviceList.get(0).getDeviceName());
+			tv_channel.setText(""+deviceList.get(0).getCurrentChn());
+		}
+	}
+
 	/**
 	 * 录像查询
 	 * 
@@ -125,11 +131,12 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	 */
 	private void queryRecord() {
 		LogUtils.i(TAG, "query() RecordInfo:"+recodInfo.toString()); 
-		if (!isUsefullTime(dateString,recodInfo.getStartTime(), recodInfo.getEndTime())) {
+		if (!isUsefullTime(recodInfo.getStartTime(), recodInfo.getEndTime())) {
 			MUtils.toast(getContext(), getContext().getString(R.string.time_validate));
 			return;
 		}
 		if (!recodInfo.isLocalVideo()) {
+			//远程视频
 			JNVPlayerUtil.JNV_N_RecQuery(recodInfo.getDeviceId(), 0, recodInfo.getRecType(),dateString+" "+ recodInfo.getStartTime(),
 					dateString+" "+recodInfo.getEndTime(), recodInfo.getChanneId(), Constants.DEVRECORD_PASTH);
 		}
@@ -145,11 +152,11 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	 * @param time
 	 * @throws ParseException
 	 */
-	private boolean isUsefullTime(String day,String start_time, String end_time) {
+	private boolean isUsefullTime(String start_time, String end_time) {
 		try {
-			DateFormat df = new SimpleDateFormat(MyDateUtils.FORMAT_RECORD);
-			Date start_date = df.parse(day+" "+start_time);
-			Date end_date = df.parse(day+" "+end_time);
+			SimpleDateFormat df = new SimpleDateFormat(DateUtil.FORMAT_RECORD);
+			Date start_date = df.parse(start_time);
+			Date end_date = df.parse(end_time);
 			if (start_date.getTime() <= end_date.getTime()) {
 				return true;
 			}

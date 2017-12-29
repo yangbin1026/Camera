@@ -10,11 +10,12 @@ public class RecordInfo implements Serializable{
 		private String fileName;//文件名称
 		private String fileSize;//文件大小
 		private String timeLen;//文件长度
+		
 		private String startTime;//开始时间
 		private String endTime;//结束时间
+		private String deviceId;//设备ID
 		private int channeId = 1;//通道号
 		private int recType = 0;//录像类型
-		private String deviceId;//设备ID
 		
 		private boolean isLocalVideo =true;
 		
@@ -72,6 +73,12 @@ public class RecordInfo implements Serializable{
 		}
 		public void setDeviceId(String guId) {
 			this.deviceId = guId;
+		}
+		@Override
+		public String toString() {
+			return "RecordInfo [fileName=" + fileName + ", fileSize=" + fileSize + ", timeLen=" + timeLen
+					+ ", startTime=" + startTime + ", endTime=" + endTime + ", deviceId=" + deviceId + ", channeId="
+					+ channeId + ", recType=" + recType + ", isLocalVideo=" + isLocalVideo + "]";
 		}
 		
 		
