@@ -7,19 +7,28 @@ import java.io.Serializable;
 public class RecordInfo implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-		private String fileName;//文件名称
+		private String fileName;//文件名称    
 		private String fileSize;//文件大小
 		private String timeLen;//文件长度
+		private String path;
 		
-		private String startTime;//开始时间
-		private String endTime;//结束时间
-		private String deviceId;//设备ID
-		private int channeId = 1;//通道号
+		private String startTime;//开始时间       1
+		private String endTime;//结束时间          1
+		private String deviceId;//设备ID     1
+		private int channeId = 1;//通道号          1
 		private int recType = 0;//录像类型
 		
 		private boolean isLocalVideo =true;
 		
 		
+		
+		
+		public String getPath() {
+			return path;
+		}
+		public void setPath(String path) {
+			this.path = path;
+		}
 		public boolean isLocalVideo() {
 			return isLocalVideo;
 		}

@@ -16,9 +16,12 @@ public class DateUtil {
 
 //    public static final String ymdhms = "yyyy-MM-dd HH:mm:ss";
     private static String TAG = "DateUtils";
- 	public static final String FORMAT_1="yyyy-MM-dd";
- 	public static final String FORMAT_RECORD="yyyy-MM-dd HH:mm";
- 	public static final String FORMAT_TODAY_START_AND_END="HH:mm";
+ 	public static final String CHECKVERSION_FORMAT="yyyy-MM-dd";
+ 	public static final String REPLAY_SHOW_FORMAT="yyyy-MM-dd";
+ 	
+ 	public static final String SAVEPATH_FORMAT = "yyyyMMdd";// （字符串）日期格式 年月日
+ 	public static final String PIC_NAME_FORMAT = "yyyyMMddHHmmssSSS";// 日期格式
+	public static final String DB_FORMAT = "yyyy-MM-dd HH:mm:ss";// （正式）日期格式 年月日
  	
     public static int getYear() {
         Calendar calendar = Calendar.getInstance();
@@ -126,7 +129,7 @@ public class DateUtil {
 		Calendar calendar=Calendar.getInstance();
 		calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 0, 0,0);
 		Date date=calendar.getTime();
-		SimpleDateFormat from = new SimpleDateFormat(FORMAT_RECORD);
+		SimpleDateFormat from = new SimpleDateFormat(DB_FORMAT);
 		String times = from.format(date);
 		return times;
 	}
@@ -134,7 +137,7 @@ public class DateUtil {
 		Calendar calendar=Calendar.getInstance();
 		calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 23, 59,59);
 		Date date=calendar.getTime();
-		SimpleDateFormat from = new SimpleDateFormat(FORMAT_RECORD);
+		SimpleDateFormat from = new SimpleDateFormat(DB_FORMAT);
 		String times = from.format(date);
 		return times;
 	}

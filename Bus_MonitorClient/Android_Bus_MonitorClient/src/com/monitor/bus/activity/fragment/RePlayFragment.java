@@ -102,7 +102,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 		tv_end_time.setText("23:59");
 		tv_type.setText("普通视频");
 		tv_file_local.setText("本地视频");
-		tv_select_time.setText(DateUtil.getTodayDateString(DateUtil.FORMAT_1));
+		tv_select_time.setText(DateUtil.getTodayDateString(DateUtil.REPLAY_SHOW_FORMAT));
 
 		if(deviceList.size()>0){
 			tv_select_device.setText(deviceList.get(0).getDeviceName());
@@ -154,7 +154,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	 */
 	private boolean isUsefullTime(String start_time, String end_time) {
 		try {
-			SimpleDateFormat df = new SimpleDateFormat(DateUtil.FORMAT_RECORD);
+			SimpleDateFormat df = new SimpleDateFormat(DateUtil.DB_FORMAT);
 			Date start_date = df.parse(start_time);
 			Date end_date = df.parse(end_time);
 			if (start_date.getTime() <= end_date.getTime()) {

@@ -31,6 +31,7 @@ import com.monitor.bus.bean.GoogleMapManager;
 import com.monitor.bus.control.VideoPlayControl;
 import com.monitor.bus.database.DatabaseHelper;
 import com.monitor.bus.view.MyVideoView;
+import com.monitor.bus.view.dialog.DateUtil;
 
 /**
  * 实时视频Activity
@@ -206,7 +207,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		if (!file.exists()) {// 目录不存在
 			file.mkdirs();
 		}
-		times = MUtils.getCurrentDateTime(Constants.YMD_HMS_FORMAT);
+		times = MUtils.getCurrentDateTime(DateUtil.DB_FORMAT);
 		String path = recordFilePath + times + Constants.RECORD_FILE_FORMAT;
 		LogUtils.i(TAG, "-------------start record!");
 		int i = playControl.recordStart(path);

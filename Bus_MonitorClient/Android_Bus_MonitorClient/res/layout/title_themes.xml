@@ -3,7 +3,7 @@
     android:id="@+id/loginLayoutId"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#ffffff"
+    android:background="@color/home_tab_blue_sheng"
     android:paddingBottom="2dp"
     android:paddingTop="2dp" >
 
@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="#ffffff"
+        android:background="@android:color/transparent"
         android:textColor="@color/black"
         android:layout_centerVertical="true"
         android:textSize="25dp"
@@ -28,10 +28,10 @@
         android:visibility="gone"
         android:src="@drawable/setting"/>
 
-    <View
+ <!--    <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/bg_my_gray" />
+        android:background="@color/bg_my_gray" /> -->
 
 </RelativeLayout>

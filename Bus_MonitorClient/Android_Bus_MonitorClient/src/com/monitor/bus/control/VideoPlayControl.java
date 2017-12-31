@@ -25,12 +25,14 @@ import com.jniUtil.JNVPlayerUtil;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.RealTimeVideoActivity;
+import com.monitor.bus.activity.ReplayActivity;
 import com.monitor.bus.bean.RecordInfo;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.database.DatabaseHelper;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.view.MyVideoView;
+import com.monitor.bus.view.dialog.DateUtil;
 
 /**
  * 视频播放控制类
@@ -164,7 +166,7 @@ public  class VideoPlayControl {
 	public void initVideoPlay(Intent intent,int type) {
 		initAudio();// 初始化音频 
 		if (STREAM_TYPE_RECORD == type) {// 录像回放
-			RecordInfo devRecordInfo = (RecordInfo) intent.getSerializableExtra("devRecordInfo");// 回放的文件名称
+			RecordInfo devRecordInfo = (RecordInfo) intent.getSerializableExtra(ReplayActivity.EXTRA_RECORDINFO);// 回放的文件名称
 				if( null != devRecordInfo ){//设备端播放
 					
 					replayStreamId =	JNVPlayerUtil.JNV_ReplayStart(devRecordInfo.getDeviceId(), 0, devRecordInfo.getChanneId(), 
@@ -172,11 +174,10 @@ public  class VideoPlayControl {
 							0, this, "callbackSetStreamInfo", 0);
 					 
 					 
-				}else{//本地回放
-					
-					String filePath = intent.getStringExtra("playFileName");// 回放的文件名称
+				}else{//本地回放 deviceInfo==null
+					String filePath = intent.getStringExtra(ReplayActivity.EXTRA_FIELPATH);// 回放的文件名称
 					//String filePath = Constants.SDCardRoot+"20130608_111847.jnv";// 回放的文件名称
-					String record_id = intent.getStringExtra("id");// 回放文件的id
+					String record_id = intent.getStringExtra(ReplayActivity.EXTRA_ID);// 回放文件的id
 					Log.e(TAG, "++++++本地回放+++++文件路径:"+ filePath+"++++++++录像ID:"+record_id);
 					File mFile = new File(filePath);
 					if (!mFile.exists()) {// 文件不存在，删除数据库的信息
@@ -405,7 +406,7 @@ public  class VideoPlayControl {
 		if (!devFile.exists()) {// 目录不存在
 			devFile.mkdirs();// 创建相应的文件夹
 		}
-		String times = MUtils.getCurrentDateTime(Constants.YMD_HMSS_FORMAT);// 当前时间 yyyyMMddHHmmssSSS格式
+		String times = MUtils.getCurrentDateTime(DateUtil.PIC_NAME_FORMAT);// 当前时间 yyyyMMddHHmmssSSS格式
 	
 		File f = new File(imageFilePath + times +".jpg");// 文件路径
 		if(videoView.saveBitmap(f)){//抓拍成功

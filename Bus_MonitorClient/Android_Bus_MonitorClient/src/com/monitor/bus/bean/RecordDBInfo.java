@@ -1,7 +1,7 @@
 package com.monitor.bus.bean;
 
 /**
- * 报警信息
+ * db recordinfo
  */
 public class RecordDBInfo {
 	private String fileName;

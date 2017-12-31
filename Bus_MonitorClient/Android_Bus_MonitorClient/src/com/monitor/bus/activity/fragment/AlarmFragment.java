@@ -18,6 +18,7 @@ import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.view.dialog.MyDataPickerDialog;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutCompat.LayoutParams;
@@ -27,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -52,8 +54,8 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 	View contentView;
 	View popContentView;
 	PopupWindow mPopWindow;
-	Dialog chooseChannelDialog;
 	AlarmManager alarmManger;
+	int screenW,screenH;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,6 +81,9 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 		alarmList.addAll(alarmManger.getAlarmList());
 		for (int i = 0; i < alarmList.size(); i++) {
 			// 报警类型是移动，震动提示用户
+			if(alarmList.get(i).getAlarmString()==null){
+				continue;
+			}
 			if (alarmList.get(i).getAlarmString().contains(getString(R.string.motion_detection))) {
 				MUtils.Vibrate(getActivity(), 1000);
 				break;
@@ -90,8 +95,11 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 		alarmListView = (ListView) contentView.findViewById(R.id.alarmListView);
 		mAlarmAdapter = new AlarmListAdapter(getContext(), alarmList);
 		popContentView = LayoutInflater.from(getContext()).inflate(R.layout.pop_alarm, null);
-		mPopWindow = new PopupWindow(popContentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
-		mPopWindow.setContentView(popContentView);
+		WindowManager manager=(WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);  
+		screenW=manager.getDefaultDisplay().getWidth();  
+		screenH=manager.getDefaultDisplay().getHeight();  
+		mPopWindow = new PopupWindow(popContentView, screenW/2,screenH/2);  
+		mPopWindow.setFocusable(true);  
 
 		alarmListView.setAdapter(mAlarmAdapter);
 
@@ -156,7 +164,7 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 		lv_alarm_pop.setAdapter(adapter);
 		lv_alarm_pop.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
+			@Override	
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				int type = alarmManger.getAlarmType()[arg2];
 				mAlarmAdapter.setData(alarmManger.getAlarmListbyType(type));
@@ -166,27 +174,7 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 		});
 
 		// 显示PopupWindow
-		mPopWindow.showAtLocation(contentView, Gravity.TOP, 0, 0);
-	}
-	private void showChannelDialog(List<String> mlist) {
-		if(chooseChannelDialog==null){
-			
-			MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
-			chooseChannelDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
-					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
-						@Override
-						public void onDataSelected(String itemValue, int position) {
-							
-						}
-						
-						@Override
-						public void onCancel() {
-							
-						}
-					}).create();
-		}
-
-		chooseChannelDialog.show();
+		mPopWindow.showAtLocation(alarmListView, Gravity.TOP, screenW/2, 30);
 	}
 
 }

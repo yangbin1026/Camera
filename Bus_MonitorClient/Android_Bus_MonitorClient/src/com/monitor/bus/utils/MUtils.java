@@ -28,6 +28,7 @@ import com.jniUtil.GpsCorrection.LongitudeLatitude;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.consts.Constants;
+import com.monitor.bus.view.dialog.DateUtil;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -317,7 +318,7 @@ public class MUtils {
 		 * @return
 		 */
 		public static String getCurrentFilePath(String path, DeviceInfo currentDeviceInfo) {
-			String currentDate = getCurrentDateTime(Constants.YMD_FORMAT);
+			String currentDate = getCurrentDateTime(DateUtil.SAVEPATH_FORMAT);
 			String currentPath = path + currentDate + "/" + currentDeviceInfo.getDeviceName() + "/"
 					+ currentDeviceInfo.getCurrentChn() + "/";
 			return currentPath;

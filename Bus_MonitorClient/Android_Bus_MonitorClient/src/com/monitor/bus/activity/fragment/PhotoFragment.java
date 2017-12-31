@@ -86,7 +86,20 @@ public class PhotoFragment extends BaseFragment{
 			}
 		});
 		rl_back = (RelativeLayout) view.findViewById(R.id.rl_back);
-		rl_back.setOnClickListener(new TextViewListener());
+		rl_back.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				File file = new File(currentPath);
+				System.out.println(file.getParent());
+				if (rootPath.equals(file.getParent())) {
+					rl_back.setVisibility(View.INVISIBLE);
+				}
+				if (!rootPath.equals(currentPath)) {
+					getFilePathList(file.getParent());
+				}
+			}
+		});
 	}
 
 	/**
@@ -297,21 +310,6 @@ public class PhotoFragment extends BaseFragment{
 		startActivity(intent);
 	}
 
-	class TextViewListener implements android.view.View.OnClickListener {
-
-		@Override
-		public void onClick(View v) {
-			File file = new File(currentPath);
-			System.out.println(file.getParent());
-			if (rootPath.equals(file.getParent())) {
-				rl_back.setVisibility(View.INVISIBLE);
-			}
-			if (!rootPath.equals(currentPath)) {
-				getFilePathList(file.getParent());
-			}
-
-		}
-	}
 
 
 }

@@ -28,22 +28,24 @@ import com.monitor.bus.view.MyVideoView;
  */
 public class ReplayActivity extends BaseActivity implements OnTouchListener{
 	public static final String EXTRA_RECORDINFO="record_info";
+	public static final String EXTRA_FIELPATH="playFileName";
+	public static final String EXTRA_ID="id";
+	
 	private static String TAG = "RecordActivity";
 	private MyVideoView myVideoView;
 	private Button pauseButton;//暂停按钮
 	private boolean play_or_pause = false;//播放暂停切换标志 false 暂停 true 继续播放 
 	GestureDetector mGestureDetector;
 	private VideoPlayControl playControl;
-	private RecordInfo devRecordInfo;
+	private RecordInfo extra_recordInfo;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		LogUtils.i(TAG, "+++++++++++++++++回放Activity onCreate");
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_replay);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
 		
 		Intent intent=this.getIntent();
-		devRecordInfo = (RecordInfo) intent.getSerializableExtra(EXTRA_RECORDINFO);// 回放的文件名称
-		
+		extra_recordInfo = (RecordInfo) intent.getSerializableExtra(EXTRA_RECORDINFO);// 回放的文件名称
 		myVideoView=(MyVideoView)findViewById(R.id.myVideoView);
 		playControl = new VideoPlayControl(this, myVideoView);
 		playControl.initVideoPlay(intent,VideoPlayControl.STREAM_TYPE_RECORD);//初始化界面
@@ -87,7 +89,7 @@ public class ReplayActivity extends BaseActivity implements OnTouchListener{
 	 * @param view
 	 */
 	public void stopVideo(View view){
-		if( null != devRecordInfo ){//设备端播放
+		if( null != extra_recordInfo ){//设备端播放
 			playControl.AVP_Native_RecordStop();
 		}else{
 			playControl.stopVideo();
@@ -110,7 +112,7 @@ public class ReplayActivity extends BaseActivity implements OnTouchListener{
 			MUtils.commonToast(this, R.string.video_stop);
 			return;
 		}
-		if( null != devRecordInfo ){//设备端播放
+		if( null != extra_recordInfo ){//设备端播放
 			if(!play_or_pause){//暂停
 				playControl.AVP_Native_RecordCtrl(5);
 				play_or_pause=true;
@@ -148,7 +150,7 @@ public class ReplayActivity extends BaseActivity implements OnTouchListener{
 			changeRecordScreenOrientation();
 			return;
 		}else{
-			if( null != devRecordInfo ){//设备端播放
+			if( null != extra_recordInfo ){//设备端播放
 				playControl.AVP_Native_RecordStop();
 			}else{
 				playControl.stopVideo();

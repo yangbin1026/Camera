@@ -161,10 +161,10 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		et_login_address.setIpConfigType();
 
 		if (LogUtils.Debug) {
-			// et_userName.setEditText("hswl");
-			// et_password.setEditText("000000");
-			et_userName.setEditText("123");
-			et_password.setEditText("123");
+			 et_userName.setEditText("hswl");
+			 et_password.setEditText("000000");
+//			et_userName.setEditText("123");
+//			et_password.setEditText("123");
 			et_login_port.setEditText("6008");
 			et_login_address.setEditText("183.61.171.28");
 		}
@@ -456,9 +456,9 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	}
 
 	private void checkVersion() {
-		String today = DateUtil.getTodayDateString(DateUtil.FORMAT_1);
-		if (DateUtil.getTimeMails(today, DateUtil.FORMAT_1) > DateUtil.getTimeMails("2018-04-01",
-				DateUtil.FORMAT_1)) {
+		String today = DateUtil.getTodayDateString(DateUtil.REPLAY_SHOW_FORMAT);
+		if (DateUtil.getTimeMails(today, DateUtil.REPLAY_SHOW_FORMAT) > DateUtil.getTimeMails("2018-04-01",
+				DateUtil.REPLAY_SHOW_FORMAT)) {
 			MUtils.toast(mContext, "请安装最新的版本");
 			finish();
 		}

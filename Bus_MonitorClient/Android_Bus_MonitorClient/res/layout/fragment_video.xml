@@ -20,7 +20,7 @@
 
         <TextView
             android:id="@+id/tv_all_device"
-            android:layout_width="55dp"
+            android:layout_width="75dp"
             android:layout_height="25dp"
             android:background="@drawable/bg_select_left"
             android:gravity="center"
@@ -30,7 +30,7 @@
 
         <TextView
             android:id="@+id/tv_online_device"
-            android:layout_width="55dp"
+            android:layout_width="75dp"
             android:layout_height="25dp"
             android:layout_toRightOf="@id/tv_all_device"
             android:background="@drawable/bg_select_right"

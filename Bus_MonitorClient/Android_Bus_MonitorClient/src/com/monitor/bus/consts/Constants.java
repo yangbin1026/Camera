@@ -35,11 +35,6 @@ public class Constants {
 			SDCardRoot + "ServerList2.xml", };
 
 	public static int FLAG_FULLSCREEN = 0;// 全屏操作---------是否长按全屏 1全屏，0还原
-	public static final String YMD_FORMAT = "yyyyMMdd";// （字符串）日期格式 年月日
-	public static final String YMD_HMS_FORMAT = "yyyyMMddHHmmss";// 日期格式 年月日时分秒
-	public static final String FORMAT = "yyyy-MM-dd HH:mm:ss";// （正式）日期格式 年月日
-	public static final String YMD_HMSS_FORMAT = "yyyyMMddHHmmssSSS";// 日期格式
-																		// 精确到毫秒
 
 	public static final String RECORD_FILE_FORMAT = ".jnv";// 录像文件格式
 

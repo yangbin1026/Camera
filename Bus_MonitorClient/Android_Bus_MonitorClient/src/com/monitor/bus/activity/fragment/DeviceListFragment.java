@@ -82,11 +82,11 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 		TextView title = (TextView) view.findViewById(R.id.tilte_name);
 		title.setText(getContext().getString(R.string.dev_list));
 
-//		Button bt_setting = (Button) view.findViewById(R.id.bt_setting);
-//		bt_setting.setBackgroundDrawable(null);
-//		bt_setting.setText(R.string.test);
-//		bt_setting.setVisibility(View.VISIBLE);
-//		bt_setting.setOnClickListener(this);
+		// Button bt_setting = (Button) view.findViewById(R.id.bt_setting);
+		// bt_setting.setBackgroundDrawable(null);
+		// bt_setting.setText(R.string.test);
+		// bt_setting.setVisibility(View.VISIBLE);
+		// bt_setting.setOnClickListener(this);
 	}
 
 	private void initView() {
@@ -203,9 +203,14 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 		switch (arg0.getId()) {
 		case R.id.tv_all_device:
 			updataByPid("0");
+			tv_all.setTextColor(getContext().getResources().getColor(R.color.black));
+			tv_online.setTextColor(getContext().getResources().getColor(R.color.bg_my_gray));
 			break;
 		case R.id.tv_online_device:
 			updataByList(manager.getOnlineDevice());
+			tv_online.setTextColor(getContext().getResources().getColor(R.color.black));
+			tv_all.setTextColor(getContext().getResources().getColor(R.color.bg_my_gray));
+
 			break;
 		case R.id.bt_setting:
 			DeviceInfo info = DeviceManager.getInstance().getDeviceList().get(0);

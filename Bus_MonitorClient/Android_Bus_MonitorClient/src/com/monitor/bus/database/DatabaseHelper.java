@@ -16,8 +16,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.monitor.bus.bean.RecordDBInfo;
+import com.monitor.bus.bean.RecordInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.LogUtils;
+import com.monitor.bus.view.dialog.DateUtil;
 
 /**
  * 数据库Helper类
@@ -70,20 +72,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	  /**
 	   * 新增录像记录
 	   * @param currentDate 的当前时间
-	   * @param fileName 文件名称
+	   * @param fileName 文件名称   DateUtil.FORMAT
 	   * @param filePath 文件路径
 	   * @return
 	 * @throws ParseException 
 	   */
 
 	  public void insertRecordInfo(String currentDate,String fileName,String filePath) throws ParseException{
-	    SQLiteDatabase db = this.getWritableDatabase();
+	   LogUtils.d(TAG,"insert():"+currentDate+":"+fileName+":"+filePath);
+		  SQLiteDatabase db = this.getWritableDatabase();
 	    ContentValues cv = new ContentValues();
-	    SimpleDateFormat formater = new SimpleDateFormat(Constants.YMD_HMS_FORMAT);
-	    Date datetime = formater.parse(currentDate);
-	    SimpleDateFormat formater2 = new SimpleDateFormat(Constants.FORMAT);
-	    String date =formater2.format(datetime);
-	    cv.put("REC_DATE",date);
+	    cv.put("REC_DATE",currentDate);
 	    cv.put("REC_PATH",filePath);
 	    cv.put("REC_FILENAME",fileName);
 	    db.insert("andr_playback", null, cv);
@@ -113,7 +112,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		 * @return
 		 */
 		public ArrayList<HashMap<String, String>> queryRecordInfoList(String start,String end){
-			LogUtils.i(TAG, "++++++++++queryRecordInfoList");
+			LogUtils.i(TAG, "queryRecordInfoList():"+start +":"+ end);
 			SQLiteDatabase db = this.getReadableDatabase();
 			Cursor cursor = db.query("andr_playback",
 					new String[] { "ID,REC_FILENAME,REC_PATH,REC_FILENAME" },
@@ -141,19 +140,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		 * @param end
 		 * @return
 		 */
-		public ArrayList<RecordDBInfo> queryAllDBList(String start,String end){
+		public ArrayList<RecordInfo> queryAllDBList(String start,String end){
 			LogUtils.i(TAG, "queryAllDBList()");
 			SQLiteDatabase db = this.getReadableDatabase();
 			Cursor cursor = db.query("andr_playback",
 					new String[] { "ID,REC_FILENAME,REC_PATH,REC_FILENAME" },
 					"REC_DATE >= datetime('" + start+ "') AND REC_DATE <= datetime('" + end + "')",null, "", "", "ID");
 			
-			ArrayList<RecordDBInfo> recoderList = new ArrayList<RecordDBInfo>();
+			ArrayList<RecordInfo> recoderList = new ArrayList<RecordInfo>();
 			while (cursor.moveToNext()) {
-				RecordDBInfo info=new RecordDBInfo();
+				RecordInfo info=new RecordInfo();
 				info.setFileName(cursor.getString(cursor.getColumnIndex("REC_FILENAME")));
-				info.setFilePath(cursor.getString(cursor.getColumnIndex("REC_PATH")));
-				info.setId(cursor.getString(cursor.getColumnIndex("ID")));
+				info.setDeviceId(cursor.getString(cursor.getColumnIndex("ID")));
+				info.setPath(cursor.getString(cursor.getColumnIndex("REC_PATH")));
 				recoderList.add(info);
 			}
 			cursor.close();
