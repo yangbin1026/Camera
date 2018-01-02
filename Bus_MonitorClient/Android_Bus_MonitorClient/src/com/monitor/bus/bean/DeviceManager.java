@@ -37,12 +37,12 @@ public class DeviceManager {
 		mDeviceList.add(info);
 		if(mDeviceMap.containsKey(info.getParentId())){
 			mDeviceMap.get(info.getParentId()).add(info);
-			LogUtils.getInstance().localLog(TAG, "addAsDevcieInfo  "+info.toString(),LogUtils.LOG_NAME_DEVICE);
+			LogUtils.getInstance().localLog(TAG, "add-AsDevcieInfo  "+info.toString(),LogUtils.LOG_NAME_DEVICE);
 		}else{
 			ArrayList<DeviceInfo> list=new ArrayList<DeviceInfo>();
 			list.add(info);
 			mDeviceMap.put(info.getParentId(), list);
-			LogUtils.getInstance().localLog(TAG, "addAsDir  "+info.toString(),LogUtils.LOG_NAME_DEVICE);
+			LogUtils.getInstance().localLog(TAG, "add-NewDir  "+info.toString(),LogUtils.LOG_NAME_DEVICE);
 		}
 	}
 //	public void setDeviceList(List<DeviceInfo> list){

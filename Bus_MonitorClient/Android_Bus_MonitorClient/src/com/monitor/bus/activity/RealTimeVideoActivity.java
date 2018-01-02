@@ -4,12 +4,15 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.WindowManager;
 import com.monitor.bus.utils.MUtils;
+import com.monitor.bus.utils.SPUtils;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.LogUtils;
@@ -55,22 +58,20 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 	private VideoPlayControl playControl;
 	private DatabaseHelper db;// 数据库操作对象
 	public Timer recordTimer;// 计时器
-
-	private float x, y;
-	private int mx, my;
-
 	private DeviceInfo deviceInfo;// 设备信息
 	private String titleString;
 	BaseMapManager mMapManager;
+	Context mContext;
 
-	boolean isGoogleMap = true;
+	boolean isGoogleMap = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_realtime);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
-
+		mContext=this;
+		isGoogleMap=SPUtils.getBoolean(mContext, SPUtils.KEY_REMEMBER_SELECTMAP, false);
 		initTitle();
 		initView();
 		initData();
@@ -158,7 +159,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		tv_tilte.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 		bt_setting = (Button) findViewById(R.id.bt_setting);
 		bt_setting.setBackgroundDrawable(null);
-		bt_setting.setText(R.string.channle);
+		bt_setting.setText(R.string.channel);
 		bt_setting.setVisibility(View.VISIBLE);
 		bt_setting.setOnClickListener(this);
 
@@ -171,6 +172,8 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			MUtils.toast(this, "设备为空");
 			return;
 		}
+		int showMode=SPUtils.getInt(mContext, SPUtils.KEY_REMEMBER_SHOWMODE, -1);
+		
 		titleString = deviceInfo.getDeviceName() + " - " + "channel_" + deviceInfo.getCurrentChn();
 		tv_tilte.setText(titleString);
 

@@ -26,6 +26,7 @@ public class SPUtils {
 	public static final String KEY_LOCAL = "key_local";
 	public static final String KEY_REMEMBER_USERINFO = "remember_userinfo";
 	public static final String KEY_REMEMBER_SHOWMODE = "show_mode";
+	public static final String KEY_REMEMBER_SELECTMAP = "selectmap";
 
 	public static void saveString(Context context, String key, String value) {
 		LogUtils.d(TAG, "saveString:" + key + "：" + value);

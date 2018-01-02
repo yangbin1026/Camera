@@ -19,10 +19,11 @@ import android.util.Log;
 public class LogUtils {
 	public static boolean Debug = true;
 	SimpleDateFormat sdf;
-	private static final long maxLen = 5 * 1024 * 1024; // 5M
+	private static final long maxLen = 20 * 1024 * 1024; // 5M
 	private static final int maxCount = 5;
 	public static final String LOG_NAME = "myLog";
 	public static final String LOG_NAME_DEVICE = "myDeviceLog";
+	public static final String LOG_NAME_ALARM = "myAlarmLog";
 
 	final static String TAG = "LogUtils";
 	private static LogUtils mUtils;
@@ -74,9 +75,14 @@ public class LogUtils {
 			return;
 		}
 		currentLogFile = new File(logDir, fileName + ".log");
-//		Log.i(TAG, "currentLogFile==" + currentLogFile.getAbsolutePath());
 		if(!currentLogFile.exists()){
 			e(TAG,"currentLogFile is NULL");
+			try {
+				currentLogFile.createNewFile();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 			
 
@@ -87,6 +93,7 @@ public class LogUtils {
 			e.printStackTrace();
 		}
 		if (currentLogFile.length() > maxLen) {
+			//大小超出，创建新文件
 			Log.i(TAG, "out>MaxLen");
 			out.close();
 			if (curentIndex > maxCount) {

@@ -99,6 +99,7 @@ public class BaiduMapManager extends BaseMapManager {
 	private void initView() {
 		mapView = (MapView) ((Activity) mContext).findViewById(R.id.bmapView);
 		mapView.setVisibility(View.VISIBLE);
+		((Activity) mContext).findViewById(R.id.rl_googlemap).setVisibility(View.GONE);;
 		mBaiduMap = mapView.getMap();
 	}
 

@@ -4,8 +4,7 @@
     <string name="menu_settings">Settings</string>
     <string name="app_name">Mobile Video Monitor Client</string>
     <string name="country">other</string>
-    
-       <string name="timepicker_year">年</string>
+    <string name="timepicker_year">年</string>
     <string name="timepicker_month">月</string>
     <string name="timepicker_day">日</string>
     <string name="timepicker_hour">时</string>
@@ -207,65 +206,100 @@
     <string name="overspeed_national_road"> overspeed on national road</string>
     <string name="lowspeed_national_road"> lowspeed on national road</string>
     <string name="overspeed_nation_road_alarm_canceled"> overspeed on national road,alarm canceled</string>
-	<string name="lowspeed_nation_road_alarm_canceled"> lowspeed on national road,alarm canceled</string>
-	<string name="gps_module_abnormal"> abnormal gps module</string>
-	<string name="gsensor_alarm"> gsensor alarm</string>
-	<string name="storage_medium_one_abnormity"> first storage medium abnormity</string>
-	<string name="storage_medium_two_abnormity"> second storage medium abnormity</string>
-	<string name="system_abnormity"> system abnormity</string>
-	<string name="device_online"> online device</string>
-	<string name="device_offline"> device off-line</string>
-	<string name="enter_into_wifi_region"> enter into wifi region</string>
-	<string name="leave_wifi_region"> leave wifi region</string>
-	<string name="ignition"> ignition</string>
-	<string name="flameout"> flameout</string>
-	<string name="front_door_opens"> front door opens</string>
-	<string name="front_door_closed"> front door closed</string>
-	<string name="middle_door_opens"> middle door opens</string>
-	<string name="middle_door_closed"> middle door closed</string>
-	<string name="postern_opens"> postern opens</string>
-	<string name="postern_closed"> postern closed</string>
-	<string name="arrive_at_station_nostop"> arrive at station but not park</string>
-	<string name="arrive_at_station_noopen"> arrive at station but not open the dorr</string>
-	<string name="high_temperature_on_carriage"> high temperature on the carriage</string>
-	<string name="low_temperature_on_carriage"> low temperature on the carriage</string>
-	<string name="drive_with_door_open"> drive with door open</string>
-	<string name="alarm_when_delay_at_station"> alarm when delay at station</string>
-	<string name="exigency_accelerate"> exigency accelerate</string>
-	<string name="exigency_brake"> exigency brake</string>
-	<string name="exigency_alarm"> exigency alarm</string>
-	<string name="deviate_route"> deviate route</string>
-	<string name="ballot_box_door_alarm"> ballot-box door alarm</string>
-	<string name="electronic_unlock"> electronic lock opens</string>
-	<string name="electronic_lock_closed"> electronic lock closed</string>
-	<string name="electronic_lock_abnormity"> electronic lock abnormity</string>
-	<string name="input_one_trigger"> input one trigger</string>
-	<string name="input_two_trigger"> input two trigger</string>
-	<string name="input_three_trigger"> input three trigger</string>
-	<string name="input_four_trigger"> input four trigger</string>
-	<string name="input_five_trigger"> input five trigger</string>
-	<string name="input_six_trigger"> input six trigger</string>
-	<string name="input_seven_trigger"> input seven trigger</string>
-	<string name="input_eight_trigger"> input eight trigger</string>
-	<string name="illegality_close"> close the door unlawfully</string>
-	<string name="overload"> overload</string>
-	<string name="beyond_the_mark"> beyond the mark</string>
-	<string name="remove_slop_over"> remove slop over</string>
-	<string name="overtime_parking"> parking overtime</string>
-	<string name="remove_overtime_parking"> remove overtime-parking</string>
-	<string name="fatigue_driving"> fatigue driving</string>
-	<string name="remove_fatigue_driving"> remove fatigue driving</string>
-	<!-- 颜色 -->
-	<drawable name="white">#ffffff</drawable>
-	<!-- 记住密码 -->
-	<string name="remember_psw">Remember Psw</string>
-	<!-- 检查版本 -->
-	<string name="version_check">Check Latest Version</string>
-	<string name="check">Check</string>
-	<string name="this_latest_version">The current version is the latest</string>
-	<string name="exit_process">Exit The Program</string>
-	<string name="exit">Exit</string>
-	<string name="software_expired">software expired</string>
-	<string name="software">software</string>
-	<string name="software_expired_tip">Expired,please upgrade to the latest version!</string>
+    <string name="lowspeed_nation_road_alarm_canceled"> lowspeed on national road,alarm canceled</string>
+    <string name="gps_module_abnormal"> abnormal gps module</string>
+    <string name="gsensor_alarm"> gsensor alarm</string>
+    <string name="storage_medium_one_abnormity"> first storage medium abnormity</string>
+    <string name="storage_medium_two_abnormity"> second storage medium abnormity</string>
+    <string name="system_abnormity"> system abnormity</string>
+    <string name="device_online"> online device</string>
+    <string name="device_offline"> device off-line</string>
+    <string name="enter_into_wifi_region"> enter into wifi region</string>
+    <string name="leave_wifi_region"> leave wifi region</string>
+    <string name="ignition"> ignition</string>
+    <string name="flameout"> flameout</string>
+    <string name="front_door_opens"> front door opens</string>
+    <string name="front_door_closed"> front door closed</string>
+    <string name="middle_door_opens"> middle door opens</string>
+    <string name="middle_door_closed"> middle door closed</string>
+    <string name="postern_opens"> postern opens</string>
+    <string name="postern_closed"> postern closed</string>
+    <string name="arrive_at_station_nostop"> arrive at station but not park</string>
+    <string name="arrive_at_station_noopen"> arrive at station but not open the dorr</string>
+    <string name="high_temperature_on_carriage"> high temperature on the carriage</string>
+    <string name="low_temperature_on_carriage"> low temperature on the carriage</string>
+    <string name="drive_with_door_open"> drive with door open</string>
+    <string name="alarm_when_delay_at_station"> alarm when delay at station</string>
+    <string name="exigency_accelerate"> exigency accelerate</string>
+    <string name="exigency_brake"> exigency brake</string>
+    <string name="exigency_alarm"> exigency alarm</string>
+    <string name="deviate_route"> deviate route</string>
+    <string name="ballot_box_door_alarm"> ballot-box door alarm</string>
+    <string name="electronic_unlock"> electronic lock opens</string>
+    <string name="electronic_lock_closed"> electronic lock closed</string>
+    <string name="electronic_lock_abnormity"> electronic lock abnormity</string>
+    <string name="input_one_trigger"> input one trigger</string>
+    <string name="input_two_trigger"> input two trigger</string>
+    <string name="input_three_trigger"> input three trigger</string>
+    <string name="input_four_trigger"> input four trigger</string>
+    <string name="input_five_trigger"> input five trigger</string>
+    <string name="input_six_trigger"> input six trigger</string>
+    <string name="input_seven_trigger"> input seven trigger</string>
+    <string name="input_eight_trigger"> input eight trigger</string>
+    <string name="illegality_close"> close the door unlawfully</string>
+    <string name="overload"> overload</string>
+    <string name="beyond_the_mark"> beyond the mark</string>
+    <string name="remove_slop_over"> remove slop over</string>
+    <string name="overtime_parking"> parking overtime</string>
+    <string name="remove_overtime_parking"> remove overtime-parking</string>
+    <string name="fatigue_driving"> fatigue driving</string>
+    <string name="remove_fatigue_driving"> remove fatigue driving</string>
+    <!-- 颜色 -->
+    <drawable name="white">#ffffff</drawable>
+    <!-- 记住密码 -->
+    <string name="remember_psw">Remember Psw</string>
+    <!-- 检查版本 -->
+    <string name="version_check">Check Latest Version</string>
+    <string name="check">Check</string>
+    <string name="this_latest_version">The current version is the latest</string>
+    <string name="exit_process">Exit The Program</string>
+    <string name="exit">Exit</string>
+    <string name="software_expired">software expired</string>
+    <string name="software">software</string>
+    <string name="software_expired_tip">Expired,please upgrade to the latest version!</string>
+    <string name="select">Select USB Web Camera</string>
+    <string name="camera">Camera</string>
+    <string name="no_device">No USB camera found</string>
+
+    <!-- context -->
+
+    <!-- 搜索页面 -->
+    <string name="select_device">Select Device</string>
+    <string name="file_local">Fiel Local</string>
+    <string name="channel">Channel</string>
+    <string name="video_type">Video Type</string>
+    <string name="select_date">Select Date</string>
+    <string name="serch">Serch</string>
+    <string name="nomeravideo">Nomera Video</string>
+    <string name="alarmvideo">Alarm Video</string>
+    <string name="localvideo">Local Video</string>
+    <string name="remontvideo">Remotely Video</string>
+
+    <!-- new -->
+    <string name="type">Type</string>
+    <string name="all">All</string>
+    <string name="test">Test</string>
+    <string name="find_record">Serch Record</string>
+    <string name="logining">Loging...</string>
+
+    <string-array name="list_setting_showmode">
+        <item>Show Video</item>
+        <item>Show Map</item>
+        <item>Video And Map</item>
+    </string-array>
+     <string-array name="maps">
+        <item>BaiduMap</item>
+        <item>GoogleMap</item>
+    </string-array>
+
 </resources>

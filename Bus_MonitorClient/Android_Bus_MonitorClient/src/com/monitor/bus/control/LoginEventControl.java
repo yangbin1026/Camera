@@ -50,14 +50,15 @@ import com.monitor.bus.bean.ServerInfo;
 public class LoginEventControl {
 	private Context mContext;
 	private static String TAG = "LoginEventControl";
+	
 	private boolean is_alarm_flag = false;// 记录是否有报警
 	private boolean alarm_times = false;// 记录是否已报警过一次
-	private Message msg;
 	private NotifycationManager myNotification;// 引用通知
 	private static Timer alarmTimer;// 计时器
 	private SoundPool soundPool;
 	private int nGetServerIndex = 0; // 获取服务器列表次数
 	private LoginStatusCallBack mStatusCallback;
+	private long lastParseTime;
 
 	public interface LoginStatusCallBack{
 		void onStatus(int statu);
@@ -99,12 +100,36 @@ public class LoginEventControl {
 	/**
 	 * 登陆之后的回调函数
 	 * 
-	 * @param strEvent
-	 *            0:正在登录 1:登录成功 2: 登录失败 3:退出登录 4: 流正在打开 5:流打开成功 6:流打开失败 7:流关闭
+	 * eventType:
+	0; // 正在登录
+	1; // 登录成功
+	2; // 登录失败
+	3; // 退出登录
+	4; // 流正在打开
+	5; // 流打开成功
+	6; // 流打开失败
+	7; // 流关闭
+	301;// 获取设备列表
+	302;// 获取录像列表
+	201;// 报警事件
+	400;// 下发GPS信息
+	100;// 图像大小改变
+	101;// 文件播放完毕
+	103;// 码流异常
+	12; // 对讲正在打开
+	13; // 对讲打开成功
+	14; // 对讲打开失败
+	15; // 对讲关闭
+
+		// 级联服务器
+		 305; // 获取服务器列表,iDataType=eJNVFileType
+	
+	 * 
+	 * 
 	 * 
 	 */
 	public synchronized int callbackLogin(long iUserParam, String strEvent) throws JSONException {
-
+		Message msg;
 		strEvent = strEvent.replace("NaN", "1");
 		LogUtils.getInstance().localLog(TAG,"-callbackLoginEvent-"+
 				"iUserParam:" + iUserParam + "  strEvent:" + strEvent,LogUtils.LOG_NAME);
@@ -152,8 +177,13 @@ public class LoginEventControl {
 				}
 				break;
 			case CALLBACKFLAG.GET_EVENT_DEVLIST:// 获取设备列表
-				LogUtils.i(TAG, "获取设备列表，回调数据为：" + msg.arg1);
-
+				LogUtils.i(TAG, "GET_EVENT_DEVLIST:callback data:" + msg.arg1);
+				long currentTime = System.currentTimeMillis();
+				if(currentTime-lastParseTime<1500){
+					//1秒来2次设备信息
+					LogUtils.getInstance().localLog(TAG, "!!! GET_EVENT_DEVLIST AGAIN");
+					return;
+				}
 				if (1 == msg.arg1) {// 设备列表文件
 					File myFile = new File(Constants.DEVICELIST_PASTH);
 					try {
@@ -264,19 +294,16 @@ public class LoginEventControl {
 				is_alarm_flag = true;
 				try {
 					JSONObject jo = new JSONObject(msg.obj + "");
-					String devID = jo.getString("devID");
+					String deviceID = jo.getString("devID");
 					int channelId = jo.getInt("alarmChn") + 1;
 					int alarmType = jo.getInt("alarmType");
+					
 					AlarmInfo alarmInfo = new AlarmInfo();
-					alarmInfo.setDeviceId(devID);
+					alarmInfo.setDeviceId(deviceID);
 					alarmInfo.setChannelId(channelId);
 					alarmInfo.setAlarmType(alarmType);
 
 					AlarmManager manager = AlarmManager.getInstance(mContext);
-					LogUtils.i(TAG, "alarmChn" + channelId + "devID" + devID);
-					if (manager.getAlarmList().size() >= 100) {// 获取的报警信息超过100条
-						manager.removeFirst();
-					}
 					manager.addAlarmInfo(alarmInfo);
 
 					if (MUtils.isBackGround(mContext)) {// 后台运行
@@ -285,7 +312,7 @@ public class LoginEventControl {
 
 					if (4096 == alarmType || 8192 == alarmType) {
 						mIntent.putExtra("eventType", alarmType);
-						mIntent.putExtra("devID", devID);
+						mIntent.putExtra("devID", deviceID);
 						// 发送广播
 						mContext.sendBroadcast(mIntent);
 					}

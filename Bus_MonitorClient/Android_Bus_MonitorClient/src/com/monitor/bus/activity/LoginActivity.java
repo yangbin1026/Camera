@@ -66,6 +66,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	private LoginEventControl loginControl;// 登陆回调类
 	private Context mContext;
 	private LoginInfo info;
+	private boolean isResume;
 
 	private int currentCode = 0;// 旧版本号
 	private int newVerCode;// 新版本号
@@ -92,7 +93,17 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		checkVersion();
 		initData();
 	}
+	@Override
+	protected void onResume() {
+		isResume=true;
+		super.onResume();
+	}
 
+	@Override
+	protected void onPause() {
+		isResume=false;
+		super.onPause();
+	}
 	private void initView() {
 		et_userName = (MyEditText) findViewById(R.id.userName);
 		et_password = (MyEditText) findViewById(R.id.login_password);
@@ -139,8 +150,8 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 				}
 			}
 		});
-		boolean savePwd = SPUtils.getBoolean(this, SPUtils.KEY_REMEMBER_USERINFO, true);
-		boolean autoLogin = SPUtils.getBoolean(this, SPUtils.KEY_AUTO_LOGIN, false);
+		boolean savePwd = SPUtils.getBoolean(mContext, SPUtils.KEY_REMEMBER_USERINFO, true);
+		boolean autoLogin = SPUtils.getBoolean(mContext, SPUtils.KEY_AUTO_LOGIN, false);
 
 		if (savePwd) {
 			cb_remenber.setChecked(true);
@@ -161,8 +172,8 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		et_login_address.setIpConfigType();
 
 		if (LogUtils.Debug) {
-			 et_userName.setEditText("hswl");
-			 et_password.setEditText("000000");
+//			 et_userName.setEditText("hswl");
+//			 et_password.setEditText("000000");
 //			et_userName.setEditText("123");
 //			et_password.setEditText("123");
 			et_login_port.setEditText("6008");
@@ -174,6 +185,9 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	}
 
 	private void showLoginDialog() {
+		if(!isResume){
+			return;
+		}
 		dialog = new ShapeLoadingDialog.Builder(this).cancelable(false).canceledOnTouchOutside(false)
 				.loadText(R.string.logining).build();
 		dialog.setCancelable(true);

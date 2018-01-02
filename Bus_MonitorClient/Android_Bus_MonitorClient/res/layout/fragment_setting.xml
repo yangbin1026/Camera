@@ -94,6 +94,32 @@
                     android:text="模式"
                     android:textSize="18dp" />
             </RelativeLayout>
+            
+             <RelativeLayout 
+                android:id="@+id/rl_map"
+                style="@style/setting_item" >
+
+                <TextView
+                    style="@style/setting_item_text"
+                    android:text="地图选择" />
+
+                <ImageView
+                    android:id="@+id/iv_map"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true" />
+
+                <TextView
+                    android:id="@+id/tv_map"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="3dp"
+                    android:layout_toLeftOf="@id/iv_map"
+                    android:text="地图"
+                    android:textSize="18dp" />
+            </RelativeLayout>
+            
 
             <RelativeLayout style="@style/setting_item" >
 

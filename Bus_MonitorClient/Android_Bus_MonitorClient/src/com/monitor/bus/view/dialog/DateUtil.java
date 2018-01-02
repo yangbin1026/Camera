@@ -104,6 +104,14 @@ public class DateUtil {
 		String times = from.format(date);
 		return times;
 	}
+	public static ArrayList<Integer> getCurrentTimeList() {
+		ArrayList<Integer> list =new ArrayList<Integer>();
+		Calendar calendar=Calendar.getInstance();
+		list.add(calendar.get(Calendar.YEAR));
+		list.add(calendar.get(Calendar.MONTH));
+		list.add(calendar.get(Calendar.DAY_OF_MONTH));
+		return list;
+	}
 	
 	///////////////////////
 	public static long getTimeMails(String dateString,String formatString){

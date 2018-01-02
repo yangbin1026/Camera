@@ -268,7 +268,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_logout"
-            android:text="搜索"
+            android:text="@string/serch"
             android:textColor="@color/white"
             android:textSize="20dp" />
     </LinearLayout>

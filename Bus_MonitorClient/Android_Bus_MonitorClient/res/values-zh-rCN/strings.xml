@@ -1,9 +1,7 @@
 <resources>
 
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="app_name">移动视频监控客户端</string>
-    
     <string name="country">中国</string>
 
     <!-- 登陆 -->
@@ -28,11 +26,9 @@
     <string name="infomation_error">用户名或用户密码错误 </string>
     <string name="relogin_error">重复登录 </string>
     <string name="blacklist_error">黑名单 </string>
-    <string name="version_error">版本太老</string>
     <string name="over_max_user_num">超过最大用户数</string>
     <string name="other_error">未知异常</string>
     <string name="network_error">网络连接异常</string>
-    
 
     <!-- 主页面 -->
     <string name="main_title">主页面</string>
@@ -42,15 +38,15 @@
     <string name="exitComplete">退出</string>
     <string name="setting">设置</string>
     <string name="googleMapSupport">下载谷歌地图支持模块</string>
-    
-     <!-- 设置页面 -->
+
+    <!-- 设置页面 -->
     <string name="google_store">谷歌市场Url:</string>
     <string name="google_service">谷歌服务Url:</string>
     <string name="default_map">默认地图:</string>
     <string name="change">更改</string>
     <string name="save">保存</string>
-     <string name="save_succeed">保存成功</string>
-    
+    <string name="save_succeed">保存成功</string>
+
     <!-- 实时视频 -->
     <string name="video_stream">实时视频</string>
     <string name="video_talk">对讲</string>
@@ -86,31 +82,30 @@
     <string name="remote_record">设备端</string>
     <string name="devChnNumber">通道号</string>
     <string name="recordType">录像类型</string>
-    <string-array name="recordTypeData">  
-        <item>普通录像</item>  
-        <item>报警录像 </item>  
-    </string-array>
     <string name="downLoad">下载</string>
     <string name="loadMessage">确定要下载该文件到本地吗？</string>
+    
     <!-- 设备列表 -->
     <string name="dev_list">设备列表</string>
-     <string name="devList">设备</string>
+    <string name="devList">设备</string>
     <string name="addDev">新增</string>
     <string name="queryMap">查看地图</string>
     <string name="delDev">删除</string>
     <string name="delMsg">确认要删除吗？</string>
     <string name="addDevMessage">请添加设备！</string>
+    
     <!-- 电子地图 -->
     <string name="electronMap">电子地图</string>
     <string name="baiduMap">百度地图</string>
     <string name="googleMap">谷歌地图</string>
     <string name="googleGpsCorrection">是否谷歌GPS校正</string>
     <string name="googleGpsCorrectionFileLoad">文件加载中...</string>
+
+    <!-- 报警信息列表 -->
+    <string name="alarm_list">报警列表</string>
+    <string name="refresh">刷新</string>
+    <string name="filter">过滤</string>
     
-	<!-- 报警信息列表 -->
-	<string name="alarm_list">报警列表</string>
-	<string name="refresh">刷新</string>
-	<string name="filter">过滤</string>
     <!-- 相册 -->
     <string name="pic_list">相册</string>
     <string name="file_back">../(上层目录)</string>
@@ -132,16 +127,16 @@
     <string name="updateSuccess">修改设备成功！</string>
     <string name="repeat_device">您添加的设备已存在！</string>
     <string name="devOperate">设备操作</string>
-    <string-array name="jpf_streamTypes">  
-        <item>主码流</item>  
-        <item>次码流 </item>  
-        <item>三码流</item>  
-    </string-array>  
-     <string-array name="jxj_streamTypes">  
-        <item>主码流</item>  
-        <item>次码流</item>  
-    </string-array>  
 
+    <string-array name="jpf_streamTypes">
+        <item>主码流</item>
+        <item>次码流 </item>
+        <item>三码流</item>
+    </string-array>
+    <string-array name="jxj_streamTypes">
+        <item>主码流</item>
+        <item>次码流</item>
+    </string-array>
 
     <!-- 云台 -->
     <string name="ptzUp">上</string>
@@ -155,128 +150,138 @@
     <string name="capture_success">抓拍成功！</string>
     <!-- 录像 -->
     <string name="record">录像</string>
-    <string name="find_record">录像查找</string>
     <string name="record_fail">录像失败！</string>
     <string name="stop_recordfail">停止录像失败！</string>
     <!-- test -->
     <string name="localFile">本地jnv文件</string>
     <!-- 关于 -->
     <string name="about">关于</string>
-    <string name="version">版本号:V3.0.2.12</string>
     <string name="product_name">移动视频监控</string>
- 	
- 	<!-- notification -->
- 	<string name="back_stage">正在后台运行中</string>
- 	<string name="alert_massage">已有设备报警信息，请查看</string>
- 	<string name="online">在线</string>
- 	<string name="alarm">报警</string>
- 	<string name="logining">正在登陆...</string>
- 	
- 	
- 	<!-- 版本 -->
- 	<string name="product_version">当前版本: </string>
- 	<!-- 报警动作配置 -->
- 	<string name="alarm_action_config">告警动作配置</string>
- 	<!-- 温馨提示 -->
- 	<string name="warm_tip">温馨提示</string>
- 	<!-- 报警信息 -->
- 	<string name="exists">存在</string>
- 	
- 	<!-- 报警类型 -->
- 	<string name="overspeed">超速</string>
- 	<string name="overspeed_cancel_alarm">超速消警</string>
- 	<string name="input_trigger">输入触发</string>
- 	<string name="motion_detection">移动侦测</string>
- 	<string name="video_lose">视频丢失</string>
- 	<string name="low_speed_alarm">低速报警</string>
- 	<string name="low_speed_cancel_alarm">低速消警</string>
- 	<string name="violation_parking_alarm">违规停车报警</string>
- 	<string name="violation_parking_cancel_alarm">违规停车消警</string>
- 	<string name="insufficient_GPS_disk_space">GPS存储磁盘空间不足</string>
- 	<string name="gps_save_ceased">GPS存储停止存储</string>
- 	<string name="overspeed_freeway">高速超速</string>
- 	<string name="overspeed_freeway_cancel_alarm">高速超速消警</string>
- 	<string name="lowspeed_freeway_alarm">高速低速报警</string>
- 	<string name="lowspeed_freeway_cancel_alarm">高速低速消警</string>
- 	<string name="overspeed_national_road">国道超速</string>
- 	<string name="lowspeed_national_road">国道低速</string>
- 	<string name="overspeed_nation_road_alarm_canceled">国道超速消警</string>
- 	<string name="lowspeed_nation_road_alarm_canceled">国道低速消警</string>
- 	<string name="gps_module_abnormal">GPS模块异常</string>
- 	<string name="gsensor_alarm">GSensor报警</string>
- 	<string name="storage_medium_one_abnormity">存储介质1异常</string>
- 	<string name="storage_medium_two_abnormity">存储介质2异常</string>
-	<string name="system_abnormity">系统异常</string>
-	<string name="device_online">设备上线</string>
-	<string name="device_offline">设备离线</string>
-	<string name="enter_into_wifi_region">进入WIFI区域</string>
-	<string name="leave_wifi_region">离开WIFI区域</string>
-	<string name="ignition">点火</string>
-	<string name="flameout">熄火</string>
-	<string name="front_door_opens">前门打开</string>
-	<string name="front_door_closed">前门关闭</string>
-	<string name="middle_door_opens">中门打开</string>
-	<string name="middle_door_closed">中门关闭</string>
-	<string name="postern_opens">后门打开</string>
-	<string name="postern_closed">后门关闭</string>
-	<string name="arrive_at_station_nostop">到站未停车</string>
-	<string name="arrive_at_station_noopen">到站未开车门</string>
-	<string name="high_temperature_on_carriage">车厢温度高</string>
-	<string name="low_temperature_on_carriage">车厢温度低</string>
-	<string name="drive_with_door_open">开门行车</string>
-	<string name="alarm_when_delay_at_station">滞站告警</string>
-	<string name="exigency_accelerate">紧急加速</string>
-	<string name="exigency_brake">紧急刹车</string>
-	<string name="exigency_alarm">紧急报警</string>
-	<string name="deviate_route">偏离路线</string>
-	<string name="ballot_box_door_alarm">票箱门报警</string>
-	<string name="electronic_unlock">电子锁打开</string>
-	<string name="electronic_lock_closed">电子锁关闭</string>
-	<string name="electronic_lock_abnormity">电子锁异常</string>
-	<string name="input_one_trigger">输入1触发</string>
-	<string name="input_two_trigger">输入2触发</string>
-	<string name="input_three_trigger">输入3触发</string>
-	<string name="input_four_trigger">输入4触发</string>
-	<string name="input_five_trigger">输入5触发</string>
-	<string name="input_six_trigger">输入6触发</string>
-	<string name="input_seven_trigger">输入7触发</string>
-	<string name="input_eight_trigger">输入8触发</string>
-	<string name="illegality_close">非法开关门</string>
-	<string name="overload">车辆载客超载</string>
-	<string name="beyond_the_mark">越界</string>
-	<string name="remove_slop_over">越界消除</string>
-	<string name="overtime_parking">超时停车</string>
-	<string name="remove_overtime_parking">超时停车消除</string>
-	<string name="fatigue_driving">疲劳驾驶</string>
-	<string name="remove_fatigue_driving">疲劳驾驶消除</string>
-	
-	
-	<!-- 记住密码 -->
-	<string name="remember_psw">记住密码</string>
-	<!-- 检查版本 -->
-	<string name="version_check">检查新版本</string>
-	<string name="check">检查</string>
-	<string name="this_latest_version">当前已是最新版本</string>
-	<string name="exit_process">退出程序</string>
-	<string name="exit">退出</string>
-	<string name="software_expired">软件已到期</string>
-	<string name="software">软件已到期</string>
-	<string name="software_expired_tip">过期,请升级最新版本!</string>
-	
-	<!-- 搜索页面 -->
-	<string name="select_device">选择设备</string>
-	<string name="file_local">文件位置</string>
-	<string name="channel">通道</string>
-	<string name="video_type">录像类型</string>
-	<string name="select_date">选择日期</string>
-	<string name="start_time">开始时间</string>
-	<string name="end_time">结束时间</string>
-	
-	<!-- new -->
-	<string name="type">类型</string>
-	<string name="channle">通道</string>
-	<string name="all">全部</string>
-	<string name="test">测试</string>
-	
-	
+
+    <!-- notification -->
+    <string name="back_stage">正在后台运行中</string>
+    <string name="alert_massage">已有设备报警信息，请查看</string>
+    <string name="online">在线</string>
+    <string name="alarm">报警</string>
+
+    <!-- 报警动作配置 -->
+    <string name="alarm_action_config">告警动作配置</string>
+    <!-- 温馨提示 -->
+    <string name="warm_tip">温馨提示</string>
+    <!-- 报警信息 -->
+    <string name="exists">存在</string>
+
+    <!-- 报警类型 -->
+    <string name="overspeed">超速</string>
+    <string name="overspeed_cancel_alarm">超速消警</string>
+    <string name="input_trigger">输入触发</string>
+    <string name="motion_detection">移动侦测</string>
+    <string name="video_lose">视频丢失</string>
+    <string name="low_speed_alarm">低速报警</string>
+    <string name="low_speed_cancel_alarm">低速消警</string>
+    <string name="violation_parking_alarm">违规停车报警</string>
+    <string name="violation_parking_cancel_alarm">违规停车消警</string>
+    <string name="insufficient_GPS_disk_space">GPS存储磁盘空间不足</string>
+    <string name="gps_save_ceased">GPS存储停止存储</string>
+    <string name="overspeed_freeway">高速超速</string>
+    <string name="overspeed_freeway_cancel_alarm">高速超速消警</string>
+    <string name="lowspeed_freeway_alarm">高速低速报警</string>
+    <string name="lowspeed_freeway_cancel_alarm">高速低速消警</string>
+    <string name="overspeed_national_road">国道超速</string>
+    <string name="lowspeed_national_road">国道低速</string>
+    <string name="overspeed_nation_road_alarm_canceled">国道超速消警</string>
+    <string name="lowspeed_nation_road_alarm_canceled">国道低速消警</string>
+    <string name="gps_module_abnormal">GPS模块异常</string>
+    <string name="gsensor_alarm">GSensor报警</string>
+    <string name="storage_medium_one_abnormity">存储介质1异常</string>
+    <string name="storage_medium_two_abnormity">存储介质2异常</string>
+    <string name="system_abnormity">系统异常</string>
+    <string name="device_online">设备上线</string>
+    <string name="device_offline">设备离线</string>
+    <string name="enter_into_wifi_region">进入WIFI区域</string>
+    <string name="leave_wifi_region">离开WIFI区域</string>
+    <string name="ignition">点火</string>
+    <string name="flameout">熄火</string>
+    <string name="front_door_opens">前门打开</string>
+    <string name="front_door_closed">前门关闭</string>
+    <string name="middle_door_opens">中门打开</string>
+    <string name="middle_door_closed">中门关闭</string>
+    <string name="postern_opens">后门打开</string>
+    <string name="postern_closed">后门关闭</string>
+    <string name="arrive_at_station_nostop">到站未停车</string>
+    <string name="arrive_at_station_noopen">到站未开车门</string>
+    <string name="high_temperature_on_carriage">车厢温度高</string>
+    <string name="low_temperature_on_carriage">车厢温度低</string>
+    <string name="drive_with_door_open">开门行车</string>
+    <string name="alarm_when_delay_at_station">滞站告警</string>
+    <string name="exigency_accelerate">紧急加速</string>
+    <string name="exigency_brake">紧急刹车</string>
+    <string name="exigency_alarm">紧急报警</string>
+    <string name="deviate_route">偏离路线</string>
+    <string name="ballot_box_door_alarm">票箱门报警</string>
+    <string name="electronic_unlock">电子锁打开</string>
+    <string name="electronic_lock_closed">电子锁关闭</string>
+    <string name="electronic_lock_abnormity">电子锁异常</string>
+    <string name="input_one_trigger">输入1触发</string>
+    <string name="input_two_trigger">输入2触发</string>
+    <string name="input_three_trigger">输入3触发</string>
+    <string name="input_four_trigger">输入4触发</string>
+    <string name="input_five_trigger">输入5触发</string>
+    <string name="input_six_trigger">输入6触发</string>
+    <string name="input_seven_trigger">输入7触发</string>
+    <string name="input_eight_trigger">输入8触发</string>
+    <string name="illegality_close">非法开关门</string>
+    <string name="overload">车辆载客超载</string>
+    <string name="beyond_the_mark">越界</string>
+    <string name="remove_slop_over">越界消除</string>
+    <string name="overtime_parking">超时停车</string>
+    <string name="remove_overtime_parking">超时停车消除</string>
+    <string name="fatigue_driving">疲劳驾驶</string>
+    <string name="remove_fatigue_driving">疲劳驾驶消除</string>
+	<string name="product_version">版本</string>
+    <!-- 记住密码 -->
+    <string name="remember_psw">记住密码</string>
+    <!-- 检查版本 -->
+    <string name="check">检查</string>
+    <string name="exit_process">退出程序</string>
+    <string name="exit">退出</string>
+    <string name="software_expired">软件已到期</string>
+    <string name="software">软件已到期</string>
+    <string name="software_expired_tip">过期,请升级最新版本!</string>
+    <string name="select">Select USB Web Camera</string>
+    <string name="camera">Camera</string>
+    <string name="no_device">No USB camera found</string>
+
+    <!-- 搜索页面 -->
+    <string name="select_device">选择设备</string>
+    <string name="file_local">文件位置</string>
+    <string name="channel">通道</string>
+    <string name="video_type">录像类型</string>
+    <string name="select_date">选择日期</string>
+    <string name="start_time">开始时间</string>
+    <string name="end_time">结束时间</string>
+    <string name="serch">搜索</string>
+    <string name="nomeravideo">普通视频</string>
+    <string name="alarmvideo">报警视频</string>
+    <string name="localvideo">本地视频</string>
+    <string name="remontvideo">远程视频</string>
+    
+
+    <!-- new -->
+    <string name="type">类型</string>
+    <string name="all">全部</string>
+    <string name="test">测试</string>
+    <string name="find_record">录像查找</string>
+    <string name="logining">正在登陆...</string>
+
+    <string-array name="list_setting_showmode">
+        <item>显示视频</item>
+        <item>显示地图</item>
+        <item>显示视频和地图</item>
+    </string-array>
+    <string-array name="maps">
+        <item>百度地图</item>
+        <item>谷歌地图</item>
+    </string-array>
+
 </resources>

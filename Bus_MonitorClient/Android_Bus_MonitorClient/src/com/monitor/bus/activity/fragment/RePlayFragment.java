@@ -100,8 +100,8 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 		
 		tv_start_time.setText("00:00");
 		tv_end_time.setText("23:59");
-		tv_type.setText("普通视频");
-		tv_file_local.setText("本地视频");
+		tv_type.setText(getContext().getString(R.string.nomeravideo));
+		tv_file_local.setText(getContext().getString(R.string.localvideo));
 		tv_select_time.setText(DateUtil.getTodayDateString(DateUtil.REPLAY_SHOW_FORMAT));
 
 		if(deviceList.size()>0){
@@ -247,7 +247,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 	private void showVideoTypeDialog(List<String> mlist) {
 		if(chooseTypeDialog==null){
 			MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
-			chooseTypeDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
+			chooseTypeDialog = builder.setData(mlist).setSelection(1).setTitle(getContext().getString(R.string.cancel))
 					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
 						@Override
 						public void onDataSelected(String itemValue, int position) {
@@ -283,7 +283,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 				public void onCancel() {
 					
 				}
-			}).setSelectYear(date.get(0) - 1).setSelectMonth(date.get(1) - 1).setSelectDay(date.get(2) - 1);
+			}).setSelectYear(date.get(0)).setSelectMonth(date.get(1)).setSelectDay(date.get(2));
 			
 			builder.setMaxYear(DateUtil.getYear());
 			builder.setMaxMonth(DateUtil.getDateForString(DateUtil.getToday()).get(1));
@@ -349,30 +349,25 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 			break;
 		case R.id.rl_2:// 文件位置
 			List<String> file = new ArrayList<String>();
-			file.add("本地录像");
-			file.add("远程录像");
+			file.add(getContext().getString(R.string.localvideo));
+			file.add(getContext().getString(R.string.remontvideo));
 			showLocalTypeDialog(file);
 			break;
 		case R.id.rl_3:// 通道
 			List<String> channel = new ArrayList<String>();
-			channel.add("通道1");
-			channel.add("通道2");
-			channel.add("通道3");
-			channel.add("通道4");
-			channel.add("通道5");
+			for(int i=1; i<6;i++){
+				channel.add(getContext().getString(R.string.localvideo)+i);
+			}
 			showChannelDialog(channel);
 			break;
 		case R.id.rl_4:// 录像类型
 			List<String> test = new ArrayList<String>();
-			test.add("普通录像");
-			test.add("报警录像");
+			test.add(getContext().getString(R.string.nomeravideo));
+			test.add(getContext().getString(R.string.alarmvideo));
 			showVideoTypeDialog(test);
 			break;
 		case R.id.rl_5:// 日期
-			List<Integer> time = new ArrayList<Integer>();
-			time.add(2017);
-			time.add(3);
-			time.add(3);
+			List<Integer> time = DateUtil.getCurrentTimeList();
 			showDateDialog(time);
 			break;
 		case R.id.rl_6:// 开始时间
