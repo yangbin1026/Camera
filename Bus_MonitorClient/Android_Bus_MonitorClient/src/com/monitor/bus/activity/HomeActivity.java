@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.monitor.bus.activity.fragment.SettingFragment;
 import com.monitor.bus.adapter.MyFragmentPageAdapter;
-import com.monitor.bus.bean.DeviceManager;
+import com.monitor.bus.bean.manager.DeviceManager;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.activity.fragment.AlarmFragment;
 import com.monitor.bus.activity.fragment.BaseFragment;

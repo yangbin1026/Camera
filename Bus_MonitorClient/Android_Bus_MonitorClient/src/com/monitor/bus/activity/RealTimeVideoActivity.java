@@ -26,11 +26,13 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.monitor.bus.bean.BaiduMapManager;
-import com.monitor.bus.bean.BaseMapManager;
-import com.monitor.bus.bean.GoogleMapManager;
+
+import com.monitor.bus.bean.manager.BaiduMapManager;
+import com.monitor.bus.bean.manager.BaseMapManager;
+import com.monitor.bus.bean.manager.GoogleMapManager;
 import com.monitor.bus.control.VideoPlayControl;
 import com.monitor.bus.database.DatabaseHelper;
 import com.monitor.bus.view.MyVideoView;
@@ -44,8 +46,8 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 	private static String TAG = "VideoActivity";
 	public static final String KEY_DEVICE_INFO = "key_device_info";
 
-	String recordFilePath = null;// 当前录像文件存储路径
-	String times = "";// 当前文件名称
+	private String recordFilePath = null;// 当前录像文件存储路径
+	private String recordFileName = "";// 当前文件名称:当前时间
 	boolean isCapturePicture = false;// 是否有操作过抓拍
 	boolean isRecording = false;
 
@@ -210,8 +212,8 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		if (!file.exists()) {// 目录不存在
 			file.mkdirs();
 		}
-		times = MUtils.getCurrentDateTime(DateUtil.DB_FORMAT);
-		String path = recordFilePath + times + Constants.RECORD_FILE_FORMAT;
+		recordFileName = MUtils.getCurrentDateTime(DateUtil.DB_FORMAT);
+		String path = recordFilePath + recordFileName + Constants.RECORD_FILE_FORMAT;
 		LogUtils.i(TAG, "-------------start record!");
 		int i = playControl.recordStart(path);
 		if (i == 0) {
@@ -243,7 +245,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		int i = playControl.recordStop();
 		if (i == 1) {
 			try {
-				db.insertRecordInfo(times, times + Constants.RECORD_FILE_FORMAT, recordFilePath);
+				db.insertRecordInfo(recordFileName, recordFileName + Constants.RECORD_FILE_FORMAT, recordFilePath);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -271,17 +273,17 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 	 * 切换横竖屏方式
 	 */
 	private void changeScreenOrientation() {
-		RelativeLayout rl_control = (RelativeLayout) findViewById(R.id.rl_control);// 按键布局
+		LinearLayout ll_control = (LinearLayout) findViewById(R.id.ll_control);// 按键布局
 		RelativeLayout title = (RelativeLayout) findViewById(R.id.titlelayout);// 标题布局
 		if (0 == Constants.FLAG_FULLSCREEN) {
 			LogUtils.i(TAG, "+++++++++++++++++hengxiang");
-			rl_control.setVisibility(View.GONE);// 隐藏布局
+			ll_control.setVisibility(View.GONE);// 隐藏布局
 			title.setVisibility(View.GONE);
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);// 横屏
 			Constants.FLAG_FULLSCREEN = 1;// 重置
 		} else {
 			LogUtils.i(TAG, "+++++++++++++++++shuxiang");
-			rl_control.setVisibility(View.VISIBLE);// 显示布局
+			ll_control.setVisibility(View.VISIBLE);// 显示布局
 			title.setVisibility(View.VISIBLE);
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);// 竖屏
 			Constants.FLAG_FULLSCREEN = 0;

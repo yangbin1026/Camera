@@ -167,6 +167,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		et_login_port.setEditText("" + info.getPort());
 
 		et_userName.setEditFocus();
+		et_userName.setEditTextType();
 		et_password.setEditPasswordType();
 		et_login_port.setEditNumberType();
 		et_login_address.setIpConfigType();

@@ -1,4 +1,4 @@
-package com.monitor.bus.bean;
+package com.monitor.bus.bean.manager;
 
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.SDKInitializer;
@@ -17,6 +17,8 @@ import com.baidu.mapapi.model.LatLng;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.RealTimeVideoActivity;
 import com.monitor.bus.bdmap.ErrorCodeReceiver;
+import com.monitor.bus.bean.DeviceInfo;
+import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.MUtils;
 
 import android.app.Activity;
@@ -152,7 +154,7 @@ public class BaiduMapManager extends BaseMapManager {
 		mContext.registerReceiver(errorCodeReceiver, iFilter);
 
 		IntentFilter myIntentFilter = new IntentFilter();
-		myIntentFilter.addAction("ACTION_NAME");
+		myIntentFilter.addAction(Constants.ACTION_LOGIN_EVENT);
 		// registerReceiver(mBroadcastReceiver, myIntentFilter);
 	}
 

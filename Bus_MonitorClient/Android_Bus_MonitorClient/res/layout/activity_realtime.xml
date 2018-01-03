@@ -9,33 +9,8 @@
         android:layout_height="@dimen/title_size"
         android:layout_alignParentTop="true"
         layout="@layout/title_themes" />
-
-    <RelativeLayout
-        android:id="@+id/rl_control"
-        android:layout_width="fill_parent"
-        android:layout_height="220dp"
-        android:layout_alignParentBottom="true" >
-
-        <com.baidu.mapapi.map.MapView
-            android:id="@+id/bmapView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:clickable="true"
-            android:visibility="invisible" />
-
-        <RelativeLayout
-            android:id="@+id/rl_googlemap"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-            <fragment
-                android:id="@+id/map"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                class="com.google.android.gms.maps.SupportMapFragment" />
-        </RelativeLayout>
-
-        <LinearLayout
+     <LinearLayout
+         	android:id="@+id/ll_control"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
@@ -80,12 +55,40 @@
                 android:scaleType="centerInside"
                 android:src="@drawable/mic" />
         </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_map"
+        android:layout_width="fill_parent"
+        android:layout_height="220dp"
+        android:layout_above="@id/ll_control" >
+
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/bmapView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:clickable="true"
+            android:visibility="invisible" />
+
+        <RelativeLayout
+            android:id="@+id/rl_googlemap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <fragment
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                class="com.google.android.gms.maps.SupportMapFragment" />
+        </RelativeLayout>
+
+       
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/rl_control"
+        android:layout_above="@id/rl_map"
         android:layout_below="@id/titlelayout" >
 
         <com.monitor.bus.view.MyVideoView

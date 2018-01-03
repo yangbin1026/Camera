@@ -40,7 +40,7 @@ import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.utils.SPUtils;
 import com.monitor.bus.bdmap.GoogleCheckGPSAsyncTask;
 import com.monitor.bus.bean.DeviceInfo;
-import com.monitor.bus.bean.GoogleMapManager;
+import com.monitor.bus.bean.manager.GoogleMapManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.utils.LogUtils;
@@ -293,7 +293,7 @@ public class UserGoogleMapActivity extends FragmentActivity {
 	 */
 	private void registerBoradcastReceiver() {
 		IntentFilter myIntentFilter = new IntentFilter();
-		myIntentFilter.addAction("ACTION_NAME");
+		myIntentFilter.addAction(Constants.ACTION_LOGIN_EVENT);
 		registerReceiver(mBroadcastReceiver, myIntentFilter);
 	}
 
@@ -304,7 +304,7 @@ public class UserGoogleMapActivity extends FragmentActivity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if (action.equals("ACTION_NAME")) {
+			if (action.equals(Constants.ACTION_LOGIN_EVENT)) {
 				int eventType = intent.getIntExtra(Constants.WHAT_LOGIN_EVENT_TYPE, 0);//
 				if (eventType == CALLBACKFLAG.DEVICE_EVENT_GPS_INFO) {// GPS基本
 					String gpsDevID = intent.getStringExtra("gpsDevID");

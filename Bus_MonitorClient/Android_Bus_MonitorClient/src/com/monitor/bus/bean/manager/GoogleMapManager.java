@@ -1,4 +1,4 @@
-package com.monitor.bus.bean;
+package com.monitor.bus.bean.manager;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -132,11 +132,12 @@ public class GoogleMapManager extends BaseMapManager {
 //		ft.replace(R.id.rl_googlemap, fragment);
 //		ft.commit();
 //		mapView = fragment.getMap();
-		
-		
 		mapView = ((SupportMapFragment) ((FragmentActivity) mContext).getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-		
 		//////////////////////////////////////////////////////////////
+		if(mapView==null){
+			MUtils.toast(mContext, mContext.getString(R.string.check_google_map));
+			return;
+		}
 		mapView.getUiSettings().setRotateGesturesEnabled(false);// 禁用旋转手势
 		mapView.setMyLocationEnabled(true);// 开启本机位置图层
 		mapView.getUiSettings().setMyLocationButtonEnabled(false);
@@ -297,7 +298,7 @@ public class GoogleMapManager extends BaseMapManager {
 	 */
 	private void registerBoradcastReceiver() {
 		IntentFilter myIntentFilter = new IntentFilter();
-		myIntentFilter.addAction("ACTION_NAME");
+		myIntentFilter.addAction(Constants.ACTION_LOGIN_EVENT);
 		mContext.registerReceiver(mBroadcastReceiver, myIntentFilter);
 	}
 
@@ -308,7 +309,7 @@ public class GoogleMapManager extends BaseMapManager {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if (action.equals("ACTION_NAME")) {
+			if (action.equals(Constants.ACTION_LOGIN_EVENT)) {
 				int eventType = intent.getIntExtra(Constants.WHAT_LOGIN_EVENT_TYPE, 0);//
 				if (eventType == CALLBACKFLAG.DEVICE_EVENT_GPS_INFO) {// GPS基本
 					String gpsDevID = intent.getStringExtra("gpsDevID");

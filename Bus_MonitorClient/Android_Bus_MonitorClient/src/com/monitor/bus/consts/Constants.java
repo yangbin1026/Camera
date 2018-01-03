@@ -17,25 +17,27 @@ import android.os.Environment;
  */
 public class Constants {
 
+	public static final String ACTION_LOGIN_EVENT = "ACTION_NAME";
 	public static final String WHAT_LOGIN_EVENT_TYPE = "eventType";
 	public static final String DATABASE_NAME = "androidClient"; // 数据库名称
 	public static final int DATABASE_VERSION = 6; // 数据库版本
-
 	public static final int SCREEN_COUNT = 4; // 分屏数(so初始化)
-
 	public static final String SDCardRoot = Environment.getExternalStorageDirectory().getAbsolutePath()
 			+ File.separator;
 	public static final String RECORD_FILE_PATH = SDCardRoot + "busRecord/";
 	public static final String IMAGE_PATH = SDCardRoot + "busPic";
+	
+	
+	
 	public static final String DEVICELIST_PASTH = SDCardRoot + "DevList.xml";
 	public static final String DEVRECORD_PASTH = SDCardRoot + "DevRecordList.xml";
-
 	// 服务器列表保存地址（0 中心 1信令 2媒体）
 	public static final String SERVERLIST_PASTH[] = { SDCardRoot + "ServerList0.xml", SDCardRoot + "ServerList1.xml",
 			SDCardRoot + "ServerList2.xml", };
-
+	
+	
+	
 	public static int FLAG_FULLSCREEN = 0;// 全屏操作---------是否长按全屏 1全屏，0还原
-
 	public static final String RECORD_FILE_FORMAT = ".jnv";// 录像文件格式
 
 	public static final int AUDIO_RATE = 8000;// 采样频率，一般为8000hz/s
@@ -56,7 +58,6 @@ public class Constants {
 	public static final String STORE_URL_KEY = "store"; // 商店
 
 	public static List<ArrayList<ServerInfo>> SERVICE_LIST = new ArrayList<ArrayList<ServerInfo>>();// 服务器信息
-	public static List<RecordInfo> RECORD_LIST = new ArrayList<RecordInfo>();// 设备端录像
 
 	public static final String SERVICE_APK_NAME = "com.google.android.gms"; // 服务
 	public static final String SERVICE_URL = "http://183.61.171.28:8002/download/googleplayservice_8.4.89.apk"; // 服务

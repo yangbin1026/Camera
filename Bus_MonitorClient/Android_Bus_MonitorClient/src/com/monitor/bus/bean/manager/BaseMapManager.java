@@ -1,4 +1,6 @@
-package com.monitor.bus.bean;
+package com.monitor.bus.bean.manager;
+
+import com.monitor.bus.bean.DeviceInfo;
 
 import android.content.Context;
 

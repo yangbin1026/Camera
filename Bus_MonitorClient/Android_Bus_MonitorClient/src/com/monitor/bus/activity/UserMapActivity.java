@@ -21,7 +21,7 @@ import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.adapter.SpinnerBusAdapter;
 import com.monitor.bus.bdmap.ErrorCodeReceiver;
 import com.monitor.bus.bean.DeviceInfo;
-import com.monitor.bus.bean.DeviceManager;
+import com.monitor.bus.bean.manager.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
@@ -162,7 +162,7 @@ public class UserMapActivity extends Activity {
 		registerReceiver(errorCodeReceiver, iFilter);
 
 		IntentFilter myIntentFilter = new IntentFilter();
-		myIntentFilter.addAction("ACTION_NAME");
+		myIntentFilter.addAction(Constants.ACTION_LOGIN_EVENT);
 		// registerReceiver(mBroadcastReceiver, myIntentFilter);
 	}
 
@@ -173,7 +173,7 @@ public class UserMapActivity extends Activity {
 	 * 
 	 * @Override public void onReceive(final Context context, final Intent
 	 * intent) { String action = intent.getAction(); if
-	 * (action.equals("ACTION_NAME")) { int eventType =
+	 * (action.equals(Constants.ACTION_LOGIN_EVENT)) { int eventType =
 	 * intent.getIntExtra("eventType", 0);// if (isBroadcastRegister &&
 	 * eventType == CALLBACKFLAG.DEVICE_EVENT_GPS_INFO) {// GPS基本 String
 	 * gpsDevID = intent.getStringExtra("gpsDevID"); if (curBusDeviceInfo !=
@@ -215,7 +215,7 @@ public class UserMapActivity extends Activity {
 	// 获取所有的bus设备
 	private void getBusDevices() {
 		listBus = new ArrayList<DeviceInfo>();
-		for (DeviceInfo busInfo :DeviceManager.getInstance().getDeviceListAll()) {
+		for (DeviceInfo busInfo :DeviceManager.getInstance().getAll()) {
 			if (!busInfo.issDeviceGroup()) {
 				listBus.add(busInfo);
 			}

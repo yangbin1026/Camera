@@ -39,7 +39,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 	SwitchButton sb_autologin, sb_local, sb_gps;
 	TextView tv_version, tv_showmode, tv_username, tv_map;
 	RelativeLayout rl_mode, rl_map;
-	Dialog modeDialog;
+	Dialog modeDialog,mapDialog;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -189,10 +189,9 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 	 * chooseDialog
 	 */
 	private void showMapsDialog(List<String> mlist) {
-		if (modeDialog == null) {
-
+		if (mapDialog == null) {
 			MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
-			modeDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
+			mapDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
 					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
 						@Override
 						public void onDataSelected(String itemValue, int position) {
@@ -206,8 +205,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 						}
 					}).create();
 		}
-
-		modeDialog.show();
+		mapDialog.show();
 	}
 
 }

@@ -9,9 +9,9 @@ import com.monitor.bus.activity.RealTimeVideoActivity;
 import com.monitor.bus.adapter.AlarmListAdapter;
 import com.monitor.bus.adapter.AlarmSelectorAdapter;
 import com.monitor.bus.bean.AlarmInfo;
-import com.monitor.bus.bean.AlarmManager;
 import com.monitor.bus.bean.DeviceInfo;
-import com.monitor.bus.bean.DeviceManager;
+import com.monitor.bus.bean.manager.AlarmManager;
+import com.monitor.bus.bean.manager.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
@@ -134,7 +134,7 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 	 * @return
 	 */
 	public DeviceInfo getDeviceInfo(String guId) {
-		Iterator<DeviceInfo> itr = DeviceManager.getInstance().getDeviceListAll().iterator();
+		Iterator<DeviceInfo> itr = DeviceManager.getInstance().getAll().iterator();
 		DeviceInfo deviceInfo = null;
 		while (itr.hasNext()) {
 			deviceInfo = itr.next();

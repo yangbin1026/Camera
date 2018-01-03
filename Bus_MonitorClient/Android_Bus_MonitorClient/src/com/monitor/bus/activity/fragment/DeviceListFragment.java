@@ -15,7 +15,7 @@ import com.monitor.bus.activity.RealTimeVideoActivity;
 import com.monitor.bus.activity.UserGoogleMapActivity;
 import com.monitor.bus.adapter.DeviceListAdapter;
 import com.monitor.bus.bean.DeviceInfo;
-import com.monitor.bus.bean.DeviceManager;
+import com.monitor.bus.bean.manager.DeviceManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.control.LoginEventControl;
@@ -29,6 +29,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.style.UpdateAppearance;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -53,28 +54,24 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 	View view;
 	ListView lv_device;
 	TextView tv_all, tv_online;
-	DeviceManager deviceManager = DeviceManager.getInstance();
 
 	DeviceListAdapter mDeviceListAdapter;
 	ArrayList<DeviceInfo> deviceInfos;
-	DeviceManager manager = DeviceManager.getInstance();
+	DeviceManager deviceManager;
+	Handler mHandler = new Handler();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_video, container, false);
-		mDeviceListAdapter = new DeviceListAdapter(getContext());
+		deviceManager = DeviceManager.getInstance();
 		setTitle();
 		initView();
-		updataByPid("0");
-
-		registerBoradcastReceiver();// 注册广播接收器
-		showWaittingDialog();
+		initData();
 		return view;
 	}
 
 	@Override
 	public void onDestroyView() {
-		unregisterReceiver();
 		super.onDestroyView();
 	}
 
@@ -91,7 +88,6 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 
 	private void initView() {
 		lv_device = (ListView) view.findViewById(R.id.lv_devicelist);
-		lv_device.setAdapter(mDeviceListAdapter);
 		tv_all = (TextView) view.findViewById(R.id.tv_all_device);
 		tv_online = (TextView) view.findViewById(R.id.tv_online_device);
 		tv_all.setOnClickListener(this);
@@ -115,10 +111,29 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 
 	}
 
-	private void updataByPid(String id) {
-		deviceInfos = manager.getListByPId(id);
+	private void initData() {
+		mDeviceListAdapter = new DeviceListAdapter(getContext());
+		lv_device.setAdapter(mDeviceListAdapter);
+		updataByPid("0");
+	}
+
+	private void updataByPid(String parent) {
+		deviceInfos = deviceManager.getListByPId(parent);
 		mDeviceListAdapter.setData(deviceInfos);
 		mDeviceListAdapter.notifyDataSetChanged();
+		if (deviceInfos.size() <= 0) {
+			showWaittingDialog();
+			mHandler.postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					deviceManager.resetInfos();
+					updataByPid("0");
+				}
+			}, 2000);
+		} else {
+			disMissWaittingDialog();
+		}
 	}
 
 	private void updataByList(ArrayList<DeviceInfo> list) {
@@ -138,31 +153,18 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 		return false;
 	}
 
-	private void registerBoradcastReceiver() {
-		IntentFilter myIntentFilter = new IntentFilter();
-		myIntentFilter.addAction("ACTION_NAME");
-		// 注册广播
-		getContext().registerReceiver(mBroadcastReceiver, myIntentFilter);
-	}
-
-	private void unregisterReceiver() {
-		getContext().unregisterReceiver(mBroadcastReceiver);
-	}
-
 	private void showWaittingDialog() {
-		if (0 == DeviceManager.getInstance().getDeviceListAll().size()) {
-			if (progressDialog != null) {
-				progressDialog.show();
-				return;
-			}
-			if (progressDialog == null) {
-				progressDialog = new ShapeLoadingDialog.Builder(getContext()).cancelable(false)
-						.canceledOnTouchOutside(false).loadText(R.string.loading_data_title).build();
-			}
-			progressDialog.setCancelable(true);
-			progressDialog.setCanceledOnTouchOutside(true);
+		if (progressDialog != null) {
 			progressDialog.show();
+			return;
 		}
+		if (progressDialog == null) {
+			progressDialog = new ShapeLoadingDialog.Builder(getContext()).cancelable(false)
+					.canceledOnTouchOutside(false).loadText(R.string.loading_data_title).build();
+		}
+		progressDialog.setCancelable(true);
+		progressDialog.setCanceledOnTouchOutside(true);
+		progressDialog.show();
 	}
 
 	private void disMissWaittingDialog() {
@@ -170,33 +172,6 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 			progressDialog.dismiss();
 		}
 	}
-
-	// 广播接收器
-	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String action = intent.getAction();
-			if (action.equals("ACTION_NAME")) {
-				int eventType = intent.getIntExtra(Constants.WHAT_LOGIN_EVENT_TYPE, 0);//
-				if (!Constants.IS_CASCADE_SERVER && eventType == CALLBACKFLAG.GET_EVENT_DEVLIST
-						|| Constants.IS_CASCADE_SERVER && eventType == CALLBACKFLAG.JNET_EET_EVENT_SERVER_LIST) {
-					// 获取成功
-					disMissWaittingDialog();
-					updataByPid("0");
-				} else {
-					// String DEVID = intent.getStringExtra("devID");//
-					// String myLocation = groupLocationMap.get(DEVID);
-					// if (myLocation != null || "".equals(myLocation)) {
-					// int location = Integer.parseInt(myLocation);
-					// if (eventType == 4096) {// 设备上线
-					// } else if (eventType == 8192) {// 设备离线
-					// }
-					// }
-				}
-			}
-		}
-
-	};
 
 	@Override
 	public void onClick(View arg0) {
@@ -207,7 +182,7 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
 			tv_online.setTextColor(getContext().getResources().getColor(R.color.bg_my_gray));
 			break;
 		case R.id.tv_online_device:
-			updataByList(manager.getOnlineDevice());
+			updataByList(deviceManager.getOnlineDevice());
 			tv_online.setTextColor(getContext().getResources().getColor(R.color.black));
 			tv_all.setTextColor(getContext().getResources().getColor(R.color.bg_my_gray));
 

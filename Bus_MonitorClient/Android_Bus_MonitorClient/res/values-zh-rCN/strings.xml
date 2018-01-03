@@ -245,8 +245,6 @@
     <string name="check">检查</string>
     <string name="exit_process">退出程序</string>
     <string name="exit">退出</string>
-    <string name="software_expired">软件已到期</string>
-    <string name="software">软件已到期</string>
     <string name="software_expired_tip">过期,请升级最新版本!</string>
     <string name="select">Select USB Web Camera</string>
     <string name="camera">Camera</string>
@@ -273,6 +271,8 @@
     <string name="test">测试</string>
     <string name="find_record">录像查找</string>
     <string name="logining">正在登陆...</string>
+    
+    <string name="check_google_map">请检查您的手机是否支持谷歌地图</string>
 
     <string-array name="list_setting_showmode">
         <item>显示视频</item>

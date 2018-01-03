@@ -19,6 +19,7 @@ import android.widget.ListView;
 import com.monitor.bus.adapter.DevRecordListAdapter;
 import com.monitor.bus.bean.RecordDBInfo;
 import com.monitor.bus.bean.RecordInfo;
+import com.monitor.bus.bean.manager.RecordManager;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.database.DatabaseHelper;
@@ -63,7 +64,7 @@ public class VideoListActivity extends BaseActivity {
 		if (devRecordFile.exists()) { // 存在删除
 			devRecordFile.delete();
 		}
-		Constants.RECORD_LIST.clear();
+		RecordManager.getInstance(mContext).clean();
 		super.onDestroy();
 	}
 
@@ -94,11 +95,11 @@ public class VideoListActivity extends BaseActivity {
 		}else{
 			//远程
 			registerBoradcastReceiver();
-			if (0 == Constants.RECORD_LIST.size()) {
+			if (RecordManager.getInstance(mContext).getAllSize()==0) {
 				myProgressDialog = ProgressDialog.show(this, getString(R.string.loading_data_title),
 						getString(R.string.waiting), true, true);
 			}else{
-				DevRecordListAdapter devRecordAdapter = new DevRecordListAdapter(this, Constants.RECORD_LIST);
+				DevRecordListAdapter devRecordAdapter = new DevRecordListAdapter(this, RecordManager.getInstance(mContext).getAll());
 				lv_recoder.setAdapter(devRecordAdapter);
 			}
 		}
@@ -109,7 +110,7 @@ public class VideoListActivity extends BaseActivity {
 	private void registerBoradcastReceiver() {
 		isRegisted=true;
 		IntentFilter myIntentFilter = new IntentFilter();
-		myIntentFilter.addAction("ACTION_NAME");
+		myIntentFilter.addAction(Constants.ACTION_LOGIN_EVENT);
 		registerReceiver(mBroadcastReceiver, myIntentFilter);
 	}
 	
@@ -120,15 +121,15 @@ public class VideoListActivity extends BaseActivity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if (action.equals("ACTION_NAME")) {
+			if (action.equals(Constants.ACTION_LOGIN_EVENT)) {
 				int eventType = intent.getIntExtra(Constants.WHAT_LOGIN_EVENT_TYPE, 0);
 				LogUtils.i(TAG, "========广播接收器=======当前登陆状态:" + eventType);
 				if (eventType == CALLBACKFLAG.GET_EVENT_RECLIST) {
 					myProgressDialog.dismiss();
 					DevRecordListAdapter devRecordAdapter = new DevRecordListAdapter(VideoListActivity.this,
-							Constants.RECORD_LIST);
+							RecordManager.getInstance(mContext).getAll());
 					lv_recoder.setAdapter(devRecordAdapter);
-					if (Constants.RECORD_LIST.size() == 0) {
+					if (RecordManager.getInstance(mContext).getAllSize() == 0) {
 						MUtils.commonToast(mContext, R.string.not_dev_recordfile);
 					}
 				}

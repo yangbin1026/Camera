@@ -38,10 +38,11 @@ import com.monitor.bus.consts.Constants.LGOINFLAG;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.bean.AlarmInfo;
-import com.monitor.bus.bean.AlarmManager;
 import com.monitor.bus.bean.DeviceInfo;
-import com.monitor.bus.bean.DeviceManager;
 import com.monitor.bus.bean.ServerInfo;
+import com.monitor.bus.bean.manager.AlarmManager;
+import com.monitor.bus.bean.manager.DeviceManager;
+import com.monitor.bus.bean.manager.RecordManager;
 
 /**
  * 登陆回调管理类
@@ -50,7 +51,7 @@ import com.monitor.bus.bean.ServerInfo;
 public class LoginEventControl {
 	private Context mContext;
 	private static String TAG = "LoginEventControl";
-	
+
 	private boolean is_alarm_flag = false;// 记录是否有报警
 	private boolean alarm_times = false;// 记录是否已报警过一次
 	private NotifycationManager myNotification;// 引用通知
@@ -58,14 +59,14 @@ public class LoginEventControl {
 	private SoundPool soundPool;
 	private int nGetServerIndex = 0; // 获取服务器列表次数
 	private LoginStatusCallBack mStatusCallback;
-	private long lastParseTime;
 
-	public interface LoginStatusCallBack{
+	public interface LoginStatusCallBack {
 		void onStatus(int statu);
 	}
+
 	public LoginEventControl(Context context) {
-		if(context==null){
-			LogUtils.getInstance().localLog(TAG, "ERROR: LoginEventControl Context is NULL!!!",LogUtils.LOG_NAME);
+		if (context == null) {
+			LogUtils.getInstance().localLog(TAG, "ERROR: LoginEventControl Context is NULL!!!", LogUtils.LOG_NAME);
 		}
 		this.mContext = context;
 		myNotification = new NotifycationManager(context);
@@ -76,54 +77,38 @@ public class LoginEventControl {
 		// 创建定时器
 		alarmTimer = new Timer();
 	}
-	public void setLoginStatusListener(LoginStatusCallBack callback){
-		mStatusCallback=callback;
+
+	public void setLoginStatusListener(LoginStatusCallBack callback) {
+		mStatusCallback = callback;
 	}
 
 	/***
 	 * 简单测试用
 	 */
-//	public int simpleCallBack(long iUserParam, String strEvent) {
-//		JSONObject jo;
-//		try {
-//			jo = new JSONObject(strEvent);
-//			int eventType = jo.getInt("eventType");
-//			if (eventType == 1) {
-//				LogUtils.i(TAG, "登陆成功！！");
-//			}
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		}
-//		return 0;
-//	}
+	// public int simpleCallBack(long iUserParam, String strEvent) {
+	// JSONObject jo;
+	// try {
+	// jo = new JSONObject(strEvent);
+	// int eventType = jo.getInt("eventType");
+	// if (eventType == 1) {
+	// LogUtils.i(TAG, "登陆成功！！");
+	// }
+	// } catch (JSONException e) {
+	// e.printStackTrace();
+	// }
+	// return 0;
+	// }
 
 	/**
 	 * 登陆之后的回调函数
 	 * 
-	 * eventType:
-	0; // 正在登录
-	1; // 登录成功
-	2; // 登录失败
-	3; // 退出登录
-	4; // 流正在打开
-	5; // 流打开成功
-	6; // 流打开失败
-	7; // 流关闭
-	301;// 获取设备列表
-	302;// 获取录像列表
-	201;// 报警事件
-	400;// 下发GPS信息
-	100;// 图像大小改变
-	101;// 文件播放完毕
-	103;// 码流异常
-	12; // 对讲正在打开
-	13; // 对讲打开成功
-	14; // 对讲打开失败
-	15; // 对讲关闭
-
-		// 级联服务器
-		 305; // 获取服务器列表,iDataType=eJNVFileType
-	
+	 * eventType: 0; // 正在登录 1; // 登录成功 2; // 登录失败 3; // 退出登录 4; // 流正在打开 5; //
+	 * 流打开成功 6; // 流打开失败 7; // 流关闭 301;// 获取设备列表 302;// 获取录像列表 201;// 报警事件
+	 * 400;// 下发GPS信息 100;// 图像大小改变 101;// 文件播放完毕 103;// 码流异常 12; // 对讲正在打开 13;
+	 * // 对讲打开成功 14; // 对讲打开失败 15; // 对讲关闭
+	 * 
+	 * // 级联服务器 305; // 获取服务器列表,iDataType=eJNVFileType
+	 * 
 	 * 
 	 * 
 	 * 
@@ -131,8 +116,8 @@ public class LoginEventControl {
 	public synchronized int callbackLogin(long iUserParam, String strEvent) throws JSONException {
 		Message msg;
 		strEvent = strEvent.replace("NaN", "1");
-		LogUtils.getInstance().localLog(TAG,"-callbackLoginEvent-"+
-				"iUserParam:" + iUserParam + "  strEvent:" + strEvent,LogUtils.LOG_NAME);
+		LogUtils.getInstance().localLog(TAG,
+				"-callbackLoginEvent-" + "iUserParam:" + iUserParam + "  strEvent:" + strEvent, LogUtils.LOG_NAME);
 		JSONObject jo = new JSONObject(strEvent);
 		int eventType = jo.getInt("eventType");
 		msg = myHandler.obtainMessage();
@@ -151,20 +136,20 @@ public class LoginEventControl {
 	}
 
 	private Handler myHandler = new Handler() {
-		Intent mIntent = new Intent("ACTION_NAME");
+		Intent mIntent = new Intent(Constants.ACTION_LOGIN_EVENT);
 
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case CALLBACKFLAG.LOGIN_ING:// 登陆中
-				if(mStatusCallback!=null){
+				if (mStatusCallback != null) {
 					mStatusCallback.onStatus(CALLBACKFLAG.LOGIN_ING);
 				}
 				break;
 			case CALLBACKFLAG.LOGIN_SUCCESS:// 登陆成功
 				LogUtils.i(TAG, "登陆成功！！");
 				JNVPlayerUtil.JNV_N_GetDevList(Constants.DEVICELIST_PASTH);// 获取设备列表
-				if(mStatusCallback!=null){
+				if (mStatusCallback != null) {
 					mStatusCallback.onStatus(CALLBACKFLAG.LOGIN_SUCCESS);
 				}
 				break;
@@ -172,37 +157,21 @@ public class LoginEventControl {
 				String str = switchFlag(msg.arg1);
 				LogUtils.i(TAG, "登陆失败!" + str);
 				JNVPlayerUtil.JNV_N_Logout();
-				if(mStatusCallback!=null){
+				if (mStatusCallback != null) {
 					mStatusCallback.onStatus(CALLBACKFLAG.LONGIN_FAILD);
 				}
 				break;
 			case CALLBACKFLAG.GET_EVENT_DEVLIST:// 获取设备列表
 				LogUtils.i(TAG, "GET_EVENT_DEVLIST:callback data:" + msg.arg1);
-				long currentTime = System.currentTimeMillis();
-				if(currentTime-lastParseTime<1500){
-					//1秒来2次设备信息
-					LogUtils.getInstance().localLog(TAG, "!!! GET_EVENT_DEVLIST AGAIN");
-					return;
-				}
 				if (1 == msg.arg1) {// 设备列表文件
-					File myFile = new File(Constants.DEVICELIST_PASTH);
-					try {
-						InputStream in = new FileInputStream(myFile);
-						PullParseXML.getSortBusDevices(in);
-					} catch (FileNotFoundException e) {
-						LogUtils.getInstance().localLog(TAG, "xml文件不存在!!",LogUtils.LOG_NAME);
-					} catch (XmlPullParserException e) {
-						LogUtils.getInstance().localLog(TAG, "xml文件解析异常!!",LogUtils.LOG_NAME);
-					} catch (IOException e) {
-						LogUtils.getInstance().localLog(TAG, "xml文件读取异常!!",LogUtils.LOG_NAME);
-					}
+					DeviceManager.getInstance().resetInfos();
 					// 设备列表解析后，申请其他信息
 					if (Constants.IS_CASCADE_SERVER) {
 						getFirstServerList();// 获取一张服务器列表
 					} else {
 						// JNVPlayerUtil.JNV_N_GetAlarmStart("");//获取报警信息
 						for (int i = 0; i < DeviceManager.getInstance().getSize(); i++) {
-							DeviceInfo info = DeviceManager.getInstance().getDeviceListAll().get(i);
+							DeviceInfo info = DeviceManager.getInstance().getAll().get(i);
 							if (!info.issDeviceGroup()) {
 								String guid = info.getGuId();
 								int ret = JNVPlayerUtil.JNV_N_GetAlarmStart(guid);// 获取报警信息
@@ -226,11 +195,11 @@ public class LoginEventControl {
 						InputStream in = new FileInputStream(myFile);
 						addServerTable(PullParseXML.getServerList(in));
 					} catch (FileNotFoundException e) {
-						LogUtils.getInstance().localLog(TAG, "servicexml文件不存在!!",LogUtils.LOG_NAME);
+						LogUtils.getInstance().localLog(TAG, "servicexml文件不存在!!", LogUtils.LOG_NAME);
 					} catch (XmlPullParserException e) {
-						LogUtils.getInstance().localLog(TAG, "servicexml文件解析异常!!" + e.getMessage(),LogUtils.LOG_NAME);
+						LogUtils.getInstance().localLog(TAG, "servicexml文件解析异常!!" + e.getMessage(), LogUtils.LOG_NAME);
 					} catch (IOException e) {
-						LogUtils.getInstance().localLog(TAG, "servicexml文件读取异常!!",LogUtils.LOG_NAME);
+						LogUtils.getInstance().localLog(TAG, "servicexml文件读取异常!!", LogUtils.LOG_NAME);
 					}
 
 					if (nGetServerIndex < 2) {
@@ -238,7 +207,7 @@ public class LoginEventControl {
 					} else {
 						upDataServerList();
 						for (int i = 0; i < DeviceManager.getInstance().getSize(); i++) {
-							DeviceInfo info = DeviceManager.getInstance().getDeviceListAll().get(i);
+							DeviceInfo info = DeviceManager.getInstance().getAll().get(i);
 							if (!info.issDeviceGroup()) {
 								// String guid = info.getGuId();
 								String guid = info.getNewGuId();
@@ -260,18 +229,7 @@ public class LoginEventControl {
 
 			case CALLBACKFLAG.GET_EVENT_RECLIST:// 获取录像列表
 				if (2 == msg.arg1) {// 录像查询文件
-					File recordFile = new File(Constants.DEVRECORD_PASTH);
-					try {
-						InputStream in = new FileInputStream(recordFile);
-						Constants.RECORD_LIST = PullParseXML.getDevRecords(in);
-						in.close();
-					} catch (FileNotFoundException e) {
-						LogUtils.getInstance().localLog(TAG, "xml文件不存在!!",LogUtils.LOG_NAME);
-					} catch (IOException e) {
-						LogUtils.getInstance().localLog(TAG, "xml文件读取异常!!",LogUtils.LOG_NAME);
-					} catch (XmlPullParserException e) {
-						LogUtils.getInstance().localLog(TAG, "xml文件解析异常!!",LogUtils.LOG_NAME);
-					}
+					RecordManager.getInstance(mContext).resetList();
 				}
 				mIntent.putExtra("eventType", msg.what);
 				// 发送广播
@@ -297,7 +255,7 @@ public class LoginEventControl {
 					String deviceID = jo.getString("devID");
 					int channelId = jo.getInt("alarmChn") + 1;
 					int alarmType = jo.getInt("alarmType");
-					
+
 					AlarmInfo alarmInfo = new AlarmInfo();
 					alarmInfo.setDeviceId(deviceID);
 					alarmInfo.setChannelId(channelId);
@@ -382,14 +340,14 @@ public class LoginEventControl {
 		List<ArrayList<ServerInfo>> tmpll = Constants.SERVICE_LIST;
 		if (Constants.IS_CASCADE_SERVER) {
 			if (tmpll.size() != Constants.SERVER_TYPES)
-				LogUtils.getInstance().localLog(TAG, "服务器列表出错！！",LogUtils.LOG_NAME);
+				LogUtils.getInstance().localLog(TAG, "服务器列表出错！！", LogUtils.LOG_NAME);
 			else {
 				for (i = 0; i < tmpll.size(); i++) {
 					ArrayList<ServerInfo> tmpl = tmpll.get(i);
 					for (j = 0; j < tmpl.size(); j++) {
 						ServerInfo tmp = tmpl.get(j);
 						LogUtils.getInstance().localLog(TAG, "服务器表：" + tmp.getServerID() + "," + tmp.getServerIp() + ","
-								+ tmp.getServerPort() + "," + i,LogUtils.LOG_NAME);
+								+ tmp.getServerPort() + "," + i, LogUtils.LOG_NAME);
 						int ret = JNVPlayerUtil.JNV_N_AddServerInfo(tmp.getServerID(), tmp.getServerIp(),
 								tmp.getServerPort(), i);
 						LogUtils.i(TAG, "加入服务器信息，返回：" + ret);
@@ -438,14 +396,14 @@ public class LoginEventControl {
 			}
 			break;
 		}
-		LogUtils.getInstance().localLog(TAG, "错误标志信息：" + ret,LogUtils.LOG_NAME);
+		LogUtils.getInstance().localLog(TAG, "错误标志信息：" + ret, LogUtils.LOG_NAME);
 		return ret;
 	}
 
 	private void addServerTable(ArrayList<ServerInfo> list) {
 		for (int i = 0; i < Constants.SERVICE_LIST.size(); i++) {
 			if (Constants.SERVICE_LIST.get(i).equals(list)) {
-				LogUtils.getInstance().localLog(TAG, "出现重复服务器列表！！",LogUtils.LOG_NAME);
+				LogUtils.getInstance().localLog(TAG, "Repeat Service List！！!", LogUtils.LOG_NAME);
 				return;
 			}
 		}
@@ -474,9 +432,8 @@ public class LoginEventControl {
 			nGetServerIndex++;
 			JNVPlayerUtil.JNV_N_GetServerList(Constants.SERVERLIST_PASTH[nGetServerIndex], nGetServerIndex);// 获取服务器列表（0
 		} else {
-			LogUtils.getInstance().localLog(TAG, "只有3张服务器列表，申请参数错误!!",LogUtils.LOG_NAME);
+			LogUtils.getInstance().localLog(TAG, "只有3张服务器列表，申请参数错误!!", LogUtils.LOG_NAME);
 		}
 	}
-	
-}
 
+}

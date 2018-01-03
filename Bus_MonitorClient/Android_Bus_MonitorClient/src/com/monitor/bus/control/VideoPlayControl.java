@@ -194,8 +194,6 @@ public  class VideoPlayControl {
 				return;
 			}
 			Constants.DERECTION_STATE = AVP_GetMirror();// 获取当前设备的镜像状态
-			Log.e(TAG, "打开流参数："+mDeviceInfo.getNewGuId()
-					+","+mDeviceInfo.getCurrentChn());
 			startStream(mDeviceInfo.getNewGuId(), mDeviceInfo.getCurrentChn());// 打开实时流
 		}
 	}
@@ -206,11 +204,13 @@ public  class VideoPlayControl {
 	 * 开始实时视频
 	 */
 	private void startStream(String deviceId,int deviceChn) {
+		LogUtils.getInstance().localLog(TAG, "startStream():"+mDeviceInfo.getNewGuId()
+		+","+mDeviceInfo.getCurrentChn());
 		Log.e(TAG, "Open Strean:" + deviceId+","+deviceChn);
 		startStreamId=JNVPlayerUtil.JNV_OpenStream(deviceId, deviceChn, 0, 0, this, "callbackSetStreamInfo", 0);
 //		System.out.println("openStreamId = " + startStreamId);
 		if(startStreamId<0){
-			Log.e(TAG, "++++++++++++打开流失败,失败返回值:"+ startStreamId);   
+			Log.e(TAG, "++++++++++++startStream FAIL code:"+ startStreamId);   
 		}
 		
 		//start_stream_flag = 1;

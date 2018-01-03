@@ -1,9 +1,11 @@
-package com.monitor.bus.bean;
+package com.monitor.bus.bean.manager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.monitor.bus.activity.R;
+import com.monitor.bus.bean.AlarmInfo;
+import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.utils.LogUtils;
 
 import android.content.Context;
@@ -15,8 +17,11 @@ public class AlarmManager {
 	private Context mContext;
 
 	private AlarmManager(Context context) {
-		mContext=context;
+		if(context!=null){
+			mContext=context;
+		}
 	}
+	private AlarmManager(){}
 
 	public synchronized static AlarmManager getInstance(Context context) {
 		if(context==null){
@@ -181,7 +186,7 @@ public class AlarmManager {
 					+ mContext.getString(R.string.device_online);
 			// BusDeviceInfo busInfo = new BusDeviceInfo();
 
-			for (DeviceInfo busInfo : DeviceManager.getInstance().getDeviceListAll()) {
+			for (DeviceInfo busInfo : DeviceManager.getInstance().getAll()) {
 				if (devId.equals(busInfo.getGuId())) {
 					busInfo.setOnLine(1);
 				}
@@ -191,7 +196,7 @@ public class AlarmManager {
 
 			alarmInfo = deviceNmae + devList + exists
 					+ mContext.getString(R.string.device_offline);
-			for (DeviceInfo busInfo : DeviceManager.getInstance().getDeviceListAll()) {
+			for (DeviceInfo busInfo : DeviceManager.getInstance().getAll()) {
 				if (devId.equals(busInfo.getGuId())) {
 					busInfo.setOnLine(0);
 				}

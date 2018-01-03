@@ -61,6 +61,12 @@ public class MyEditText extends LinearLayout {
 	/**
 	 * 设置密码输入格式
 	 */
+	public void setEditTextType() {
+		edit_input.setInputType(InputType.TYPE_CLASS_TEXT);
+	}
+	/**
+	 * 设置密码输入格式
+	 */
 	public void setEditPasswordType() {
 		edit_input.setInputType(InputType.TYPE_CLASS_TEXT
 				| InputType.TYPE_TEXT_VARIATION_PASSWORD);
