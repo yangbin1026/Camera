@@ -1,6 +1,5 @@
 package com.monitor.bus.activity.fragment;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -222,7 +221,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 		if(chooseChannelDialog==null){
 			
 			MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
-			chooseChannelDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
+			chooseChannelDialog = builder.setData(mlist).setSelection(1).setTitle(getContext().getString(R.string.cancel))
 					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
 						@Override
 						public void onDataSelected(String itemValue, int position) {
@@ -356,7 +355,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 		case R.id.rl_3:// 通道
 			List<String> channel = new ArrayList<String>();
 			for(int i=1; i<6;i++){
-				channel.add(getContext().getString(R.string.localvideo)+i);
+				channel.add(getContext().getString(R.string.channel)+i);
 			}
 			showChannelDialog(channel);
 			break;

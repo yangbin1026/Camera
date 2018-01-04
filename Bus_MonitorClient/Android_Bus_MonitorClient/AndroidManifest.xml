@@ -80,7 +80,6 @@
 
         <activity
             android:name=".LoginActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -131,7 +130,7 @@
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" />
-        <service android:name="com.monitor.bus.service.CpuService" />
+        <service android:name="com.monitor.bus.service.MonitorService" />
     </application>
 
 </manifest>

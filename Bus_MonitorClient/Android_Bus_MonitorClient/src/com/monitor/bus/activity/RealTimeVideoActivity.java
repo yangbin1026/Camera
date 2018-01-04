@@ -2,9 +2,12 @@ package com.monitor.bus.activity;
 
 import java.io.File;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -37,6 +40,7 @@ import com.monitor.bus.control.VideoPlayControl;
 import com.monitor.bus.database.DatabaseHelper;
 import com.monitor.bus.view.MyVideoView;
 import com.monitor.bus.view.dialog.DateUtil;
+import com.monitor.bus.view.dialog.MyDataPickerDialog;
 
 /**
  * 实时视频Activity
@@ -55,6 +59,9 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 	private TextView tv_tilte;// 标题名称
 	private Button bt_setting;
 	private ImageButton ib_record, ib_takePhoto, ib_voice, ib_mic;
+	private Dialog chooseChannelDialog;
+	private LinearLayout ll_control;
+	private RelativeLayout rl_map,rl_video;
 
 	private Intent intent;
 	private VideoPlayControl playControl;
@@ -167,6 +174,24 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 
 	}
 
+	private void initView() {
+		myVideoView = (MyVideoView) findViewById(R.id.myVideoView);
+		myVideoView.setOnTouchListener(this);
+		
+		rl_map=(RelativeLayout) findViewById(R.id.rl_map);
+		
+		ib_record = (ImageButton) findViewById(R.id.ib_record);
+		ib_takePhoto = (ImageButton) findViewById(R.id.ib_takephoto);
+		ib_voice = (ImageButton) findViewById(R.id.ib_voice);
+		ib_mic = (ImageButton) findViewById(R.id.ib_mic);
+		
+		ib_record.setOnClickListener(this);
+		ib_takePhoto.setOnClickListener(this);
+		ib_voice.setOnClickListener(this);
+		ib_mic.setOnClickListener(this);
+
+	}
+
 	private void initData() {
 		intent = this.getIntent();
 		deviceInfo = (DeviceInfo) intent.getSerializableExtra(KEY_DEVICE_INFO);
@@ -174,33 +199,32 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			MUtils.toast(this, "设备为空");
 			return;
 		}
-		int showMode=SPUtils.getInt(mContext, SPUtils.KEY_REMEMBER_SHOWMODE, -1);
+		int showMode=SPUtils.getInt(mContext, SPUtils.KEY_REMEMBER_SHOWMODE, 2);
+		switch (showMode) {
+		case 0://视频
+			break;
+		case 1://地图
+			
+			break;
+		case 2:
+			
+			break;
+	
+		default:
+			break;
+		}
 		
 		titleString = deviceInfo.getDeviceName() + " - " + "channel_" + deviceInfo.getCurrentChn();
 		tv_tilte.setText(titleString);
-
+	
 		playControl = new VideoPlayControl(this, myVideoView);
-		playControl.initVideoPlay(intent, VideoPlayControl.STREAM_TYPE_REAL);// 初始化界面
+		playControl.initRealPlay(deviceInfo);;// 初始化界面
 		if (isGoogleMap) {
 			mMapManager = new GoogleMapManager(this);
 		} else {
 			mMapManager = new BaiduMapManager(this);
 		}
 		mMapManager.setDeviceInfo(deviceInfo);
-	}
-
-	private void initView() {
-		myVideoView = (MyVideoView) findViewById(R.id.myVideoView);
-		myVideoView.setOnTouchListener(this);
-		ib_record = (ImageButton) findViewById(R.id.ib_record);
-		ib_takePhoto = (ImageButton) findViewById(R.id.ib_takephoto);
-		ib_voice = (ImageButton) findViewById(R.id.ib_voice);
-		ib_mic = (ImageButton) findViewById(R.id.ib_mic);
-		ib_record.setOnClickListener(this);
-		ib_takePhoto.setOnClickListener(this);
-		ib_voice.setOnClickListener(this);
-		ib_mic.setOnClickListener(this);
-
 	}
 
 	private void startRecord() {
@@ -289,6 +313,31 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			Constants.FLAG_FULLSCREEN = 0;
 		}
 	}
+	
+	private void showChannelDialog(List<String> mlist) {
+		if(chooseChannelDialog==null){
+			
+			MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(mContext);
+			chooseChannelDialog = builder.setData(mlist).setSelection(1).setTitle(mContext.getString(R.string.cancel))
+					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
+						@Override
+						public void onDataSelected(String itemValue, int position) {
+							Log.i(TAG, "selectchannel:" + itemValue + "  position:" + position);
+							deviceInfo.setCurrentChn(position+1);
+							titleString = deviceInfo.getDeviceName() + " - " + "channel_" + deviceInfo.getCurrentChn();
+							tv_tilte.setText(titleString);
+							playControl.initRealPlay(deviceInfo);
+						}
+						
+						@Override
+						public void onCancel() {
+							
+						}
+					}).create();
+		}
+
+		chooseChannelDialog.show();
+	}
 
 	// private class MySimpleGesture extends SimpleOnGestureListener {
 	//
@@ -347,15 +396,15 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			// 监听
 			if (myVideoView.isNormalPlay()) {// 正常播放
 				if (Constants.ISOPEN_AUDIO) {// 监听已开启
-					Constants.ISOPEN_AUDIO = false;
 					// 停止监听
 					playControl.track.stop();// 停止音频
+					ib_voice.setImageDrawable(getResources().getDrawable(R.drawable.voice_off));
 				} else {// 监听已关闭
-					// 重新设置按下时的背景图片
-					Constants.ISOPEN_AUDIO = true;
 					// 开始监听
 					playControl.track.play();// 启动本地音频读取
+					ib_voice.setImageDrawable(getResources().getDrawable(R.drawable.voice_on));
 				}
+				Constants.ISOPEN_AUDIO = !Constants.ISOPEN_AUDIO;
 			}
 			break;
 		case R.id.ib_mic:
@@ -366,13 +415,15 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 					// 停止对讲
 					playControl.closeTalk();
 					playControl.audioRecord.stop();
+					ib_mic.setImageDrawable(getResources().getDrawable(R.drawable.mic_on));
+					
 				} else {// 对讲已关闭
-
 					// 重新设置按下时的背景图片
 					Constants.ISOPEN_TALK = true;
 					// 打开对讲
 					playControl.audioRecord.startRecording();// 开启录音
 					playControl.openTalk();// 打开对讲
+					ib_mic.setImageDrawable(getResources().getDrawable(R.drawable.mic_off));
 				}
 			}
 			break;
@@ -396,7 +447,11 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			break;
 		case R.id.bt_setting:
 			// 通道按钮
-
+			List<String> channel = new ArrayList<String>();
+			for(int i=1; i<6;i++){
+				channel.add(mContext.getString(R.string.channel)+i);
+			}
+			showChannelDialog(channel);
 			break;
 		default:
 			break;

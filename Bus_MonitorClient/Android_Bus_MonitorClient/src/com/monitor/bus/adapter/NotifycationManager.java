@@ -52,8 +52,8 @@ public class NotifycationManager {
         // 设置通知的事件消息
         CharSequence contentTitle = currentContext.getString(R.string.product_name); // 通知栏标题
         notificationIntent = new Intent(currentContext,HomeActivity.class);
-        notificationIntent.setAction(Intent.ACTION_MAIN);
-        notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+//        notificationIntent.setAction(Intent.ACTION_MAIN);
+//        notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         
         PendingIntent contentIntent = PendingIntent.getActivity(
         		currentContext, 0, notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT);

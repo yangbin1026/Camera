@@ -92,7 +92,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 		sb_autologin.setChecked(autoLogin);
 		sb_gps.setChecked(gps);
 		sb_local.setChecked(local);
-		int mode = SPUtils.getInt(getContext(), SPUtils.KEY_REMEMBER_SHOWMODE, -1);
+		int mode = SPUtils.getInt(getContext(), SPUtils.KEY_REMEMBER_SHOWMODE, 2);
 		switch (mode) {
 		case 0:
 			tv_showmode.setText("显示视频");

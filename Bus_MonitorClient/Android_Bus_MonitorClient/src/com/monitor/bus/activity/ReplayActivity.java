@@ -48,7 +48,7 @@ public class ReplayActivity extends BaseActivity implements OnTouchListener{
 		extra_recordInfo = (RecordInfo) intent.getSerializableExtra(EXTRA_RECORDINFO);// 回放的文件名称
 		myVideoView=(MyVideoView)findViewById(R.id.myVideoView);
 		playControl = new VideoPlayControl(this, myVideoView);
-		playControl.initVideoPlay(intent,VideoPlayControl.STREAM_TYPE_RECORD);//初始化界面
+		playControl.initLocalPlay(intent);//初始化界面
 		mGestureDetector = new GestureDetector(new MySimpleGesture());
 		myVideoView.setOnTouchListener(this);
 		myVideoView.setLongClickable(true);
