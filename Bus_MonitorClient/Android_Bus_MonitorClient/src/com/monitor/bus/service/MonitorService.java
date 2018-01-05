@@ -30,7 +30,6 @@ import com.monitor.bus.consts.Constants;
 import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.consts.Constants.LGOINFLAG;
 import com.monitor.bus.control.LoginEventControl;
-import com.monitor.bus.control.LoginEventControl.LoginStatusCallBack;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 
@@ -359,6 +358,7 @@ public class MonitorService extends Service{
 					}
 
 					if (4096 == alarmType || 8192 == alarmType) {
+						//上线下线
 						mIntent.putExtra("eventType", alarmType);
 						mIntent.putExtra("devID", deviceID);
 						// 发送广播

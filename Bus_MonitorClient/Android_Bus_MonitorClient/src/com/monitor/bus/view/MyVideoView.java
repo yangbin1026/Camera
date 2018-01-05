@@ -77,7 +77,7 @@ public class MyVideoView extends ImageView {
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-		LogUtils.i(TAG, "++++++++++++w:" + w + "++++++++h:" + h + "+++++++++oldw:" + oldw + "++++++++++oldh:" + oldh);
+		LogUtils.i(TAG,"onSizeChanged()W:" + w + " h:" + h + " oldw:" + oldw + " oldh:" + oldh);
 		getScaleSize(w, h);
 		super.onSizeChanged(w, h, oldw, oldh);
 	}
@@ -160,7 +160,7 @@ public class MyVideoView extends ImageView {
 			scaleHeight = viewHeight;
 			scaleWidth = (int) (scaleHeight * ImgRation);
 		}
-		LogUtils.i(TAG, "+++++++getScaleSize+++++++++scaleWidth:" + scaleWidth + "++++++++scaleHeight:" + scaleHeight);
+		LogUtils.i(TAG, "getScaleSize() scaleWidth:" + scaleWidth + " scaleHeight:" + scaleHeight);
 		displayWidth = scaleWidth;
 		displayHeight = scaleHeight;
 

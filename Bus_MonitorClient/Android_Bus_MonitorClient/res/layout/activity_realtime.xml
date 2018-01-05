@@ -59,7 +59,7 @@
     <RelativeLayout
         android:id="@+id/rl_map"
         android:layout_width="fill_parent"
-        android:layout_height="220dp"
+        android:layout_height="230dp"
         android:layout_above="@id/ll_control" >
 
         <com.baidu.mapapi.map.MapView

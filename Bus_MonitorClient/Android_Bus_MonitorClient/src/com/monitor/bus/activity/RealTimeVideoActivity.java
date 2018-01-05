@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.monitor.bus.bean.manager.BaiduMapManager;
@@ -73,6 +74,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 	Context mContext;
 
 	boolean isGoogleMap = false;
+	int showMode;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +82,6 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		setContentView(R.layout.activity_realtime);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
 		mContext=this;
-		isGoogleMap=SPUtils.getBoolean(mContext, SPUtils.KEY_REMEMBER_SELECTMAP, false);
 		initTitle();
 		initView();
 		initData();
@@ -90,6 +91,10 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 	@Override
 	protected void onResume() {
 		super.onResume();
+		if(showMode!=1){
+			playControl = new VideoPlayControl(this, myVideoView);
+			playControl.initRealPlay(deviceInfo);;// 初始化界面
+		}
 		mMapManager.onResum();
 	}
 
@@ -179,6 +184,8 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		myVideoView.setOnTouchListener(this);
 		
 		rl_map=(RelativeLayout) findViewById(R.id.rl_map);
+		rl_video=(RelativeLayout) findViewById(R.id.rl_video);
+		ll_control=(LinearLayout) findViewById(R.id.ll_control);
 		
 		ib_record = (ImageButton) findViewById(R.id.ib_record);
 		ib_takePhoto = (ImageButton) findViewById(R.id.ib_takephoto);
@@ -199,12 +206,17 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			MUtils.toast(this, "设备为空");
 			return;
 		}
-		int showMode=SPUtils.getInt(mContext, SPUtils.KEY_REMEMBER_SHOWMODE, 2);
+		showMode=SPUtils.getInt(mContext, SPUtils.KEY_REMEMBER_SHOWMODE, 2);
 		switch (showMode) {
 		case 0://视频
+			rl_map.setVisibility(View.GONE);
 			break;
 		case 1://地图
-			
+			rl_video.setVisibility(View.GONE);
+			ll_control.setVisibility(View.GONE);
+			RelativeLayout.LayoutParams params=(LayoutParams) rl_map.getLayoutParams();
+			params.height=LayoutParams.MATCH_PARENT;
+			rl_map.setLayoutParams(params);
 			break;
 		case 2:
 			
@@ -217,14 +229,19 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		titleString = deviceInfo.getDeviceName() + " - " + "channel_" + deviceInfo.getCurrentChn();
 		tv_tilte.setText(titleString);
 	
-		playControl = new VideoPlayControl(this, myVideoView);
-		playControl.initRealPlay(deviceInfo);;// 初始化界面
-		if (isGoogleMap) {
-			mMapManager = new GoogleMapManager(this);
-		} else {
-			mMapManager = new BaiduMapManager(this);
+		if(showMode!=1){
+			playControl = new VideoPlayControl(this, myVideoView);
+			playControl.initRealPlay(deviceInfo);;// 初始化界面
 		}
-		mMapManager.setDeviceInfo(deviceInfo);
+		if(showMode!=0){
+			isGoogleMap=SPUtils.getBoolean(mContext, SPUtils.KEY_REMEMBER_SELECTMAP, false);
+			if (isGoogleMap) {
+				mMapManager = new GoogleMapManager(this);
+			} else {
+				mMapManager = new BaiduMapManager(this);
+			}
+			mMapManager.setDeviceInfo(deviceInfo);
+		}
 	}
 
 	private void startRecord() {
