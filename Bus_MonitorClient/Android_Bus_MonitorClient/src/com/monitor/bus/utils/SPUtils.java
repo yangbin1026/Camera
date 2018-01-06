@@ -25,7 +25,7 @@ public class SPUtils {
 	public static final String KEY_GSP_CHECK = "key_gps_check";
 	public static final String KEY_LOCAL = "key_local";
 	public static final String KEY_REMEMBER_USERINFO = "remember_userinfo";
-	public static final String KEY_REMEMBER_SHOWMODE = "show_mode";
+	public static final String KEY_REMEMBER_SHOWMODE = "show_mode"; //0:视频 1：地图 2：视频地图
 	public static final String KEY_REMEMBER_SELECTMAP = "selectmap";
 
 	public static void saveString(Context context, String key, String value) {

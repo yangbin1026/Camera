@@ -49,6 +49,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 	private Context mContext;
 	private LoginInfo info;
 	private boolean isResume;
+	boolean autoLogin;
 	
 	LoginStatuListener loginListener;
 	MonitorService service;
@@ -110,7 +111,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 
 	private void initData() {
 		boolean savePwd = SPUtils.getBoolean(mContext, SPUtils.KEY_REMEMBER_USERINFO, true);
-		boolean autoLogin = SPUtils.getBoolean(mContext, SPUtils.KEY_AUTO_LOGIN, false);
+		autoLogin = SPUtils.getBoolean(mContext, SPUtils.KEY_AUTO_LOGIN, false);
 
 		if (savePwd) {
 			cb_remenber.setChecked(true);
@@ -134,13 +135,10 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		if (LogUtils.Debug) {
 			// et_userName.setEditText("hswl");
 			// et_password.setEditText("000000");
-			 et_userName.setEditText("123");
-			 et_password.setEditText("123");
+//			 et_userName.setEditText("123");
+//			 et_password.setEditText("123");
 			et_login_port.setEditText("6008");
 			et_login_address.setEditText("183.61.171.28");
-		}
-		if (autoLogin) {
-			login(info);
 		}
 	}
 
@@ -467,6 +465,9 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 			public void onServiceConnected(ComponentName arg0, IBinder arg1) {
 				service=((MyBinder)arg1).getService();
 				service.setLoginStatusListener(loginListener);
+				if (autoLogin) {
+					login(info);
+				}
 			}  
 	    };  
 	  

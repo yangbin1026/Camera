@@ -15,7 +15,6 @@ import com.baidu.mapapi.map.BaiduMap.OnMarkerClickListener;
 import com.baidu.mapapi.map.MarkerOptions.MarkerAnimateType;
 import com.baidu.mapapi.model.LatLng;
 import com.monitor.bus.activity.R;
-import com.monitor.bus.activity.RealTimeVideoActivity;
 import com.monitor.bus.bdmap.ErrorCodeReceiver;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.consts.Constants;
@@ -23,12 +22,8 @@ import com.monitor.bus.utils.MUtils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.nsd.NsdManager.RegistrationListener;
 import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
 
 public class BaiduMapManager extends BaseMapManager {
 	private Context mContext;

@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 public class CrashHandler implements UncaughtExceptionHandler {
 	
-	private static final String TAG = "CrashAppLog.class";
+	private static final String TAG = "CrashHandler";
 	
 	
 	 //限制文件数量
@@ -187,7 +187,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 			 */
 			printWriter.close();
 			String result = writer.toString();
-			Log.e(TAG, "ewsult:"+result);
+			Log.e(TAG, "exceptionWhite2File:"+result);
 			buffer.append("\nException:\n");
 			buffer.append(result);
 			String timeTemp = ""+System.currentTimeMillis();

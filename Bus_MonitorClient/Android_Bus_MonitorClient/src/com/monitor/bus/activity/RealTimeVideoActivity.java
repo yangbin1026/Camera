@@ -85,23 +85,29 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		initTitle();
 		initView();
 		initData();
-		mMapManager.onCreat();
+		if(mMapManager!=null){
+			mMapManager.onCreat();
+		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if(showMode!=1){
+		if(showMode ==0 || showMode==2){
 			playControl = new VideoPlayControl(this, myVideoView);
 			playControl.initRealPlay(deviceInfo);;// 初始化界面
 		}
-		mMapManager.onResum();
+		if(mMapManager!=null){
+			mMapManager.onResum();
+		}
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		mMapManager.onPause();
+		if(mMapManager!=null){
+			mMapManager.onPause();
+		}
 	}
 
 	@Override
@@ -110,28 +116,30 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			stopRecord();
 			isRecording = false;
 		}
-		if (Constants.ISOPEN_AUDIO) {// 停止监听
-			Constants.ISOPEN_AUDIO = false;
-			playControl.track.stop();// 停止音频
+		if(playControl!=null){
+			if (Constants.ISOPEN_AUDIO) {// 停止监听
+				Constants.ISOPEN_AUDIO = false;
+				playControl.track.stop();// 停止音频
+			}
+			if (playControl.track != null) {
+				playControl.track.release();
+				playControl.track = null;
+			}
+			
+			if (Constants.ISOPEN_TALK) {
+				Constants.ISOPEN_TALK = false;
+				playControl.closeTalk();
+				playControl.audioRecord.stop();
+				
+			}
+			if (playControl.audioRecord != null) {
+				playControl.audioRecord.release();
+				playControl.audioRecord = null;
+				
+			}
+			
+			playControl.stopStream();
 		}
-		if (playControl.track != null) {
-			playControl.track.release();
-			playControl.track = null;
-		}
-
-		if (Constants.ISOPEN_TALK) {
-			Constants.ISOPEN_TALK = false;
-			playControl.closeTalk();
-			playControl.audioRecord.stop();
-
-		}
-		if (playControl.audioRecord != null) {
-			playControl.audioRecord.release();
-			playControl.audioRecord = null;
-
-		}
-
-		playControl.stopStream();
 
 		myVideoView.is_drawblack = true;
 		myVideoView.isPlaying = false;
@@ -154,7 +162,9 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
                 		Uri.parse("file://" + Environment.getExternalStorageDirectory())));// 刷新相册环境
             }
 		}
-		mMapManager.onDestory();
+		if(mMapManager!=null){
+			mMapManager.onDestory();
+		}
 		super.onDestroy();
 	}
 
@@ -207,6 +217,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			return;
 		}
 		showMode=SPUtils.getInt(mContext, SPUtils.KEY_REMEMBER_SHOWMODE, 2);
+		LogUtils.d(TAG, "showMode="+showMode);
 		switch (showMode) {
 		case 0://视频
 			rl_map.setVisibility(View.GONE);
@@ -229,11 +240,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		titleString = deviceInfo.getDeviceName() + " - " + "channel_" + deviceInfo.getCurrentChn();
 		tv_tilte.setText(titleString);
 	
-		if(showMode!=1){
-			playControl = new VideoPlayControl(this, myVideoView);
-			playControl.initRealPlay(deviceInfo);;// 初始化界面
-		}
-		if(showMode!=0){
+		if(showMode ==1 || showMode==2){
 			isGoogleMap=SPUtils.getBoolean(mContext, SPUtils.KEY_REMEMBER_SELECTMAP, false);
 			if (isGoogleMap) {
 				mMapManager = new GoogleMapManager(this);
@@ -410,6 +417,9 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			ib_record.setImageResource(isRecording? R.drawable.record_off:R.drawable.record_on);
 			break;
 		case R.id.ib_voice:
+			if(playControl==null){
+				return;
+			}
 			// 监听
 			if (myVideoView.isNormalPlay()) {// 正常播放
 				if (Constants.ISOPEN_AUDIO) {// 监听已开启

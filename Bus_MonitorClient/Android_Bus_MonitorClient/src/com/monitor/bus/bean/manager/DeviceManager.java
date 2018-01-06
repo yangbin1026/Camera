@@ -18,6 +18,7 @@ import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.LogUtils;
 
+import android.util.Log;
 import android.util.Xml;
 
 
@@ -136,6 +137,7 @@ public class DeviceManager {
 								LogUtils.i("PullParseXML", "服务器为单服务器！！");
 								Constants.IS_CASCADE_SERVER = false;
 								/* jni */
+								Log.d(TAG, "JNV_N_SetConnectServerType:0");
 								JNVPlayerUtil.JNV_N_SetConnectServerType(0);
 							}
 							isCheck = true;

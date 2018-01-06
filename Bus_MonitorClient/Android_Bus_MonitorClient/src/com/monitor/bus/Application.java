@@ -2,6 +2,7 @@ package com.monitor.bus;
 
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
+import com.monitor.bus.bean.manager.DeviceManager;
 import com.monitor.bus.utils.CrashHandler;
 
 public class Application extends android.app.Application{
@@ -9,6 +10,7 @@ public class Application extends android.app.Application{
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		DeviceManager deviceManager=DeviceManager.getInstance();
 		CrashHandler.getInstance().init(this);
 		// 在使用 SDK 各组间之前初始化 context 信息，传入 ApplicationContext
         SDKInitializer.initialize(this);

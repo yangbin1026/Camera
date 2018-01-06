@@ -291,6 +291,8 @@
     <string name="test">Test</string>
     <string name="find_record">Serch Record</string>
     <string name="logining">Loging...</string>
+      <string name="check_google_map">Check GoogleMap is Usefull</string>
+    
 
     <string-array name="list_setting_showmode">
         <item>Show Video</item>
