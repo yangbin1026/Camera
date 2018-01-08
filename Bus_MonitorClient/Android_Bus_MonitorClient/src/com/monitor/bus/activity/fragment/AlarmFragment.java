@@ -46,6 +46,7 @@ import android.widget.Button;
  *
  */
 public class AlarmFragment extends BaseFragment implements View.OnClickListener {
+	private static final String TAG=AlarmManager.class.getSimpleName();
 	private ListView alarmListView;
 	private AlarmListAdapter mAlarmAdapter;
 
@@ -60,6 +61,7 @@ public class AlarmFragment extends BaseFragment implements View.OnClickListener 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		contentView = inflater.inflate(R.layout.fragment_alarm, container, false);
+		LogUtils.getInstance().localLog(TAG, "Context："+getContext());
 		alarmManger = AlarmManager.getInstance(getContext());
 		setTitle();
 		initData();

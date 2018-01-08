@@ -24,7 +24,7 @@ public class AlarmManager {
 	private AlarmManager(){}
 
 	public synchronized static AlarmManager getInstance(Context context) {
-		if(context==null){
+		if(context == null){
 			LogUtils.getInstance().localLog(TAG, "Context IS NULL!!!", LogUtils.LOG_NAME_ALARM);
 		}
 		if (manager == null) {
@@ -37,7 +37,7 @@ public class AlarmManager {
 		if (alarmList.size() >= 100) {// 获取的报警信息超过100条
 			alarmList.remove(0);
 		}
-		LogUtils.getInstance().localLog(TAG, "Context IS NULL!!!", LogUtils.LOG_NAME_ALARM);
+		LogUtils.getInstance().localLog(TAG, "addAlarmInfo:"+info.toString(), LogUtils.LOG_NAME_ALARM);
 		info.setAlarmString(getAlarmMessage(info.getDeviceId(), info.getChannelId(), info.getAlarmType()));
 		alarmList.add(info);
 	}

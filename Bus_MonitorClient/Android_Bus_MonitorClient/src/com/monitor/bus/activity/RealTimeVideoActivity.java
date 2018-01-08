@@ -22,6 +22,7 @@ import com.monitor.bus.utils.LogUtils;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -72,6 +73,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 	private String titleString;
 	BaseMapManager mMapManager;
 	Context mContext;
+	private Handler mHandler;
 
 	boolean isGoogleMap = false;
 	int showMode;
@@ -82,6 +84,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		setContentView(R.layout.activity_realtime);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 屏幕保持常亮
 		mContext=this;
+		mHandler =new Handler();
 		initTitle();
 		initView();
 		initData();
@@ -94,8 +97,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 	protected void onResume() {
 		super.onResume();
 		if(showMode ==0 || showMode==2){
-			playControl = new VideoPlayControl(this, myVideoView);
-			playControl.initRealPlay(deviceInfo);;// 初始化界面
+			startAll();
 		}
 		if(mMapManager!=null){
 			mMapManager.onResum();
@@ -112,39 +114,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 
 	@Override
 	protected void onStop() {
-		if (isRecording) {// 停止录像
-			stopRecord();
-			isRecording = false;
-		}
-		if(playControl!=null){
-			if (Constants.ISOPEN_AUDIO) {// 停止监听
-				Constants.ISOPEN_AUDIO = false;
-				playControl.track.stop();// 停止音频
-			}
-			if (playControl.track != null) {
-				playControl.track.release();
-				playControl.track = null;
-			}
-			
-			if (Constants.ISOPEN_TALK) {
-				Constants.ISOPEN_TALK = false;
-				playControl.closeTalk();
-				playControl.audioRecord.stop();
-				
-			}
-			if (playControl.audioRecord != null) {
-				playControl.audioRecord.release();
-				playControl.audioRecord = null;
-				
-			}
-			
-			playControl.stopStream();
-		}
-
-		myVideoView.is_drawblack = true;
-		myVideoView.isPlaying = false;
-		myVideoView.videoWidth = 0;
-		myVideoView.videoHeight = 0;
+		stopAll();
 		super.onStop();
 	}
 
@@ -252,6 +222,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 	}
 
 	private void startRecord() {
+		LogUtils.i(TAG, "-start record()");
 		if (!myVideoView.isNormalPlay()) {
 			return;
 		}
@@ -262,7 +233,6 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		}
 		recordFileName = MUtils.getCurrentDateTime(DateUtil.DB_FORMAT);
 		String path = recordFilePath + recordFileName + Constants.RECORD_FILE_FORMAT;
-		LogUtils.i(TAG, "-------------start record!");
 		int i = playControl.recordStart(path);
 		if (i == 0) {
 			MUtils.commonToast(this, R.string.record_fail);
@@ -304,6 +274,47 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		}
 		myVideoView.shoudDrawCircle = false;
 		recordTimer.cancel();
+	}
+	
+	private void startAll(){
+		playControl = new VideoPlayControl(this, myVideoView);
+		playControl.initRealPlay(deviceInfo);;// 初始化界面
+	}
+	
+	private void stopAll(){
+		if (isRecording) {// 停止录像
+			stopRecord();
+			isRecording = false;
+		}
+		if(playControl!=null){
+			if (Constants.ISOPEN_AUDIO) {// 停止监听
+				Constants.ISOPEN_AUDIO = false;
+				playControl.track.stop();// 停止音频
+			}
+			if (playControl.track != null) {
+				playControl.track.release();
+				playControl.track = null;
+			}
+			
+			if (Constants.ISOPEN_TALK) {
+				Constants.ISOPEN_TALK = false;
+				playControl.closeTalk();
+				playControl.audioRecord.stop();
+				
+			}
+			if (playControl.audioRecord != null) {
+				playControl.audioRecord.release();
+				playControl.audioRecord = null;
+				
+			}
+			
+			playControl.stopStream();
+		}
+
+		myVideoView.is_drawblack = true;
+		myVideoView.isPlaying = false;
+		myVideoView.videoWidth = 0;
+		myVideoView.videoHeight = 0;
 	}
 
 	/**
@@ -350,7 +361,12 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 							deviceInfo.setCurrentChn(position+1);
 							titleString = deviceInfo.getDeviceName() + " - " + "channel_" + deviceInfo.getCurrentChn();
 							tv_tilte.setText(titleString);
-							playControl.initRealPlay(deviceInfo);
+							stopAll();
+							mHandler.postDelayed(new Runnable() {
+								public void run() {
+									startAll();
+								}
+							}, 1000);
 						}
 						
 						@Override

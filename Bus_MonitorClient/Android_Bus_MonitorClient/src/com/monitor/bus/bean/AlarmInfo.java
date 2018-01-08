@@ -44,11 +44,10 @@ public class AlarmInfo {
 	public void setAlarmString(String expresion) {
 		this.alarmString = expresion;
 	}
-	
 	@Override
 	public String toString() {
-		return "AlarmInfo [guId=" + deviceId + ", currentChn=" + channelId
-				+ ", expresion=" + alarmString +"]";
+		return "AlarmInfo [deviceId=" + deviceId + ", channelId=" + channelId + ", alarmString=" + alarmString
+				+ ", alarmType=" + alarmType + ", deviceName=" + deviceName + "]";
 	}
 	
 }
