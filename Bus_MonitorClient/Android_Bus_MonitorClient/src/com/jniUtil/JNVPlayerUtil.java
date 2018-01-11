@@ -144,7 +144,7 @@ public class JNVPlayerUtil {
 
 	// 解码操作 begin
 	/**
-	 * 抓拍
+	 * 抓拍  Not used
 	 * @param lStream
 	 * @param filePath
 	 * @return
@@ -173,6 +173,9 @@ public class JNVPlayerUtil {
 	public static native int JNV_RecCloseFile(int lRecFile);				//关闭本地录像回放
 	public static native int JNV_RecPlayStart(int lRecFile);
 	public static native int JNV_RecPlayPause(int lRecFile);				//暂停本地录像
+	
+	
+	//not used
 	public static native int JNV_RecPlaySetSpeed(int lRecFile,int iSpeed);	//设置本地录像播放速度
 	public static native int JNV_RecPlayGetSpeed(int lRecFile);				//获取本地录像播放速度
 	public static native int JNV_RecPlayNextFrame(int lRecFile);			//下一帧播放

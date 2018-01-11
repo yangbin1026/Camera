@@ -14,12 +14,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.utils.SPUtils;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.LogUtils;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -30,6 +34,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -54,7 +59,6 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 
 	private String recordFilePath = null;// 当前录像文件存储路径
 	private String recordFileName = "";// 当前文件名称:当前时间
-	boolean isCapturePicture = false;// 是否有操作过抓拍
 	boolean isRecording = false;
 
 	private MyVideoView myVideoView;
@@ -64,6 +68,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 	private Dialog chooseChannelDialog;
 	private LinearLayout ll_control;
 	private RelativeLayout rl_map,rl_video;
+	private ImageView iv_capture;
 
 	private Intent intent;
 	private VideoPlayControl playControl;
@@ -120,18 +125,6 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 
 	@Override
 	protected void onDestroy() {
-		if (isCapturePicture) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {//如果是4.4及以上版本
-//                Intent mediaScanIntent = new Intent(
-//                        Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-//                Uri contentUri = Uri.fromFile(mPhotoFile); //out is your output file
-//                mediaScanIntent.setData(contentUri);
-//                this.sendBroadcast(mediaScanIntent);
-            } else {
-                sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
-                		Uri.parse("file://" + Environment.getExternalStorageDirectory())));// 刷新相册环境
-            }
-		}
 		if(mMapManager!=null){
 			mMapManager.onDestory();
 		}
@@ -171,6 +164,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		ib_takePhoto = (ImageButton) findViewById(R.id.ib_takephoto);
 		ib_voice = (ImageButton) findViewById(R.id.ib_voice);
 		ib_mic = (ImageButton) findViewById(R.id.ib_mic);
+		iv_capture=(ImageView)findViewById(R.id.iv_capture);
 		
 		ib_record.setOnClickListener(this);
 		ib_takePhoto.setOnClickListener(this);
@@ -315,6 +309,38 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		myVideoView.isPlaying = false;
 		myVideoView.videoWidth = 0;
 		myVideoView.videoHeight = 0;
+	}
+	
+	private void tackPhoto(final Bitmap mBitmap){
+		Log.i(TAG, "---------tackPhoto-----------");
+		if (mBitmap == null) {
+			Log.e(TAG, "tackPhoto failed:bitmap is NULL");
+			return;
+		}
+
+		iv_capture.setVisibility(View.VISIBLE);
+		iv_capture.setImageBitmap(mBitmap);
+		Animation mAlphaAnimation = AnimationUtils.loadAnimation(this, R.anim.screensort_animation);
+		mAlphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+			@Override
+			public void onAnimationStart(Animation animation) {
+				Log.d(TAG,"onAnimationStart()");
+			}
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				Log.d(TAG,"onAnimationEnd()");
+				iv_capture.setVisibility(View.GONE);
+				//mBitmap.recycle();
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+
+			}
+		});
+		iv_capture.setAnimation(mAlphaAnimation);
+		mAlphaAnimation.start();
 	}
 
 	/**
@@ -462,11 +488,12 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 					
 				} else {// 对讲已关闭
 					// 重新设置按下时的背景图片
-					Constants.ISOPEN_TALK = true;
-					// 打开对讲
-					playControl.audioRecord.startRecording();// 开启录音
-					playControl.openTalk();// 打开对讲
-					ib_mic.setImageDrawable(getResources().getDrawable(R.drawable.mic_off));
+					if(playControl!=null&&playControl.audioRecord!=null){
+						Constants.ISOPEN_TALK = true;
+						playControl.audioRecord.startRecording();// 开启录音
+						playControl.openTalk();// 打开对讲
+						ib_mic.setImageDrawable(getResources().getDrawable(R.drawable.mic_off));
+					}
 				}
 			}
 			break;
@@ -474,8 +501,8 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			if (!myVideoView.isNormalPlay()) {
 				return;
 			}
-			playControl.CapturePicture();
-			isCapturePicture = true;
+			Bitmap bitmap = playControl.CapturePicture();
+			tackPhoto(bitmap);
 			break;
 		case R.id.aboutLayoutId:
 			// 镜像

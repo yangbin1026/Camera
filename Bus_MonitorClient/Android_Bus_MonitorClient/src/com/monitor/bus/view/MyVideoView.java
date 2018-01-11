@@ -18,6 +18,7 @@ import android.widget.ImageView;
 
 import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.LogUtils;
+import com.monitor.bus.utils.MUtils;
 
 /**
  * 自定义视频回放窗口类
@@ -29,6 +30,7 @@ public class MyVideoView extends ImageView {
 	private Paint mPaint;// 画笔对象
 	public ByteBuffer buffer; // 内存数组包
 	
+	public byte[] picBytes;	
 	public Bitmap VideoBit; // 图像
 	private Bitmap bitmap;// 转换后的图像
 	
@@ -41,8 +43,10 @@ public class MyVideoView extends ImageView {
 
 	public int videoHeight; // 视频原高度
 	public int videoWidth;// 视频原宽度
+	
 	public int displayWidth; // 要显示的宽度
 	public int displayHeight; // 要显示的高度
+	int position=45;
 
 	public MyVideoView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -97,6 +101,10 @@ public class MyVideoView extends ImageView {
 			e.printStackTrace();
 		}
 	}
+	public void showBitmap(){
+		VideoBit.copyPixelsFromBuffer(buffer.position(0));
+		setImageBitmap(VideoBit);
+	}
 
 	public void drawStream(Canvas canvas) throws IOException {
 		if (isPlaying) {// 显示图像
@@ -113,6 +121,15 @@ public class MyVideoView extends ImageView {
 			if (is_drawblack == true) {
 				canvas.drawColor(Color.BLACK);// 将屏幕画黑
 			}
+			
+			if(position>=60){
+				LogUtils.d(TAG, "createFile()");
+				MUtils.saveBitmap(VideoBit);
+				position=0;
+			}else{
+				LogUtils.d(TAG, "not createFile()"+position);
+				position++;
+			}
 		}
 
 	}
@@ -125,20 +142,18 @@ public class MyVideoView extends ImageView {
 	 * @param currentFile
 	 *            保存的路径
 	 */
-	public boolean saveBitmap(File currentFile) {
+	public Bitmap saveBitmap(File currentFile) {
 		FileOutputStream out;
-		boolean temp = false;
 		try {
 			out = new FileOutputStream(currentFile);
 			if (bitmap.compress(Bitmap.CompressFormat.JPEG, 70, out)) {// 抓拍成功
-				temp = true;
 				out.flush();
 				out.close();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return temp;
+		return bitmap;
 	}
 
 	/**

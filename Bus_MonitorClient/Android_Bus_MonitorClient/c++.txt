@@ -1,0 +1,10 @@
+int–>%d
+long int–>%ld
+char–>%c
+float–>%f
+短整形(short)–>%hd
+double–>%lf
+十六进制输出–>%#x
+无符号(unsigned)–>%u
+字符串–>%s
+八进制–>%o

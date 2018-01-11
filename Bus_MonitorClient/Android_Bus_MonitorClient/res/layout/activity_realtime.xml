@@ -133,6 +133,11 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/select_right" />
         </RelativeLayout>
+        <ImageView 
+            android:id="@+id/iv_capture"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:scaleType="centerInside"/>
     </RelativeLayout>
 
 </RelativeLayout>

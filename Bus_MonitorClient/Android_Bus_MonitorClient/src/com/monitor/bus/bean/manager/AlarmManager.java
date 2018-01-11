@@ -38,8 +38,11 @@ public class AlarmManager {
 			alarmList.remove(0);
 		}
 		LogUtils.getInstance().localLog(TAG, "addAlarmInfo:"+info.toString(), LogUtils.LOG_NAME_ALARM);
-		info.setAlarmString(getAlarmMessage(info.getDeviceId(), info.getChannelId(), info.getAlarmType()));
-		alarmList.add(info);
+		String message=getAlarmMessage(info.getDeviceId(), info.getChannelId(), info.getAlarmType());
+		if(message !=null && !message.equals("")){
+			info.setAlarmString(message);
+			alarmList.add(info);
+		}
 	}
 
 

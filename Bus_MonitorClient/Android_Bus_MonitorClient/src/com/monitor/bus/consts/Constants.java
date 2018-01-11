@@ -21,7 +21,7 @@ public class Constants {
 	public static final String WHAT_LOGIN_EVENT_TYPE = "eventType";
 	public static final String DATABASE_NAME = "androidClient"; // 数据库名称
 	public static final int DATABASE_VERSION = 6; // 数据库版本
-	public static final int SCREEN_COUNT = 4; // 分屏数(so初始化)
+	public static final int SCREEN_COUNT = 4; // 分屏数(so初始化) 参数 最大连接数
 	public static final String SDCardRoot = Environment.getExternalStorageDirectory().getAbsolutePath()
 			+ File.separator;
 	public static final String RECORD_FILE_PATH = SDCardRoot + "busRecord/";

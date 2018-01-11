@@ -259,13 +259,12 @@ public class MonitorService extends Service{
 						getFirstServerList();// 获取一张服务器列表
 					} else {
 						// JNVPlayerUtil.JNV_N_GetAlarmStart("");//获取报警信息
-						for (int i = 0; i < DeviceManager.getInstance().getSize(); i++) {
-							DeviceInfo info = DeviceManager.getInstance().getAll().get(i);
-							if (!info.issDeviceGroup()) {
-								String guid = info.getGuId();
+						for (DeviceInfo info: DeviceManager.getInstance().getDeviceList()) {
+							String guid = info.getGuId();
+							if (!info.issDeviceGroup()&& guid!=null && !guid.isEmpty()) {
 								int ret = JNVPlayerUtil.JNV_N_GetAlarmStart(guid);// 获取报警信息
 								if (ret != 0) {
-									LogUtils.i(TAG, "申请获取报警信息出错" + info);
+									LogUtils.getInstance().localLog(TAG, "get AlarmInof Error" + info,LogUtils.LOG_NAME_ALARM);
 								}
 							}
 						}

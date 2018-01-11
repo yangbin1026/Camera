@@ -66,6 +66,7 @@ public class LogUtils {
 	}
 	
 	public void localLog(String tag,String log){
+		i(tag,log);
 		localLog(tag, log, LOG_NAME);
 	}
 
