@@ -1,7 +1,6 @@
 package com.monitor.bus.view;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -12,11 +11,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 
@@ -37,12 +34,13 @@ public class MyVideoView extends ImageView {
 	public int posWidth;// 当前视频显示的位置----距view的宽
 	public int posHeight;// 当前视频显示的位置---距view的高
 
+	public int videoHeight; // 视频原高度
+	public int videoWidth;// 视频原宽度
+
 	public boolean isPlaying = false; // 播放显示标志
 	public boolean is_drawblack = false;// 是否将画布画黑 true :画黑
 	public boolean shoudDrawCircle = false;// 是否画实心圆标志
 
-	public int videoHeight; // 视频原高度
-	public int videoWidth;// 视频原宽度
 	
 	public int displayWidth; // 要显示的宽度
 	public int displayHeight; // 要显示的高度
@@ -122,14 +120,14 @@ public class MyVideoView extends ImageView {
 				canvas.drawColor(Color.BLACK);// 将屏幕画黑
 			}
 			
-			if(position>=60){
-				LogUtils.d(TAG, "createFile()");
-				MUtils.saveBitmap(VideoBit);
-				position=0;
-			}else{
-				LogUtils.d(TAG, "not createFile()"+position);
-				position++;
-			}
+//			if(position>=60){
+//				LogUtils.d(TAG, "createFile()");
+//				MUtils.saveBitmap(VideoBit);
+//				position=0;
+//			}else{
+//				LogUtils.d(TAG, "not createFile()"+position);
+//				position++;
+//			}
 		}
 
 	}

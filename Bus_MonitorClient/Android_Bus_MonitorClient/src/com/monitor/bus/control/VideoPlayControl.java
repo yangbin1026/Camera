@@ -39,6 +39,7 @@ import com.monitor.bus.view.dialog.DateUtil;
 @SuppressLint("HandlerLeak")
 public class VideoPlayControl {
 	private static String TAG = "VideoPlayControl";
+	private static String CALLBACK_STREAM_INFO="callbackSetStreamInfo";
 	private Activity mContext;
 
 
@@ -93,7 +94,7 @@ public class VideoPlayControl {
 	 *            JNV_OpenStream或JNV_ReplayStart或JNV_RecOpenFile 函数中指定的用户参数;
 	 * @return
 	 */
-	public int callbackSetStreamInfo(int errorCode, byte[] lpBuf, int lSize, int lWidth, int lHeight, long lStamp,
+	public int callbackSetStreamInfo(int lStream, byte[] lpBuf, int lSize, int lWidth, int lHeight, long lStamp,
 			int lType, int lUserParam) {
 //				errorCode:
 //				JNETErrSuccess				= 0,			// 成功
@@ -104,21 +105,19 @@ public class VideoPlayControl {
 //				JNETErrNoMem				= -5,			// 内存不足
 //				JNETErrRecv					= -6,			// 接收错误
 //				JNETErrSend					= -7,			// 发送错误
-		LogUtils.getInstance().localLog(TAG, "callbackSetStreamInfo: errorCode:"+errorCode);
+		Log.e(TAG, "callbackSetStreamInfo()lWidth:" + lWidth + 
+				   " lHeight:" + lHeight + 
+				   " lStream:" + lStream+ 
+				   " lSize:" + lSize+ 
+			   	   " type:" + lType + 
+				   " userparam:" + lUserParam);
 		//视频type=8
 		if (lType == 8) {// 视频
 			if (videoView.videoWidth != lWidth || videoView.videoHeight != lHeight) {
-				Log.e(TAG, "callbackSetStreamInfo()lWidth:" + lWidth + 
-						   " lHeight:" + lHeight + 
-						   " lStream:" + errorCode+ 
-						   " lSize:" + lSize+ 
-					   	   " type:" + lType + 
-						   " userparam:" + lUserParam);
 				videoView.is_drawblack = false;
 				videoView.videoWidth = lWidth;
 				videoView.videoHeight = lHeight;
-				
-				videoView.picBytes=lpBuf;
+//				videoView.picBytes=lpBuf;
 				videoView.buffer = ByteBuffer.wrap(lpBuf);
 				videoView.VideoBit = Bitmap.createBitmap(videoView.videoWidth, videoView.videoHeight, Config.RGB_565);
 				videoView.getScaleSize(videoView.getMeasuredWidth(), videoView.getMeasuredHeight());
@@ -186,6 +185,7 @@ public class VideoPlayControl {
 	};
 
 	public void initRealPlay(DeviceInfo deviceInfo) {
+		Log.e(TAG, "initRealPlay()");
 		initAudio();
 		initSendTalk();// 初始化对讲
 		if (deviceInfo == null) {
@@ -201,26 +201,27 @@ public class VideoPlayControl {
 	 * 初始化
 	 */
 	public void initLocalPlay(Intent intent) {
+		Log.e(TAG, "initLocalPlay()");
 		initAudio();// 初始化音频
 		RecordInfo devRecordInfo = (RecordInfo) intent.getSerializableExtra(ReplayActivity.EXTRA_RECORDINFO);// 回放的文件名称
 		if (null != devRecordInfo) {// 设备端播放
 
 			replayStreamId = JNVPlayerUtil.JNV_ReplayStart(devRecordInfo.getDeviceId(), 0, devRecordInfo.getChanneId(),
 					devRecordInfo.getStartTime(), devRecordInfo.getEndTime(), 0, devRecordInfo.getRecType(), 0, this,
-					"callbackSetStreamInfo", 0);
+					CALLBACK_STREAM_INFO, 0);
 
 		} else {// 本地回放 deviceInfo==null
 			String filePath = intent.getStringExtra(ReplayActivity.EXTRA_FIELPATH);// 回放的文件名称
 			// String filePath = Constants.SDCardRoot+"20130608_111847.jnv";//
 			// 回放的文件名称
 			String record_id = intent.getStringExtra(ReplayActivity.EXTRA_ID);// 回放文件的id
-			Log.e(TAG, "++++++本地回放+++++文件路径:" + filePath + "++++++++录像ID:" + record_id);
+			Log.e(TAG, " filepath:" + filePath + "recordid:" + record_id);
 			File mFile = new File(filePath);
 			if (!mFile.exists()) {// 文件不存在，删除数据库的信息
 				MUtils.commonToast(mContext, R.string.not_findfile);
 				db.deleteRecordInfo(record_id);
 			}
-			recStreamId = JNVPlayerUtil.JNV_RecOpenFile(filePath, this, "callbackSetStreamInfo", "callbackPlayInfo", 0);
+			recStreamId = JNVPlayerUtil.JNV_RecOpenFile(filePath, this, CALLBACK_STREAM_INFO, "callbackPlayInfo", 0);
 		}
 	}
 
@@ -232,7 +233,7 @@ public class VideoPlayControl {
 	private void startStream(String deviceId, int deviceChn) {
 		LogUtils.getInstance().localLog(TAG, "startStream():" + deviceId + "," + deviceChn);
 		Log.e(TAG, "Open Strean:" + deviceId + "," + deviceChn);
-		startStreamId = JNVPlayerUtil.JNV_OpenStream(deviceId, deviceChn, 0, 0, this, "callbackSetStreamInfo", 0);
+		startStreamId = JNVPlayerUtil.JNV_OpenStream(deviceId, deviceChn, 0, 0, this, CALLBACK_STREAM_INFO, 0);
 		if (startStreamId < 0) {
 			LogUtils.getInstance().localLog(TAG, "++++++++++++startStream FAIL code:" + startStreamId);
 		}
@@ -467,7 +468,7 @@ public class VideoPlayControl {
 	private void initSendTalk() {
 		int min = AudioRecord.getMinBufferSize(Constants.AUDIO_RATE, AudioFormat.CHANNEL_CONFIGURATION_MONO,
 				AudioFormat.ENCODING_PCM_16BIT);
-		Log.e(TAG, "++++initSendTalk++++++++初始化录音" + min);
+		Log.e(TAG, "++++initSendTalk++++++++" + min);
 		audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, // the
 																		// recording
 																		// source
@@ -501,7 +502,7 @@ public class VideoPlayControl {
 		@Override
 		public void run() {
 
-			LogUtils.i(TAG, "+++++++++++++对讲线程ID：" + Thread.currentThread().getId() + "+++++++++name："
+			LogUtils.i(TAG, "+++++++++++++talkThreadID：" + Thread.currentThread().getId() + "+++++++++name："
 					+ Thread.currentThread().getName());
 			while (Constants.ISOPEN_TALK) {// 打开对讲成功
 				int size = readAudioRecord();

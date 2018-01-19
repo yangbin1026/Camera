@@ -116,8 +116,11 @@ public class LogUtils {
 		if (sdf == null) {
 			sdf = new SimpleDateFormat("yyyyMMdd-HH-mm-ss");
 		}
-		out.println(sdf.format(new Date(System.currentTimeMillis())) + ": " + tag + " " + log);
-		out.flush();
+		if(out!=null){
+			//bug:out为空
+			out.println(sdf.format(new Date(System.currentTimeMillis())) + ": " + tag + " " + log);
+			out.flush();
+		}
 	}
 
 }

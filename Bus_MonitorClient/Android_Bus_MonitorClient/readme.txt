@@ -26,6 +26,8 @@ jni解码回调在 jniUtils.cpp中CallIntMethod
 	不正常：01-09 15:01:32.671 26217 26547 D JNVStreamTcp.cpp: eNVStreamPayloadHeaderFrame:1280x720,rate=2097152,type=0x00000002
 解码后的数据：JNVPlayer.cpp:830
 
+解码代码：Decoder.cpp
+
 
 // 流类型
 typedef enum

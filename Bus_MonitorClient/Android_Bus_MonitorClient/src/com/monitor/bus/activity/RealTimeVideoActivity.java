@@ -271,6 +271,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 	}
 	
 	private void startAll(){
+		LogUtils.d(TAG,"startAll()");
 		playControl = new VideoPlayControl(this, myVideoView);
 		playControl.initRealPlay(deviceInfo);;// 初始化界面
 	}
