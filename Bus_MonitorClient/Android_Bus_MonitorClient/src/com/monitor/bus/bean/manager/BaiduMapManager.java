@@ -14,10 +14,10 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.BaiduMap.OnMarkerClickListener;
 import com.baidu.mapapi.map.MarkerOptions.MarkerAnimateType;
 import com.baidu.mapapi.model.LatLng;
+import com.monitor.bus.Constants;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.bdmap.ErrorCodeReceiver;
 import com.monitor.bus.bean.DeviceInfo;
-import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.MUtils;
 
 import android.app.Activity;

@@ -14,8 +14,8 @@ import java.util.Map;
 import org.xmlpull.v1.XmlPullParser;
 
 import com.jniUtil.JNVPlayerUtil;
+import com.monitor.bus.Constants;
 import com.monitor.bus.bean.DeviceInfo;
-import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.LogUtils;
 
 import android.util.Log;

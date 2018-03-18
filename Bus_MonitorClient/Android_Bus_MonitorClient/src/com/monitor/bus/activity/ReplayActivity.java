@@ -15,9 +15,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.monitor.bus.Constants;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.bean.RecordInfo;
-import com.monitor.bus.consts.Constants;
 import com.monitor.bus.control.VideoPlayControl;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.view.MyVideoView;

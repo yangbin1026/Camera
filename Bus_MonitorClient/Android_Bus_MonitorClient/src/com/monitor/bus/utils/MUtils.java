@@ -26,11 +26,12 @@ import org.apache.http.params.HttpParams;
 import com.google.android.gms.maps.model.LatLng;
 import com.jniUtil.GpsCorrection;
 import com.jniUtil.GpsCorrection.LongitudeLatitude;
+import com.monitor.bus.Constants;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.bean.DeviceInfo;
-import com.monitor.bus.consts.Constants;
 import com.monitor.bus.view.dialog.DateUtil;
 
+import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -89,6 +90,9 @@ public class MUtils {
 
 	public static void toast(Context context, String msg) {
 		Toast.makeText(context, "" + msg, Toast.LENGTH_LONG).show();
+	}
+	public static void toast(Context context, int res) {
+		Toast.makeText(context, "" + context.getString(res), Toast.LENGTH_LONG).show();
 	}
 
 	/**

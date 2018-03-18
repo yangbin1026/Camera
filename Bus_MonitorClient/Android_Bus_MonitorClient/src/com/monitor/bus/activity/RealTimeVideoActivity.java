@@ -17,10 +17,10 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.monitor.bus.Constants;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.utils.SPUtils;
 import com.monitor.bus.bean.DeviceInfo;
-import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.LogUtils;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -146,7 +146,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		tv_tilte.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 		bt_setting = (Button) findViewById(R.id.bt_setting);
 		bt_setting.setBackgroundDrawable(null);
-		bt_setting.setText(R.string.channel);
+		bt_setting.setText(R.string.my_channel);
 		bt_setting.setVisibility(View.VISIBLE);
 		bt_setting.setOnClickListener(this);
 
@@ -205,7 +205,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 		tv_tilte.setText(titleString);
 	
 		if(showMode ==1 || showMode==2){
-			isGoogleMap=SPUtils.getBoolean(mContext, SPUtils.KEY_REMEMBER_SELECTMAP, false);
+			isGoogleMap=SPUtils.getBoolean(mContext, SPUtils.KEY_REMEMBER_ISGOOGLEMAP, false);
 			if (isGoogleMap) {
 				mMapManager = new GoogleMapManager(this);
 			} else {
@@ -386,7 +386,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 						public void onDataSelected(String itemValue, int position) {
 							Log.i(TAG, "selectchannel:" + itemValue + "  position:" + position);
 							deviceInfo.setCurrentChn(position+1);
-							titleString = deviceInfo.getDeviceName() + " - " + "channel_" + deviceInfo.getCurrentChn();
+							titleString = deviceInfo.getDeviceName() + " - " +mContext.getString(R.string.my_channel) +"_" + deviceInfo.getCurrentChn();
 							tv_tilte.setText(titleString);
 							stopAll();
 							mHandler.postDelayed(new Runnable() {
@@ -520,7 +520,7 @@ public class RealTimeVideoActivity extends FragmentActivity implements OnTouchLi
 			// 通道按钮
 			List<String> channel = new ArrayList<String>();
 			for(int i=1; i<6;i++){
-				channel.add(mContext.getString(R.string.channel)+i);
+				channel.add(mContext.getString(R.string.my_channel)+i);
 			}
 			showChannelDialog(channel);
 			break;

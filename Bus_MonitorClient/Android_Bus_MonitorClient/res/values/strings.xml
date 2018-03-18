@@ -1,17 +1,16 @@
 <resources>
 
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="app_name">Mobile Video Monitor Client</string>
     <string name="country">other</string>
-    <string name="timepicker_year">年</string>
-    <string name="timepicker_month">月</string>
-    <string name="timepicker_day">日</string>
-    <string name="timepicker_hour">时</string>
-    <string name="timepicker_min">分</string>
-    <string name="timepicker_title">选择时间</string>
-    <string name="timepicker_finish">确认</string>
-    <string name="timepicker_title_default">设置</string>
+    <string name="timepicker_year">yea</string>
+    <string name="timepicker_month">mon</string>
+    <string name="timepicker_day">day</string>
+    <string name="timepicker_hour">hou</string>
+    <string name="timepicker_min">min</string>
+    <string name="timepicker_title">select time</string>
+    <string name="timepicker_finish">OK</string>
+    <string name="timepicker_title_default">setting</string>
 
     <!-- 登陆 -->
     <string name="init_user">Please enter a username</string>
@@ -95,10 +94,7 @@
     <string name="devChnNumber">Channel</string>
     <string name="recordType">Record type</string>
 
-    <string-array name="recordTypeData">
-        <item>Ordinary record</item>
-        <item>Alarm record</item>
-    </string-array>
+   
 
     <string name="downLoad">Download</string>
     <string name="loadMessage">Sure you want to download the file to the local?</string>
@@ -145,15 +141,6 @@
     <string name="devOperate">Device Setting</string>
     <string name="repeat_device">Device Alreay Exists!</string>
 
-    <string-array name="jpf_streamTypes">
-        <item>First Stream</item>
-        <item>Second Stream</item>
-        <item>Third Stream</item>
-    </string-array>
-    <string-array name="jxj_streamTypes">
-        <item>First Stream</item>
-        <item>Second Stream</item>
-    </string-array>
     <!-- 云台 -->
     <string name="ptzUp">Up</string>
     <string name="ptzDown">Down</string>
@@ -172,7 +159,6 @@
     <string name="localFile">Local Video File</string>
     <!-- 关于 -->
     <string name="about">About</string>
-    <string name="version">Version: V3.0.2.12</string>
     <string name="product_name">Mobile Video Monitor</string>
 
     <!-- notification -->
@@ -273,6 +259,7 @@
 
     <!-- context -->
 
+
     <!-- 搜索页面 -->
     <string name="select_device">Select Device</string>
     <string name="file_local">Fiel Local</string>
@@ -291,17 +278,24 @@
     <string name="test">Test</string>
     <string name="find_record">Serch Record</string>
     <string name="logining">Loging...</string>
-      <string name="check_google_map">Check GoogleMap is Usefull</string>
+    <string name="check_google_map">Check GoogleMap is Usefull</string>
+
     
 
-    <string-array name="list_setting_showmode">
-        <item>Show Video</item>
-        <item>Show Map</item>
-        <item>Video And Map</item>
-    </string-array>
-     <string-array name="maps">
-        <item>BaiduMap</item>
-        <item>GoogleMap</item>
-    </string-array>
+    <string name="show_map">ShowMap</string>
+    <string name="show_video">ShowVideo</string>
+    <string name="show_mapvideo">Map and Video</string>
+    <string name="errorout">Error and Exit</string>
+    <string name="account">Account</string>
+    <string name="showmode">ShowMode</string>
+    <string name="choosemap">ChooseMap</string>
+    <string name="localanal">LocalAnalysis</string>
+    <string name="GPScheck">GPSCheck</string>
+    <string name="speedcompany">SpeedComPany</string>
+    <string name="version">Version</string>
+    <string name="map">Map</string>
+    <string name="username">UserName</string>
+    <string name="loginout">LoginOut</string>
+    <string name="my_channel">Channel</string>
 
 </resources>

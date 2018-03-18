@@ -16,12 +16,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.monitor.bus.Constants;
+import com.monitor.bus.Constants.CALLBACKFLAG;
 import com.monitor.bus.adapter.DevRecordListAdapter;
 import com.monitor.bus.bean.RecordDBInfo;
 import com.monitor.bus.bean.RecordInfo;
 import com.monitor.bus.bean.manager.RecordManager;
-import com.monitor.bus.consts.Constants;
-import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.database.DatabaseHelper;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;

@@ -21,8 +21,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.monitor.bus.Constants;
 import com.monitor.bus.utils.MUtils;
-import com.monitor.bus.consts.Constants;
 
 //SplashActivity
 public class SplashActivity extends Activity {

@@ -29,13 +29,13 @@
                 style="@style/setting_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="用户" />
+                android:text="@string/account" />
 
             <RelativeLayout style="@style/setting_item" >
 
                 <TextView
                     style="@style/setting_item_text"
-                    android:text="账号" />
+                    android:text="@string/username" />
 
                 <TextView
                     android:id="@+id/tv_username"
@@ -52,7 +52,7 @@
 
                 <TextView
                     style="@style/setting_item_text"
-                    android:text="自动登录" />
+                    android:text="@string/auto_Login" />
 
                 <com.monitor.bus.view.SwitchButton
                     android:id="@+id/sb_autologin"
@@ -68,7 +68,7 @@
                 style="@style/setting_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="设置" />
+                android:text="@string/setting" />
 
             <RelativeLayout 
                 android:id="@+id/rl_mode"
@@ -76,7 +76,7 @@
 
                 <TextView
                     style="@style/setting_item_text"
-                    android:text="显示模式" />
+                    android:text="@string/showmode" />
 
                 <ImageView
                     android:id="@+id/iv_mode"
@@ -91,7 +91,6 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="3dp"
                     android:layout_toLeftOf="@id/iv_mode"
-                    android:text="模式"
                     android:textSize="18dp" />
             </RelativeLayout>
             
@@ -101,7 +100,7 @@
 
                 <TextView
                     style="@style/setting_item_text"
-                    android:text="地图选择" />
+                    android:text="@string/choosemap" />
 
                 <ImageView
                     android:id="@+id/iv_map"
@@ -116,7 +115,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="3dp"
                     android:layout_toLeftOf="@id/iv_map"
-                    android:text="地图"
+                    android:text="@string/map"
                     android:textSize="18dp" />
             </RelativeLayout>
             
@@ -127,7 +126,7 @@
                     style="@style/setting_item_text"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="地理位置解析" />
+                    android:text="@string/localanal" />
 
                 <com.monitor.bus.view.SwitchButton
                     android:id="@+id/sb_localpaser"
@@ -143,7 +142,7 @@
 
                 <TextView
                     style="@style/setting_item_text"
-                    android:text="GPS矫正" />
+                    android:text="@string/GPScheck" />
 
                 <com.monitor.bus.view.SwitchButton
                     android:id="@+id/sb_gps"
@@ -159,14 +158,14 @@
 
                 <TextView
                     style="@style/setting_item_text"
-                    android:text="速度单位" />
+                    android:text="@string/speedcompany" />
             </RelativeLayout>
 
             <TextView
                 style="@style/setting_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="版本" />
+                android:text="@string/version" />
 
             <RelativeLayout style="@style/setting_item" >
 
@@ -187,7 +186,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_logout"
-                android:text="退出登录"
+                android:text="@string/loginout"
                 android:textColor="@color/white"
                 android:textSize="20dp" />
         </LinearLayout>

@@ -7,8 +7,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import org.xmlpull.v1.XmlPullParser;
+
+import com.monitor.bus.Constants;
 import com.monitor.bus.bean.RecordInfo;
-import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.LogUtils;
 
 import android.content.Context;

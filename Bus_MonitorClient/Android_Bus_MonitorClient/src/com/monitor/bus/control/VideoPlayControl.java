@@ -21,13 +21,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.jniUtil.JNVPlayerUtil;
+import com.monitor.bus.Constants;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.RealTimeVideoActivity;
 import com.monitor.bus.activity.ReplayActivity;
 import com.monitor.bus.bean.RecordInfo;
 import com.monitor.bus.bean.DeviceInfo;
-import com.monitor.bus.consts.Constants;
 import com.monitor.bus.database.DatabaseHelper;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.view.MyVideoView;

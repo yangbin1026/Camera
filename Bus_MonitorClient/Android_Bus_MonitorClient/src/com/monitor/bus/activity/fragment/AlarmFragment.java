@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.monitor.bus.Constants;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.RealTimeVideoActivity;
 import com.monitor.bus.adapter.AlarmListAdapter;
@@ -12,7 +13,6 @@ import com.monitor.bus.bean.AlarmInfo;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.manager.AlarmManager;
 import com.monitor.bus.bean.manager.DeviceManager;
-import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.view.dialog.MyDataPickerDialog;

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.monitor.bus.Constants;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 import com.jniUtil.JNVPlayerUtil;
@@ -14,7 +15,6 @@ import com.monitor.bus.activity.VideoListActivity;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.RecordInfo;
 import com.monitor.bus.bean.manager.DeviceManager;
-import com.monitor.bus.consts.Constants;
 import com.monitor.bus.view.dialog.DateUtil;
 import com.monitor.bus.view.dialog.MyDataPickerDialog;
 import com.monitor.bus.view.dialog.MyDatePickerDialog;
@@ -172,7 +172,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 		if(chooseDeviceDialog==null){
 			
 			MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
-			chooseDeviceDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
+			chooseDeviceDialog = builder.setData(mlist).setSelection(1).setTitle(getContext().getString(R.string.cancel))
 					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
 						@Override
 						public void onDataSelected(String itemValue, int position) {
@@ -198,7 +198,7 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 		if(chooseLocalDialog==null){
 			
 			MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
-			chooseLocalDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
+			chooseLocalDialog = builder.setData(mlist).setSelection(1).setTitle(getContext().getString(R.string.cancel))
 					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
 						@Override
 						public void onDataSelected(String itemValue, int position) {

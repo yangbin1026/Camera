@@ -27,15 +27,15 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.jniUtil.JNVPlayerUtil;
+import com.monitor.bus.Constants;
 import com.monitor.bus.utils.MUtils;
 import com.jniUtil.PullParseXML;
+import com.monitor.bus.Constants.CALLBACKFLAG;
+import com.monitor.bus.Constants.LGOINFLAG;
 import com.monitor.bus.activity.HomeActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.adapter.NotifycationManager;
 
-import com.monitor.bus.consts.Constants;
-import com.monitor.bus.consts.Constants.CALLBACKFLAG;
-import com.monitor.bus.consts.Constants.LGOINFLAG;
 import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.bean.AlarmInfo;

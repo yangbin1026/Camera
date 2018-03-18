@@ -11,8 +11,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.monitor.bus.Constants;
 import com.monitor.bus.utils.MUtils;
-import com.monitor.bus.consts.Constants;
 import com.monitor.bus.database.DatabaseHelper;
 
 /**

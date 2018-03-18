@@ -2,7 +2,7 @@ package com.monitor.bus.bean;
 
 import java.io.Serializable;
 
-import com.monitor.bus.consts.Constants;
+import com.monitor.bus.Constants;
 /**
  * 设备信息
  */

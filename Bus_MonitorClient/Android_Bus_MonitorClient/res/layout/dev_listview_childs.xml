@@ -10,7 +10,7 @@
     					android:layout_height="wrap_content" 
     					android:layout_marginLeft="65dp" 
     					android:layout_centerVertical="true"
-    					android:contentDescription="@string/hello_world"/>
+    					android:contentDescription="@string/app_name"/>
 
 <TextView
     android:id="@+id/textChild"

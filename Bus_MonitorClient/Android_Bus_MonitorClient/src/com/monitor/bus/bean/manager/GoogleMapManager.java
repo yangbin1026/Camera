@@ -38,13 +38,13 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.jniUtil.GpsCorrection;
 import com.jniUtil.JNVPlayerUtil;
+import com.monitor.bus.Constants;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.utils.SPUtils;
+import com.monitor.bus.Constants.CALLBACKFLAG;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.bdmap.GoogleCheckGPSAsyncTask;
 import com.monitor.bus.bean.DeviceInfo;
-import com.monitor.bus.consts.Constants;
-import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.utils.LogUtils;
 
 

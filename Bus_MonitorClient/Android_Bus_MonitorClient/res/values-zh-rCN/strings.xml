@@ -1,8 +1,17 @@
 <resources>
 
-    <string name="menu_settings">Settings</string>
+    <string name="menu_settings">设置</string>
     <string name="app_name">移动视频监控客户端</string>
     <string name="country">中国</string>
+    
+    <string name="timepicker_year">年</string>
+    <string name="timepicker_month">月</string>
+    <string name="timepicker_day">日</string>
+    <string name="timepicker_hour">小时</string>
+    <string name="timepicker_min">分钟</string>
+    <string name="timepicker_title">选择时间</string>
+    <string name="timepicker_finish">确定</string>
+    <string name="timepicker_title_default">设置</string>
 
     <!-- 登陆 -->
     <string name="init_user">请输入用户名</string>
@@ -128,15 +137,6 @@
     <string name="repeat_device">您添加的设备已存在！</string>
     <string name="devOperate">设备操作</string>
 
-    <string-array name="jpf_streamTypes">
-        <item>主码流</item>
-        <item>次码流 </item>
-        <item>三码流</item>
-    </string-array>
-    <string-array name="jxj_streamTypes">
-        <item>主码流</item>
-        <item>次码流</item>
-    </string-array>
 
     <!-- 云台 -->
     <string name="ptzUp">上</string>
@@ -251,9 +251,10 @@
     <string name="no_device">No USB camera found</string>
 
     <!-- 搜索页面 -->
+    <string name="channel">通道</string>
     <string name="select_device">选择设备</string>
     <string name="file_local">文件位置</string>
-    <string name="channel">通道</string>
+    
     <string name="video_type">录像类型</string>
     <string name="select_date">选择日期</string>
     <string name="start_time">开始时间</string>
@@ -274,14 +275,24 @@
     
     <string name="check_google_map">请检查您的手机是否支持谷歌地图</string>
 
-    <string-array name="list_setting_showmode">
-        <item>显示视频</item>
-        <item>显示地图</item>
-        <item>显示视频和地图</item>
-    </string-array>
-    <string-array name="maps">
-        <item>百度地图</item>
-        <item>谷歌地图</item>
-    </string-array>
+    
+    
+    <string name="errorout">异常退出</string>    
+    <string name="show_map">显示地图</string>    
+    <string name="show_video">显示视频</string>    
+    <string name="show_mapvideo">显示地图和视屏</string>    
+    <string name="account">账号</string>
+    <string name="showmode">显示模式</string>
+    <string name="choosemap">地图选择</string>
+    <string name="localanal">地理位置解析</string>
+    <string name="GPScheck">GPS校正</string>
+    <string name="speedcompany">速度单位</string>
+    <string name="version">版本</string>
+    <string name="map">地图</string>
+    <string name="username">用户名</string>
+    <string name="loginout">退出登录</string>
+    <string name="my_channel">通道</string>
+    
+    
 
 </resources>

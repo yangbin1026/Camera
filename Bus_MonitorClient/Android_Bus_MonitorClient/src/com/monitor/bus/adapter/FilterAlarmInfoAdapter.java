@@ -3,8 +3,8 @@ package com.monitor.bus.adapter;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.monitor.bus.Constants;
 import com.monitor.bus.activity.R;
-import com.monitor.bus.consts.Constants;
 import com.monitor.bus.control.LoginEventControl;
 
 import android.content.Context;

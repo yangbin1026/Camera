@@ -1,6 +1,7 @@
 ﻿package com.monitor.bus.activity;
 
 import java.net.InetAddress;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,6 +11,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
@@ -18,10 +21,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
+import com.monitor.bus.Constants;
 import com.monitor.bus.utils.MUtils;
+import com.monitor.bus.Constants.CALLBACKFLAG;
 import com.monitor.bus.bean.LoginInfo;
-import com.monitor.bus.consts.Constants;
-import com.monitor.bus.consts.Constants.CALLBACKFLAG;
 import com.monitor.bus.control.LoginEventControl;
 import com.monitor.bus.service.MonitorService;
 import com.monitor.bus.service.MonitorService.MyBinder;
@@ -69,6 +72,9 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		initView();
 		checkVersion();
 		initData();
+		Resources resource = getResources();  
+		Configuration config = resource.getConfiguration();
+		SPUtils.saveBoolean(this, SPUtils.KEY_REMEMBER_ISGOOGLEMAP, (!getResources().getConfiguration().locale.getCountry().equals("CN")));
 	}
 
 	@Override
@@ -125,6 +131,12 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 		et_password.setEditText(info.getPassWord());
 		et_login_address.setEditText(info.getIp());
 		et_login_port.setEditText("" + info.getPort());
+		if(info.getIp()==null|| info.getIp().isEmpty()){
+			et_login_address.setEditText("183.61.171.28");
+		}
+		if(info.getPort()==0){
+			et_login_port.setEditText("6008");
+		}
 
 		et_userName.setEditFocus();
 		et_userName.setEditTextType();
@@ -137,8 +149,8 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 			// et_password.setEditText("000000");
 //			 et_userName.setEditText("123");
 //			 et_password.setEditText("123");
-			et_login_port.setEditText("6008");
-			et_login_address.setEditText("183.61.171.28");
+//			et_login_port.setEditText("6008");
+//			et_login_address.setEditText("183.61.171.28");
 		}
 	}
 
@@ -419,7 +431,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 
 	private void checkVersion() {
 		String today = DateUtil.getTodayDateString(DateUtil.REPLAY_SHOW_FORMAT);
-		if (DateUtil.getTimeMails(today, DateUtil.REPLAY_SHOW_FORMAT) > DateUtil.getTimeMails("2018-04-01",
+		if (DateUtil.getTimeMails(today, DateUtil.REPLAY_SHOW_FORMAT) > DateUtil.getTimeMails("2018-09-01",
 				DateUtil.REPLAY_SHOW_FORMAT)) {
 			MUtils.toast(mContext, "请安装最新的版本");
 			finish();

@@ -9,8 +9,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.monitor.bus.Constants;
 import com.monitor.bus.adapter.NotifycationManager;
-import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.MUtils;
 
 /**

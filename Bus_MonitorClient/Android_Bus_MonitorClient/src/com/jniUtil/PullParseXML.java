@@ -14,11 +14,11 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.util.Log;
 import android.util.Xml;
 
+import com.monitor.bus.Constants;
 import com.monitor.bus.bean.RecordInfo;
 import com.monitor.bus.bean.DeviceInfo;
 import com.monitor.bus.bean.ServerInfo;
 import com.monitor.bus.bean.manager.DeviceManager;
-import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.LogUtils;
 
 /**

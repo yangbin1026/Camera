@@ -4,11 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.monitor.bus.Constants;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.activity.PhotoActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.adapter.FileListAdapter;
-import com.monitor.bus.consts.Constants;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

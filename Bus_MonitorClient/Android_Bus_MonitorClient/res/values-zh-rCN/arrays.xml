@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pnw_date_time_range">
+        <item>今天</item>
+        <item>明天</item>
+        <item>后天</item>
+    </string-array>
+    
+    <string-array name="maps">
+        <item>百度地图</item>
+        <item>谷歌地图</item>
+    </string-array>
+    
+     <string-array name="jpf_streamTypes">
+        <item>主码流</item>
+        <item>次码流 </item>
+        <item>三码流</item>
+    </string-array>
+    <string-array name="jxj_streamTypes">
+        <item>主码流</item>
+        <item>次码流</item>
+    </string-array>
+    
+    <string-array name="list_setting_showmode">
+        <item>显示视频</item>
+        <item>显示地图</item>
+        <item>显示视频和地图</item>
+    </string-array>
+    
+    <string-array name="alarms">
+     <item>超速</item>
+     <item>超速消警</item>
+     <item>输入触发</item>
+     <item>移动侦测</item>
+     <item>视频丢失</item>
+     <item>低速报警</item>
+     <item>低速消警</item>
+     <item>违规停车报警</item>
+     <item>违规停车消警</item>
+     <item>GPS存储磁盘空间不足</item>
+     <item>GPS存储停止存储</item>
+     <item>高速超速</item>
+     <item>高速超速消警</item>
+     <item>高速低速报警</item>
+     <item>高速低速消警</item>
+     <item>国道超速</item>
+     <item>国道低速</item>
+     <item>国道超速消警</item>
+     <item>国道低速消警</item>
+     <item>GPS模块异常</item>
+     <item>GSensor报警</item>
+     <item>存储介质1异常</item>
+     <item>存储介质2异常</item>
+     <item>系统异常</item>
+     <item>设备上线</item>
+     <item>设备离线</item>
+     <item>进入WIFI区域</item>
+     <item>离开WIFI区域</item>
+     <item>点火</item>
+     <item>熄火</item>
+     <item>前门打开</item>
+     <item>前门关闭</item>
+     <item>中门打开</item>
+     <item>中门关闭</item>
+     <item>后门打开</item>
+     <item>后门关闭</item>
+     <item>到站未停车</item>
+     <item>到站未开车门</item>
+     <item>车厢温度高</item>
+     <item>车厢温度低</item>
+     <item>开门行车</item>
+     <item>滞站告警</item>
+     <item>紧急加速</item>
+     <item>紧急刹车</item>
+     <item>紧急报警</item>
+     <item>偏离路线</item>
+     <item>票箱门报警</item>
+     <item>电子锁打开</item>
+     <item>电子锁关闭</item>
+     <item>电子锁异常</item>
+     <item>输入1触发</item>
+     <item>输入2触发</item>
+     <item>输入3触发</item>
+     <item>输入4触发</item>
+     <item>输入5触发</item>
+     <item>输入6触发</item>
+     <item>输入7触发</item>
+     <item>输入8触发</item>
+     <item>非法开关门</item>
+     <item>车辆载客超载</item>
+     <item>越界</item>
+     <item>越界消除</item>
+     <item>超时停车</item>
+     <item>超时停车消除</item>
+     <item>疲劳驾驶</item>
+     <item>疲劳驾驶消除</item>
+    </string-array>
+    
+    
+</resources>
+
+

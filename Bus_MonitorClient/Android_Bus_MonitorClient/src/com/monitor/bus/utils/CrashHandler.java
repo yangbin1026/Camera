@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.monitor.bus.activity.R;
+
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -127,9 +129,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					// TODO Auto-generated method stub
 					Looper.prepare();
-					Toast.makeText(context, "程序异常退出", Toast.LENGTH_SHORT).show();
+					MUtils.toast(context, R.string.errorout);
 					Looper.loop();
 				}
 			}).start();

@@ -6,6 +6,100 @@
         <item>后天</item>
     </string-array>
     
+     <string-array name="recordTypeData">
+        <item>Ordinary record</item>
+        <item>Alarm record</item>
+    </string-array>
+    
+     <string-array name="jpf_streamTypes">
+        <item>First Stream</item>
+        <item>Second Stream</item>
+        <item>Third Stream</item>
+    </string-array>
+    <string-array name="jxj_streamTypes">
+        <item>First Stream</item>
+        <item>Second Stream</item>
+    </string-array>
+    
+    <string-array name="list_setting_showmode">
+        <item>Show Video</item>
+        <item>Show Map</item>
+        <item>Video And Map</item>
+    </string-array>
+    <string-array name="maps">
+        <item>BaiduMap</item>
+        <item>GoogleMap</item>
+    </string-array>
+     <string-array name="alarms">
+        <item>overspeed</item>
+        <item>overspeed cancel-alarm</item>
+        <item>input-trigger</item>
+        <item>motion-detection</item>
+        <item>video-lose</item>
+        <item>low-speed alarm</item>
+        <item>low-speed cancel alarm</item>
+        <item>violation of parking alarm</item>
+        <item>violation parking cancel alarm</item>
+        <item>insufficient GPS-disk-space</item>
+        <item>cease of gps-save</item>
+        <item>overspeed on the freeway</item>
+        <item>overspeed on the freeway,alarm canceled</item>
+        <item>lowspeed on the freeway,alarm</item>
+        <item>lowspeed on the freeway,alarm canceled</item>
+        <item>overspeed on national road</item>
+        <item>lowspeed on national road</item>
+        <item>overspeed on national road,alarm canceled</item>
+        <item>lowspeed on national road,alarm canceled</item>
+        <item>abnormal gps module</item>
+        <item>gsensor alarm</item>
+        <item>first storage medium abnormity</item>
+        <item>second storage medium abnormity</item>
+        <item>system abnormity</item>
+        <item>online device</item>
+        <item>device off-line</item>
+        <item>enter into wifi region</item>
+        <item>leave wifi region</item>
+        <item>ignition</item>
+        <item>flameout</item>
+        <item>front door opens</item>
+        <item>front door closed</item>
+        <item>middle door opens</item>
+        <item>middle door closed</item>
+        <item>postern opens</item>
+        <item>postern closed</item>
+        <item>arrive at station but not park</item>
+        <item>arrive at station but not open the dorr</item>
+        <item>high temperature on the carriage</item>
+        <item>low temperature on the carriage</item>
+        <item>drive with door open</item>
+        <item>alarm when delay at station</item>
+        <item>exigency accelerate</item>
+        <item>exigency brake</item>
+        <item>exigency alarm</item>
+        <item>deviate route</item>
+        <item>ballot-box door alarm</item>
+        <item>electronic lock opens</item>
+        <item>electronic lock closed</item>
+        <item>electronic lock abnormity</item>
+        <item>input one trigger</item>
+        <item>input two trigger</item>
+        <item>input three trigger</item>
+        <item>input four trigger</item>
+        <item>input five trigger</item>
+        <item>input six trigger</item>
+        <item>input seven trigger</item>
+        <item>input eight trigger</item>
+        <item>close the door unlawfully</item>
+        <item>overload</item>
+        <item>beyond the mark</item>
+        <item>remove slop over</item>
+        <item>parking overtime</item>
+        <item>remove overtime-parking</item>
+        <item>fatigue driving</item>
+        <item>remove fatigue driving</item>
+    </string-array>
+    
+    
 </resources>
 
 

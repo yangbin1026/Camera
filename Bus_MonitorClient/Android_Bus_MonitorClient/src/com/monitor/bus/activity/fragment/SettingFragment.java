@@ -3,10 +3,10 @@ package com.monitor.bus.activity.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.monitor.bus.Constants;
 import com.monitor.bus.activity.LoginActivity;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.bean.LoginInfo;
-import com.monitor.bus.consts.Constants;
 import com.monitor.bus.utils.MUtils;
 import com.monitor.bus.utils.SPUtils;
 import com.monitor.bus.view.SwitchButton;
@@ -18,8 +18,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaRouter.UserRouteInfo;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,13 +93,13 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 		int mode = SPUtils.getInt(getContext(), SPUtils.KEY_REMEMBER_SHOWMODE, 2);
 		switch (mode) {
 		case 0:
-			tv_showmode.setText("显示视频");
+			tv_showmode.setText(getContext().getString(R.string.show_video));
 			break;
 		case 1:
-			tv_showmode.setText("显示地图");
+			tv_showmode.setText(getContext().getString(R.string.show_map));
 			break;
 		case 2:
-			tv_showmode.setText("显示视频和地图");
+			tv_showmode.setText(getContext().getString(R.string.show_mapvideo));
 			break;
 
 		default:
@@ -167,7 +165,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 		if (modeDialog == null) {
 
 			MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
-			modeDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
+			modeDialog = builder.setData(mlist).setSelection(1).setTitle(getContext().getString(R.string.cancel))
 					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
 						@Override
 						public void onDataSelected(String itemValue, int position) {
@@ -191,12 +189,12 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 	private void showMapsDialog(List<String> mlist) {
 		if (mapDialog == null) {
 			MyDataPickerDialog.Builder builder = new MyDataPickerDialog.Builder(getContext());
-			mapDialog = builder.setData(mlist).setSelection(1).setTitle("取消")
+			mapDialog = builder.setData(mlist).setSelection(1).setTitle(getContext().getString(R.string.cancel))
 					.setOnDataSelectedListener(new MyDataPickerDialog.OnDataSelectedListener() {
 						@Override
 						public void onDataSelected(String itemValue, int position) {
 							tv_map.setText(itemValue);
-							SPUtils.saveBoolean(getContext(), SPUtils.KEY_REMEMBER_SELECTMAP, position == 1);
+							SPUtils.saveBoolean(getContext(), SPUtils.KEY_REMEMBER_ISGOOGLEMAP, position == 1);
 						}
 
 						@Override
