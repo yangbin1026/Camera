@@ -33,60 +33,9 @@ public class SplashActivity extends Activity {
 	private int state;
 	private int alpha = 0;
 	ImageView imageView;
-	private SimpleDateFormat format;// 格式日期
-	private java.util.Date curDate;// 当前时间
-	private String deadline_time = "2019-12-31";// 截止日期
-	private String tip_time = "2019-12-24";// 提醒日期
-	private int result;//日期比较结果
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		result = -1;
-		try { 
-		format = new SimpleDateFormat("yyyy-MM-dd");
-		curDate = new java.util.Date(System.currentTimeMillis());
-		java.util.Date d = format.parse(deadline_time);// 截止日期
-		result = d.compareTo(curDate);// 截止日期	> 当前日期 
-		} 
-		catch (ParseException e) { 
-			// TODO
-			e.printStackTrace();
-		}
-		if (result < 0) {
-			String strMsg = getResources().getString(R.string.software_expired);;
-			AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-			dialog.setCancelable(false);
-			dialog.setTitle(R.string.warm_tip)
-					.setMessage(strMsg)
-					.setPositiveButton(R.string.btnSure,
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									// TODO Auto-generated method stub
-									finish();
-								}
-							}).create().show();
-			return;
-		}
-		else{
-			//日期提醒
-			int nTipResult = -1;
-			try { 
-			java.util.Date dd = format.parse(tip_time);	// 提醒日期
-			nTipResult = dd.compareTo(curDate);				// 提醒日期 	> 当前日期
-			}
-			catch (ParseException e) { 
-				// TODO
-				e.printStackTrace();
-			}
-			if (nTipResult < 0) {
-				//软件%s过期,请升级最新版本!
-				String strTip = String.format("%s %s %s",getResources().getString(R.string.software), deadline_time,getResources().getString(R.string.software_expired_tip));
-				Toast.makeText(this, strTip, Toast.LENGTH_LONG).show();
-			}
-		}
-		
 		// 设置无标题
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// 设置全屏

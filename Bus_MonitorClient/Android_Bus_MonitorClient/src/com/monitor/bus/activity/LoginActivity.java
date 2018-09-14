@@ -431,8 +431,9 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 
 	private void checkVersion() {
 		String today = DateUtil.getTodayDateString(DateUtil.REPLAY_SHOW_FORMAT);
-		if (DateUtil.getTimeMails(today, DateUtil.REPLAY_SHOW_FORMAT) > DateUtil.getTimeMails("2018-09-01",
-				DateUtil.REPLAY_SHOW_FORMAT)) {
+		//原本是18.9.1  发个包出来
+		if (DateUtil.getTimeMails(today, DateUtil.REPLAY_SHOW_FORMAT) > DateUtil.getTimeMails("2020-11-01",
+				DateUtil.REPLAY_SHOW_FORMAT)) { 
 			MUtils.toast(mContext, "请安装最新的版本");
 			finish();
 		}
