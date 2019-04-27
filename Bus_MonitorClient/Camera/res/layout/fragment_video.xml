@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center"
+    android:background="@color/white">
+
+    <include
+        android:id="@+id/titlelayout"
+        layout="@layout/title_themes"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_size"
+        android:layout_alignParentTop="true" />
+
+    <RelativeLayout
+        android:id="@+id/rl_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/titlelayout"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tv_all_device"
+            android:layout_width="75dp"
+            android:layout_height="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/bg_left_button"
+            android:focusable="true"
+            android:gravity="center"
+            android:nextFocusDown="@id/lv_devicelist"
+            android:text="@string/all"
+            android:textColor="@color/white"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tv_online_device"
+            android:layout_width="75dp"
+            android:layout_height="25dp"
+            android:layout_toRightOf="@id/tv_all_device"
+            android:background="@drawable/bg_right_button"
+            android:focusable="true"
+            android:gravity="center"
+            android:nextFocusDown="@id/lv_devicelist"
+            android:text="@string/online"
+            android:textColor="@color/white"
+            android:textSize="14dp" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lv_devicelist"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/rl_select"
+        android:focusable="false"
+        android:descendantFocusability="afterDescendants"
+        android:nextFocusUp="@id/tv_all_device" />
+
+</RelativeLayout>

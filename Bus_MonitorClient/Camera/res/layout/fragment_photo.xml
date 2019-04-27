@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white" >
+
+    <include
+        android:id="@+id/titlelayout"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/title_size"
+        android:layout_alignParentTop="true"
+        layout="@layout/title_themes" />
+
+    <RelativeLayout
+        android:id="@+id/rl_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_below="@+id/titlelayout" >
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="center|left"
+            android:paddingLeft="3dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/back_folder" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/fileList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/rl_back"
+        android:cacheColorHint="#00000000"
+        android:divider="@xml/listline_repeat"
+        android:dividerHeight="1dp"
+        android:longClickable="true"
+        android:paddingLeft="3dp" >
+    </ListView>
+
+</RelativeLayout>

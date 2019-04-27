@@ -1,0 +1,85 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loginLayoutId"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/login_bg" >
+
+    <LinearLayout
+        android:id="@+id/ll_editall"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <com.monitor.bus.view.MyEditText
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="true" />
+
+        <com.monitor.bus.view.MyEditText
+            android:id="@+id/login_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" />
+
+        <com.monitor.bus.view.MyEditText
+            android:id="@+id/login_port"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" />
+
+        <com.monitor.bus.view.MyEditText
+            android:id="@+id/login_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <CheckBox
+                android:id="@+id/remember"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/checkbox_bg1"
+                android:text="@string/remember_psw"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                android:textColor="#716b60" />
+
+            <CheckBox
+                android:id="@+id/cb_auto_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/checkbox_bg1"
+                android:text="@string/auto_Login"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                android:textColor="#716b60" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_editall"
+        android:layout_marginTop="25dp"
+        android:gravity="center_horizontal" >
+
+        <Button
+            android:id="@+id/login"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_login"
+            android:gravity="center"
+            android:onClick="loginClient"
+            android:paddingLeft="2dp"
+            android:text="@string/login"
+            android:textColor="@color/font_color" />
+    </LinearLayout>
+
+</RelativeLayout>

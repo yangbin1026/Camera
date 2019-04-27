@@ -1,0 +1,51 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "27.0.3"
+
+    defaultConfig {
+        minSdkVersion 19
+        versionCode 20
+        versionName "2.5.0"
+        //禁止Gradle检查图片的合法性
+        aaptOptions.cruncherEnabled = false
+        aaptOptions.useNewCruncher = false
+        ndk { abiFilters "armeabi", "armeabi-v7a", "x86", "mips" }
+    }
+    //debug:D3:B4:8B:30:F9:F5:15:BA:A2:96:D7:2B:50:CF:4F:CB:13:08:B5:70
+    //release:9F:8A:2A:ED:3B:4E:CD:D8:12:91:57:63:70:3E:D4:0D:00:B8:70:FD
+
+    signingConfigs {
+        release {
+            keyAlias 'camera'
+            keyPassword 'camera'
+            storeFile file('F:/workspace/Camera/mynewkey.jks')
+            storePassword 'camera'
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDir 'libs'
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+
+        instrumentTest.setRoot('tests')
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+    }
+
+
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+    compile project(':google-play-services_lib')
+}
