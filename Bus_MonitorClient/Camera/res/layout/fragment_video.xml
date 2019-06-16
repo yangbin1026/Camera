@@ -1,15 +1,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:focusable="false">
 
     <include
         android:id="@+id/titlelayout"
         layout="@layout/title_themes"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/title_size"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:focusable="false" />
 
     <RelativeLayout
         android:id="@+id/rl_select"
@@ -51,8 +54,5 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/rl_select"
-        android:focusable="false"
-        android:descendantFocusability="afterDescendants"
         android:nextFocusUp="@id/tv_all_device" />
-
 </RelativeLayout>

@@ -56,7 +56,6 @@ public class CrashHandler implements UncaughtExceptionHandler {
 	}
 	/**
 	 * 初始化
-	 * @param app
 	 */
 	public void init(Context context) {
 		try {
@@ -93,7 +92,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 			try {
 				Thread.sleep(2000);
 			} catch (Exception e) {
-				// TODO: handle exception
+				LogUtils.e(TAG,ex.getMessage());
 				e.printStackTrace();
 			}
 			

@@ -77,7 +77,6 @@ public class DeviceListAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_devicelist, null);
         }
-        ll_content = (LinearLayout) convertView.findViewById(R.id.ll_content);
         iv_icon = (ImageView) convertView.findViewById(R.id.iv_icon);
         tv_content = (TextView) convertView.findViewById(R.id.tv_content);
         DeviceInfo info = mList.get(position);
@@ -88,14 +87,6 @@ public class DeviceListAdapter extends BaseAdapter {
             tv_content.setText(info.getDeviceName());
         }
 
-        ll_content.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectListener != null) {
-                    selectListener.onItemSelect(position);
-                }
-            }
-        });
 
         return convertView;
     }

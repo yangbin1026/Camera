@@ -15,7 +15,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
 
 public class GpsToBaiduUtil {
 	// 百度地图经纬度接口转换

@@ -79,9 +79,7 @@ public class LogUtils {
 		currentLogFile = new File(logDir, fileName + ".log");
 		if(!currentLogFile.exists()){
 			e(TAG,"currentLogFile is NULL");
-			//yangbintest
 			return;
-
 //			try {
 //				currentLogFile.createNewFile();
 //			} catch (IOException e1) {

@@ -2,6 +2,7 @@ package com.monitor.bus.activity.fragment;
 
 import java.util.ArrayList;
 
+import com.monitor.bus.utils.LogUtils;
 import com.monitor.bus.view.dialog.ShapeLoadingDialog.ShapeLoadingDialog;
 import com.monitor.bus.activity.R;
 import com.monitor.bus.activity.RealTimeVideoActivity;
@@ -16,6 +17,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,6 +33,7 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
     ArrayList<DeviceInfo> deviceInfos;
     DeviceManager deviceManager;
     Handler mHandler = new Handler();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,14 +68,24 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
         tv_online = (TextView) view.findViewById(R.id.tv_online_device);
         tv_all.setOnClickListener(this);
         tv_online.setOnClickListener(this);
+        lv_device.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                LogUtils.d("yangbintest", "lv_device has Focus:" + hasFocus);
+
+                if (foucusListener != null && !hasFocus) {
+                    foucusListener.onFoucusChanged(v, hasFocus);
+                }
+            }
+        });
 
         mDeviceListAdapter = new DeviceListAdapter(getContext());
         lv_device.setAdapter(mDeviceListAdapter);
 
 
-        mDeviceListAdapter.setItemSelectListener(new DeviceListAdapter.ItemSelectListener() {
+        lv_device.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelect(int position) {
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 DeviceInfo info = mDeviceListAdapter.getDataByPosition(position);
                 if (info.issDeviceGroup()) {
                     // 组
@@ -85,7 +98,6 @@ public class DeviceListFragment extends BaseFragment implements View.OnClickList
                 }
             }
         });
-
     }
 
 

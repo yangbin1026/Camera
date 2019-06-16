@@ -5,206 +5,192 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="#ffffff"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <include
         android:id="@+id/include1"
+        layout="@layout/title_themes"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/title_size"
-        android:layout_alignParentTop="true"
-        layout="@layout/title_themes" />
+        android:layout_alignParentTop="true" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_my_gray" >
+        android:background="@color/bg_my_gray">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:background="@color/bg_my_gray"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                style="@style/setting_title"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/bg_my_gray"
-                android:orientation="vertical" >
+                android:text="@string/account" />
+
+            <RelativeLayout style="@style/setting_item_nofocus">
 
                 <TextView
-                    style="@style/setting_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/account" />
-
-                <RelativeLayout style="@style/setting_item" >
-
-                    <TextView
-                        style="@style/setting_item_text"
-                        android:text="@string/username" />
-
-                    <TextView
-                        android:id="@+id/tv_username"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="5dp"
-                        android:text="123"
-                        android:textSize="18dp" />
-                </RelativeLayout>
-
-                <RelativeLayout style="@style/setting_item" >
-
-                    <TextView
-                        style="@style/setting_item_text"
-                        android:text="@string/auto_Login" />
-
-                    <com.monitor.bus.view.SwitchButton
-                        android:id="@+id/sb_autologin"
-                        style="@style/SwitchButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        app:kswThumbMargin="-5dp" />
-                </RelativeLayout>
+                    style="@style/setting_item_text"
+                    android:text="@string/username" />
 
                 <TextView
-                    style="@style/setting_title"
+                    android:id="@+id/tv_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/setting" />
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:text="123"
+                    android:textSize="18dp" />
+            </RelativeLayout>
 
-                <RelativeLayout
-                    android:id="@+id/rl_mode"
-                    style="@style/setting_item" >
-
-                    <TextView
-                        style="@style/setting_item_text"
-                        android:text="@string/showmode" />
-
-                    <ImageView
-                        android:id="@+id/iv_mode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true" />
-
-                    <TextView
-                        android:id="@+id/tv_showmode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="3dp"
-                        android:layout_toLeftOf="@id/iv_mode"
-                        android:textSize="18dp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rl_map"
-                    style="@style/setting_item" >
-
-                    <TextView
-                        style="@style/setting_item_text"
-                        android:text="@string/choosemap" />
-
-                    <ImageView
-                        android:id="@+id/iv_map"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true" />
-
-                    <TextView
-                        android:id="@+id/tv_map"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="3dp"
-                        android:layout_toLeftOf="@id/iv_map"
-                        android:text="@string/map"
-                        android:textSize="18dp" />
-                </RelativeLayout>
-
-                <RelativeLayout style="@style/setting_item" >
-
-                    <TextView
-                        style="@style/setting_item_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/localanal" />
-
-                    <com.monitor.bus.view.SwitchButton
-                        android:id="@+id/sb_localpaser"
-                        style="@style/SwitchButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        app:kswThumbMargin="-5dp" />
-                </RelativeLayout>
-
-                <RelativeLayout style="@style/setting_item" >
-
-                    <TextView
-                        style="@style/setting_item_text"
-                        android:text="@string/GPScheck" />
-
-                    <com.monitor.bus.view.SwitchButton
-                        android:id="@+id/sb_gps"
-                        style="@style/SwitchButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        app:kswThumbMargin="-5dp" />
-                </RelativeLayout>
-
-                <RelativeLayout style="@style/setting_item" >
-
-                    <TextView
-                        style="@style/setting_item_text"
-                        android:text="@string/speedcompany" />
-                </RelativeLayout>
+            <RelativeLayout style="@style/setting_item">
 
                 <TextView
-                    style="@style/setting_title"
+                    style="@style/setting_item_text"
+                    android:text="@string/auto_Login" />
+
+                <com.monitor.bus.view.SwitchButton
+                    android:id="@+id/sb_autologin"
+                    style="@style/SwitchButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/version" />
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    app:kswThumbMargin="-5dp" />
+            </RelativeLayout>
 
-                <RelativeLayout style="@style/setting_item" >
+            <TextView
+                style="@style/setting_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting" />
 
-                    <TextView
-                        android:id="@+id/tv_version"
-                        style="@style/setting_item_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="1.0.0"
-                        android:textSize="18dp" />
-                </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_mode"
+                style="@style/setting_item">
 
-                <Button
-                    android:id="@+id/bt_logout"
-                    android:layout_width="280dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_logout"
-                    android:text="@string/loginout"
-                    android:textColor="@color/white"
-                    android:textSize="20dp" />
+                <TextView
+                    style="@style/setting_item_text"
+                    android:text="@string/showmode" />
 
-                <Button
-                    android:layout_width="280dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_logout"
-                    android:text="@string/loginout"
-                    android:textColor="@color/white"
-                    android:textSize="20dp"
-                    android:visibility="invisible" />
-            </LinearLayout>
-        </RelativeLayout>
+                <ImageView
+                    android:id="@+id/iv_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true" />
+
+                <TextView
+                    android:id="@+id/tv_showmode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="3dp"
+                    android:layout_toLeftOf="@id/iv_mode"
+                    android:textSize="18dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_map"
+                style="@style/setting_item">
+
+                <TextView
+                    style="@style/setting_item_text"
+                    android:text="@string/choosemap" />
+
+                <ImageView
+                    android:id="@+id/iv_map"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true" />
+
+                <TextView
+                    android:id="@+id/tv_map"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="3dp"
+                    android:layout_toLeftOf="@id/iv_map"
+                    android:text="@string/map"
+                    android:textSize="18dp" />
+            </RelativeLayout>
+
+            <RelativeLayout style="@style/setting_item">
+
+                <TextView
+                    style="@style/setting_item_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/localanal" />
+
+                <com.monitor.bus.view.SwitchButton
+                    android:id="@+id/sb_localpaser"
+                    style="@style/SwitchButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    app:kswThumbMargin="-5dp" />
+            </RelativeLayout>
+
+            <RelativeLayout style="@style/setting_item"
+                android:nextFocusDown="@id/bt_logout"
+                >
+
+                <TextView
+                    style="@style/setting_item_text"
+                    android:text="@string/GPScheck" />
+
+                <com.monitor.bus.view.SwitchButton
+                    android:id="@+id/sb_gps"
+                    style="@style/SwitchButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    app:kswThumbMargin="-5dp" />
+            </RelativeLayout>
+
+            <RelativeLayout style="@style/setting_item_nofocus">
+
+                <TextView
+                    style="@style/setting_item_text"
+                    android:text="@string/speedcompany" />
+            </RelativeLayout>
+
+            <TextView
+                style="@style/setting_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/version" />
+
+            <RelativeLayout style="@style/setting_item_nofocus">
+
+                <TextView
+                    android:id="@+id/tv_version"
+                    style="@style/setting_item_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="1.0.0"
+                    android:textSize="18dp" />
+            </RelativeLayout>
+
+            <Button
+                style="@style/focus_buttom"
+                android:id="@+id/bt_logout"
+                android:layout_width="280dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="@string/loginout"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
+        </LinearLayout>
     </ScrollView>
 
 </LinearLayout>

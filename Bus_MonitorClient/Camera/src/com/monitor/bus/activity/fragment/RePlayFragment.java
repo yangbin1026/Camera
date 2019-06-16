@@ -66,8 +66,6 @@ public class RePlayFragment extends BaseFragment implements View.OnClickListener
 		tv_select_time = (TextView) contentView.findViewById(R.id.tv_select_time);
 		tv_start_time = (TextView) contentView.findViewById(R.id.tv_start_time);
 		tv_end_time = (TextView) contentView.findViewById(R.id.tv_end_time);
-	
-			
 
 		rl_1 = (RelativeLayout) contentView.findViewById(R.id.rl_1);
 		rl_2 = (RelativeLayout) contentView.findViewById(R.id.rl_2);

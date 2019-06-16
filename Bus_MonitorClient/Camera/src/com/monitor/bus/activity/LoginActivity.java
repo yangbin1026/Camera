@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -47,10 +46,11 @@ import com.monitor.bus.view.dialog.ShapeLoadingDialog.ShapeLoadingDialog;
 public class LoginActivity extends Activity implements android.view.View.OnClickListener, OnCheckedChangeListener {
     private static String TAG = "LoginActivity";
 
-    private static final String FILTER_ACTION_LOGIN_INFO = "com.android.test";
+    private static final String FILTER_ACTION_LOGIN_INFO = "com.monitor.bus";
+    public static final String KEY_NAME = "userName";
+    public static final String KEY_PASSWORD = "userPwd";
 
-    public static final String KEY_NAME = "name";
-    public static final String KEY_PASSWORD = "password";
+    private static String END_TIME = "2020-03-12";
 
 
     private MyEditText et_userName;// 用户名
@@ -80,36 +80,37 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
         setContentView(R.layout.login);
         mContext = this;
 
-        Intent intent = new Intent(mContext, MonitorService.class);
-        startService(intent);
-        bindService(intent, conn, Context.BIND_AUTO_CREATE);
-
-
         initView();
+        startService();
         initData();
         registerReceiver();
+
+        getMyIntent();
+
+
         checkVersion();
         Resources resource = getResources();
         Configuration config = resource.getConfiguration();
         SPUtils.saveBoolean(this, SPUtils.KEY_REMEMBER_ISGOOGLEMAP, (!getResources().getConfiguration().locale.getCountry().equals("CN")));
     }
 
-    private void registerReceiver() {
-        try {
-            String ProcID = "79";
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-                ProcID = "42"; // ICS
-            // 需要root 权限
-            Process proc = Runtime.getRuntime().exec(new String[]{"su", "-c", "service call activity " + ProcID + " s16 com.android.systemui"}); // WAS
-            proc.waitFor();
-        } catch (Exception ex) {
-            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+    private void getMyIntent() {
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle == null) {
+            return;
         }
+        final String userName = bundle.getString(KEY_NAME);
+        final String passWord = bundle.getString(KEY_PASSWORD);
 
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(FILTER_ACTION_LOGIN_INFO);
-        registerReceiver(loginInfoReceiver, intentFilter);
-
+        et_userName.setEditText(userName);
+        et_password.setEditText(passWord);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                login(userName, passWord, et_login_address.getEditText(), Integer.parseInt(et_login_port.getEditText()));
+            }
+        }, 1000);
     }
 
     @Override
@@ -131,6 +132,30 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
         unbindService(conn);
         unregisterReceiver(loginInfoReceiver);
         super.onDestroy();
+    }
+
+    private void startService() {
+        Intent intent = new Intent(mContext, MonitorService.class);
+        startService(intent);
+        bindService(intent, conn, Context.BIND_AUTO_CREATE);
+    }
+
+    private void registerReceiver() {
+        try {
+            String ProcID = "79";
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+                ProcID = "42"; // ICS
+            // 需要root 权限
+//            Process proc = Runtime.getRuntime().exec(new String[]{"su", "-c", "service call activity " + ProcID + " s16 com.android.systemui"}); // WAS
+//            proc.waitFor();
+        } catch (Exception ex) {
+            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(FILTER_ACTION_LOGIN_INFO);
+        registerReceiver(loginInfoReceiver, intentFilter);
+
     }
 
     private void initView() {
@@ -209,8 +234,8 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
             // et_userName.setEditText("hswl");
             // et_password.setEditText("000000");
 //			 et_userName.setEditText("123");
-//			 et_password.setEditText("123");
-//			et_login_port.setEditText("6008");
+//			 et_password.setEditText("000000");
+//			et_login_port.setEditText("6008"
 //			et_login_address.setEditText("183.61.171.28");
         }
     }
@@ -347,7 +372,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 //					HttpEntity entity = response.getEntity();
 //					long length = entity.getContentLength();
 //					LogUtils.i("------------", "length : " + (int) length);
-//					InputStream is = entity.getContent();
+//					InputStream is = entity.getContent();o
 //					FileOutputStream fileOutputStream = null;
 //					if (is == null) {
 //						throw new RuntimeException("inputStream is null");
@@ -456,6 +481,12 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
     /**
      * 登录
      */
+
+    private void login(String name, String pwd, String ip, int port) {
+        info = new LoginInfo(name, port, pwd, ip);
+        login(info);
+    }
+
     private void login(LoginInfo info) {
         InetAddress iAdd;
         String ipAdd = null;
@@ -494,7 +525,7 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
     private void checkVersion() {
         String today = DateUtil.getTodayDateString(DateUtil.REPLAY_SHOW_FORMAT);
         //原本是18.9.1  发个包出来
-        if (DateUtil.getTimeMails(today, DateUtil.REPLAY_SHOW_FORMAT) > DateUtil.getTimeMails("2020-11-01",
+        if (DateUtil.getTimeMails(today, DateUtil.REPLAY_SHOW_FORMAT) > DateUtil.getTimeMails(END_TIME,
                 DateUtil.REPLAY_SHOW_FORMAT)) {
             MUtils.toast(mContext, "请安装最新的版本");
             finish();

@@ -24,9 +24,7 @@ public class BaseActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
 		myNotification = new NotifycationManager(this);
-		
 		super.onCreate(savedInstanceState);
 	}
 	
