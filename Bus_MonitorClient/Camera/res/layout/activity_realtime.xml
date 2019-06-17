@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@null"
+                style="@style/focus_item4paly"
                 android:scaleType="centerInside"
                 android:src="@drawable/record_on" />
 
@@ -33,7 +33,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@null"
+                style="@style/focus_item4paly"
+
                 android:scaleType="centerInside"
                 android:src="@drawable/camera" />
 
@@ -42,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@null"
+                style="@style/focus_item4paly"
                 android:scaleType="centerInside"
                 android:src="@drawable/voice_off" />
 
@@ -51,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@null"
+                style="@style/focus_item4paly"
                 android:scaleType="centerInside"
                 android:src="@drawable/mic_off" />
         </LinearLayout>

@@ -137,9 +137,9 @@
                     app:kswThumbMargin="-5dp" />
             </RelativeLayout>
 
-            <RelativeLayout style="@style/setting_item"
-                android:nextFocusDown="@id/bt_logout"
-                >
+            <RelativeLayout
+                style="@style/setting_item"
+                android:nextFocusDown="@id/bt_logout">
 
                 <TextView
                     style="@style/setting_item_text"
@@ -181,8 +181,8 @@
             </RelativeLayout>
 
             <Button
-                style="@style/focus_buttom"
                 android:id="@+id/bt_logout"
+                style="@style/focus_buttom"
                 android:layout_width="280dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_horizontal"

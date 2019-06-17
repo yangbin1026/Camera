@@ -92,10 +92,11 @@
         <item name="android:layout_marginTop">1dp</item>
     </style>
 
-    <style name="focus_item">
+    <style name="focus_item4paly">
         <item name="android:focusable">true</item>
-        <item name="android:background">@drawable/select_replay_4_item</item>
+        <item name="android:background">@drawable/select_play_4_item</item>
     </style>
+
 
     <style name="finding_item">
         <item name="android:paddingRight">5dp</item>

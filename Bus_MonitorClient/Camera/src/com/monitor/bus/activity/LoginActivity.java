@@ -237,6 +237,10 @@ public class LoginActivity extends Activity implements android.view.View.OnClick
 //			 et_password.setEditText("000000");
 //			et_login_port.setEditText("6008"
 //			et_login_address.setEditText("183.61.171.28");
+
+//            测试服务器：用户名super，密码super
+//            182.61.27.89
+//            1000077-1000090这几个设备ID我现在在用，你可以用1000091-1000120之间任意一个
         }
     }
 
